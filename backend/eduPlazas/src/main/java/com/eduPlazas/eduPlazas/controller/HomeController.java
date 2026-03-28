@@ -15,14 +15,4 @@ public class HomeController {
     public String login() {
         return "login";
     }
-
-    @GetMapping("/solicitante/home")
-    public String solicitanteHome() {
-        return "solicitante-home";
-    }
-
-    @GetMapping("/admin/home")
-    public String adminHome() {
-        return "admin-home";
-    }
 }
