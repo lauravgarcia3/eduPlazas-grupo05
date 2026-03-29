@@ -1,12 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>Crear Convocatoria</title>
+    <meta charset="UTF-8">
+    <title>Convocatorias</title>
 </head>
 <body>
-	<h1>Crear Convocatoria</h1>
-	
-	<p>Aqui irá el formulario de convocatoria</p>
-	<a href="/admin/home">Volver</a>
+<h1>Convocatorias</h1>
+
+<p><a th:href="@{/admin/convocatoria/nueva}">Crear nueva convocatoria</a></p>
+
+<table border="1">
+    <tr>
+        <th>Nombre</th>
+        <th>Fecha inicio</th>
+        <th>Fecha fin</th>
+        <th>Plazas totales</th>
+    </tr>
+    <tr th:each="conv : ${convocatorias}">
+        <td th:text="${conv.nombre}">Nombre</td>
+        <td th:text="${conv.fechaInicio}">Fecha inicio</td>
+        <td th:text="${conv.fechaFin}">Fecha fin</td>
+        <td th:text="${conv.plazasTotales}">Plazas</td>
+    </tr>
+</table>
+
 </body>
 </html>
