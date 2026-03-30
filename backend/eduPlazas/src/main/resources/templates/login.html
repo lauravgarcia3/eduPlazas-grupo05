@@ -1,12 +1,200 @@
 <!DOCTYPE html>
-<html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login</title>
-</head>
-<body>
-    <h1>Login</h1>
+    <meta charset="UTF-8">
+    <title>Login - EduPlazas</title>
 
-    <a href="/solicitante/home">Entrar como solicitante</a><br>
-    <a href="/admin/home">Entrar como admin</a>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        .left {
+            width: 50%;
+            background-color: #ddb36a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .card {
+            background: #f3f3f3;
+            padding: 45px 40px;
+            border-radius: 35px;
+            width: 560px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            font-size: 38px;
+            font-weight: 800;
+            margin: 0;
+            color: #d88a00;
+            text-align: left;
+        }
+
+        .top-text {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+
+        .welcome-block {
+            text-align: left;
+        }
+
+        .welcome {
+            font-size: 22px;
+            margin: 0 0 2px 0;
+            color: #111;
+            font-weight: 600;
+        }
+
+        .register-block {
+            text-align: right;
+            margin-top: 2px;
+        }
+
+        .register-block p {
+            margin: 0 0 6px 0;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .register-link {
+            color: #d88a00;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .login-form {
+            margin-top: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 20px;
+            font-weight: 500;
+            color: #111;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 46px;
+            padding: 10px 12px;
+            border: 1.5px solid #bdbdbd;
+            border-radius: 12px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #d88a00;
+            background-color: white;
+        }
+
+        .forgot-link {
+            display: block;
+            text-align: right;
+            margin-top: 8px;
+            color: #c85c2d;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            padding: 11px;
+            background-color: #e58d00;
+            color: white;
+            border: none;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #c77400;
+        }
+
+        .right {
+            width: 50%;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .right img {
+            width: 150%;
+            max-width: none;
+            height: auto;
+            object-fit: contain;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="left">
+        <div class="card">
+            <div class="top-text">
+                <div class="welcome-block">
+                    <p class="welcome">Bienvenido a</p>
+                    <h1>EduPlazas</h1>
+                </div>
+
+                <div class="register-block">
+                    <p>No tienes cuenta?</p>
+                    <a href="#" class="register-link">Regístrate</a>
+                </div>
+            </div>
+
+            <form class="login-form">
+                <div class="form-group">
+                    <label for="usuario">Introduzca su nombre de usuario o correo electrónico</label>
+                    <input type="text" id="usuario" name="usuario">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Introduzca su contraseña</label>
+                    <input type="password" id="password" name="password">
+                    <a href="#" class="forgot-link">He olvidado mi contraseña</a>
+                </div>
+
+                <button type="button" class="btn">Iniciar Sesión</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="right">
+        <img th:src="@{/images/login.png}" alt="Imagen login">
+    </div>
+
 </body>
 </html>
