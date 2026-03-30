@@ -2,7 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Login - EduPlazas</title>
+    <title>Registro - EduPlazas</title>
 
     <style>
         body {
@@ -31,7 +31,7 @@
         }
 
         h1 {
-            font-size: 38px;
+            font-size: 42px;
             font-weight: 800;
             margin: 0;
             color: #d88a00;
@@ -75,17 +75,17 @@
             font-weight: 700;
         }
 
-        .login-form {
-            margin-top: 10px;
+        .register-form {
+            margin-top: 18px;
         }
 
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .form-group label {
             display: block;
-            font-size: 20px;
+            font-size: 19px;
             font-weight: 500;
             color: #111;
             margin-bottom: 10px;
@@ -95,10 +95,10 @@
         .form-group input {
             width: 100%;
             height: 46px;
-            padding: 10px 12px;
+            padding: 10px 14px;
             border: 1.5px solid #bdbdbd;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 15px;
             background-color: #f9f9f9;
             box-sizing: border-box;
         }
@@ -113,29 +113,47 @@
             color: #9a9a9a;
         }
 
-        .forgot-link {
-            display: block;
-            text-align: right;
-            margin-top: 8px;
-            color: #c85c2d;
-            text-decoration: none;
-            font-size: 14px;
+        .double-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .half {
+            width: 50%;
+        }
+
+        .password-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .password-label-row label {
+            margin-bottom: 0;
+        }
+
+        .eye-icon {
+            font-size: 20px;
+            color: #999;
+            line-height: 1;
         }
 
         .btn {
             display: block;
             width: 100%;
             margin-top: 18px;
-            padding: 11px;
+            padding: 13px;
             background-color: #e58d00;
             color: white;
             border: none;
             text-decoration: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 17px;
             font-weight: 600;
             text-align: center;
             cursor: pointer;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
         }
 
         .btn:hover {
@@ -174,30 +192,44 @@
                 </div>
 
                 <div class="register-block">
-                    <p>No tienes cuenta?</p>
-                    <a th:href="@{/register}" class="register-link">Regístrate</a>
+                    <p>¿Ya tienes cuenta?</p>
+                    <a th:href="@{/login}" class="register-link">Inicia sesión</a>
                 </div>
             </div>
 
-            <form class="login-form">
+            <form class="register-form">
                 <div class="form-group">
                     <label for="usuario">Introduzca su nombre de usuario o correo electrónico</label>
                     <input type="text" id="usuario" name="usuario" placeholder="Correo electrónico o usuario">
                 </div>
 
-                <div class="form-group">
-                    <label for="password">Introduzca su contraseña</label>
-                    <input type="password" id="password" name="password" placeholder="Contraseña">
-                    <a href="#" class="forgot-link">He olvidado mi contraseña</a>
+                <div class="double-group">
+                    <div class="form-group half">
+                        <label for="nombre">Nombre del usuario</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Nombre del usuario">
+                    </div>
+
+                    <div class="form-group half">
+                        <label for="telefono">Número de teléfono</label>
+                        <input type="text" id="telefono" name="telefono" placeholder="Número de teléfono">
+                    </div>
                 </div>
 
-                <button type="button" class="btn">Iniciar Sesión</button>
+                <div class="form-group">
+                    <div class="password-label-row">
+                        <label for="password">Introduzca su contraseña</label>
+                        <span class="eye-icon">👁</span>
+                    </div>
+                    <input type="password" id="password" name="password" placeholder="Contraseña">
+                </div>
+
+                <button type="button" class="btn">Registrarme</button>
             </form>
         </div>
     </div>
 
     <div class="right">
-        <img th:src="@{/images/login.png}" alt="Imagen login">
+        <img th:src="@{/images/login.png}" alt="Imagen registro">
     </div>
 
 </body>
