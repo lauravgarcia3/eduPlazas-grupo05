@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Solicitudes</title>
+<meta charset="UTF-8">
+</head>
+<body>
+
+<h1>Lista de Solicitudes</h1>
+
+<table border="1">
+<thead>
+<tr>
+<th>ID</th>
+<th>Nombre solicitante</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr th:each="solicitud : ${solicitudes}">
+<td th:text="${solicitud.id}"></td>
+<td th:text="${solicitud.nombreSolicitante}"></td>
+<td th:text="${solicitud.estado}"></td>
+</tr>
+</tbody>
+</table>
+
+</body>
+</html>
