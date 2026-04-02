@@ -1,5 +1,6 @@
 package com.eduPlazas.eduPlazas.service;
 
+import com.eduPlazas.eduPlazas.model.DocumentoAdjunto;
 import com.eduPlazas.eduPlazas.model.Solicitud;
 import com.eduPlazas.eduPlazas.repository.SolicitudRepository;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,11 @@ return solicitudRepository.findAll();
 }
 
 public Solicitud guardar(Solicitud solicitud) {
+if (solicitud.getDocumentos() != null) {
+for (DocumentoAdjunto documento : solicitud.getDocumentos()) {
+documento.setSolicitud(solicitud);
+}
+}
 return solicitudRepository.save(solicitud);
 }
 

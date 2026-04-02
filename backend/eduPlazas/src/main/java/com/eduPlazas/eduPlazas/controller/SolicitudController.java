@@ -34,4 +34,9 @@ return solicitud.get();
 return "Solicitud no encontrada";
 }
 }
+@PostMapping("/admin/solicitudes")
+@ResponseBody
+public Solicitud crearSolicitud(@RequestBody Solicitud solicitud) {
+return solicitudService.guardar(solicitud);
+}
 }
