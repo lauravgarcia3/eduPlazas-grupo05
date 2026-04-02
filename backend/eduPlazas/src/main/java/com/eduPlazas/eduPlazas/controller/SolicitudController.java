@@ -4,7 +4,9 @@ import com.eduPlazas.eduPlazas.model.Solicitud;
 import com.eduPlazas.eduPlazas.service.SolicitudService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Controller
 public class SolicitudController {
@@ -19,5 +21,17 @@ this.solicitudService = solicitudService;
 public String listarSolicitudes(Model model) {
 model.addAttribute("solicitudes", solicitudService.obtenerTodas());
 return "admin/solicitudes";
+}
+
+@GetMapping("/admin/solicitudes/{id}")
+@ResponseBody
+public Object verSolicitud(@PathVariable Long id) {
+Optional<Solicitud> solicitud = solicitudService.buscarPorId(id);
+
+if (solicitud.isPresent()) {
+return solicitud.get();
+} else {
+return "Solicitud no encontrada";
+}
 }
 }

@@ -1,8 +1,14 @@
 package com.eduPlazas.eduPlazas.model;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Menor {
 
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
+
 private String nombre;
 private String apellidos;
 private String fechaNacimiento;
@@ -49,4 +55,3 @@ public void setFechaNacimiento(String fechaNacimiento) {
 this.fechaNacimiento = fechaNacimiento;
 }
 }
-

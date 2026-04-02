@@ -1,10 +1,22 @@
 package com.eduPlazas.eduPlazas.model;
 
+import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@Entity
 public class DocumentoAdjunto {
 
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
+
 private String nombreArchivo;
 private String tipoDocumento;
+
+@ManyToOne
+@JsonIgnore
+@JoinColumn(name = "solicitud_id")
+private Solicitud solicitud;
 
 public DocumentoAdjunto() {
 }
@@ -37,5 +49,13 @@ return tipoDocumento;
 
 public void setTipoDocumento(String tipoDocumento) {
 this.tipoDocumento = tipoDocumento;
+}
+
+public Solicitud getSolicitud() {
+return solicitud;
+}
+
+public void setSolicitud(Solicitud solicitud) {
+this.solicitud = solicitud;
 }
 }
