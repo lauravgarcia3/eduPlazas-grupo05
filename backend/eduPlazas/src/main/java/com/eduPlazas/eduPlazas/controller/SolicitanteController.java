@@ -3,6 +3,7 @@ package com.eduPlazas.eduPlazas.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequestMapping("/solicitante")
@@ -22,4 +23,9 @@ public class SolicitanteController {
     public String estado() {
         return "solicitante/estado";
     }
+
+	@PostMapping("/solicitud")
+public String crearSolicitud() {
+    return "solicitante/estado";
+}
 }
