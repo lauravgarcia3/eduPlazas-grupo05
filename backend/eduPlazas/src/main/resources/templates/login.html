@@ -160,6 +160,25 @@
             object-fit: contain;
             display: block;
         }
+
+        /* Estilos para mensajes de feedback */
+        .alert {
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .alert-error {
+            background-color: #fceaea;
+            color: #b90707;
+            border: 1px solid #f5c6c6;
+        }
+        .alert-success {
+            background-color: #eaf6fc;
+            color: #2d6d95;
+            border: 1px solid #c6e3f5;
+        }
     </style>
 </head>
 
@@ -179,19 +198,32 @@
                 </div>
             </div>
 
-            <form class="login-form">
+            <form th:action="@{/login}" method="post" class="login-form">
+                
+                <div th:if="${param.error}" class="alert alert-error">
+                    El correo o la contraseña son incorrectos.
+                </div>
+
+                <div th:if="${param.registrado}" class="alert alert-success">
+                    ¡Registro completado! Ya puedes iniciar sesión.
+                </div>
+
+                <div th:if="${param.logout}" class="alert alert-success">
+                    Has cerrado sesión correctamente.
+                </div>
+
                 <div class="form-group">
-                    <label for="usuario">Introduzca su nombre de usuario o correo electrónico</label>
-                    <input type="text" id="usuario" name="usuario" placeholder="Correo electrónico o usuario">
+                    <label for="email">Introduzca su correo electrónico</label>
+                    <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
                 </div>
 
                 <div class="form-group">
                     <label for="password">Introduzca su contraseña</label>
-                    <input type="password" id="password" name="password" placeholder="Contraseña">
+                    <input type="password" id="password" name="password" placeholder="Contraseña" required>
                     <a href="#" class="forgot-link">He olvidado mi contraseña</a>
                 </div>
 
-                <button type="button" class="btn">Iniciar Sesión</button>
+                <button type="submit" class="btn">Iniciar Sesión</button>
             </form>
         </div>
     </div>

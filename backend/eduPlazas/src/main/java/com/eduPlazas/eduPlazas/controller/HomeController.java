@@ -8,17 +8,8 @@ public class HomeController {
 
     @GetMapping("/")
     public String home() {
-        return "home";
-    }
-
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
-    @GetMapping("/register")
-    public String register() {
-        return "register";
+        // Redirige automáticamente a la pantalla de login al entrar en la raíz
+        return "redirect:/login";
     }
 
 }
