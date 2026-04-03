@@ -13,14 +13,21 @@ private String nombre;
 private String apellidos;
 private String fechaNacimiento;
 
+// NUEVOS CAMPOS (mockup)
+private String lugarNacimiento;
+private String sexo;
+
 public Menor() {
 }
 
-public Menor(Long id, String nombre, String apellidos, String fechaNacimiento) {
+public Menor(Long id, String nombre, String apellidos, String fechaNacimiento,
+String lugarNacimiento, String sexo) {
 this.id = id;
 this.nombre = nombre;
 this.apellidos = apellidos;
 this.fechaNacimiento = fechaNacimiento;
+this.lugarNacimiento = lugarNacimiento;
+this.sexo = sexo;
 }
 
 public Long getId() {
@@ -53,5 +60,21 @@ return fechaNacimiento;
 
 public void setFechaNacimiento(String fechaNacimiento) {
 this.fechaNacimiento = fechaNacimiento;
+}
+
+public String getLugarNacimiento() {
+return lugarNacimiento;
+}
+
+public void setLugarNacimiento(String lugarNacimiento) {
+this.lugarNacimiento = lugarNacimiento;
+}
+
+public String getSexo() {
+return sexo;
+}
+
+public void setSexo(String sexo) {
+this.sexo = sexo;
 }
 }

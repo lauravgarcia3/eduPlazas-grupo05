@@ -21,6 +21,10 @@ public List<Solicitud> obtenerTodas() {
 return solicitudRepository.findAll();
 }
 
+public List<Solicitud> obtenerPorUsuario(String usuario) {
+return solicitudRepository.findByUsuario(usuario);
+}
+
 public Solicitud guardar(Solicitud solicitud) {
 if (solicitud.getDocumentos() != null) {
 for (DocumentoAdjunto documento : solicitud.getDocumentos()) {
@@ -32,5 +36,9 @@ return solicitudRepository.save(solicitud);
 
 public Optional<Solicitud> buscarPorId(Long id) {
 return solicitudRepository.findById(id);
+}
+
+public Optional<Solicitud> buscarPorIdYUsuario(Long id, String usuario) {
+return solicitudRepository.findByIdAndUsuario(id, usuario);
 }
 }
