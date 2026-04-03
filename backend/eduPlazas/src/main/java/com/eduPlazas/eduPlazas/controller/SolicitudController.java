@@ -48,6 +48,12 @@ public Solicitud crearSolicitudAdmin(@RequestBody Solicitud solicitud) {
 return solicitudService.guardar(solicitud);
 }
 
+@PutMapping("/admin/solicitudes/{id}/estado")
+@ResponseBody
+public Solicitud cambiarEstado(@PathVariable Long id, @RequestParam String estado) {
+return solicitudService.cambiarEstado(id, estado);
+}
+
 // =========================
 // SOLICITANTE
 // =========================

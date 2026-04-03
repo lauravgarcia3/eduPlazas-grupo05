@@ -41,4 +41,19 @@ return solicitudRepository.findById(id);
 public Optional<Solicitud> buscarPorIdYUsuario(Long id, String usuario) {
 return solicitudRepository.findByIdAndUsuario(id, usuario);
 }
+
+public Solicitud cambiarEstado(Long id, String estado) {
+
+Solicitud solicitud = solicitudRepository.findById(id)
+.orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
+
+// Validación básica (opcional pero recomendable)
+if (!estado.equals("Pendiente") && !estado.equals("Aceptada") && !estado.equals("Rechazada")) {
+throw new RuntimeException("Estado inválido");
+}
+
+solicitud.setEstado(estado);
+return solicitudRepository.save(solicitud);
+}
+
 }
