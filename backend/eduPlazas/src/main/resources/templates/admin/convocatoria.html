@@ -334,6 +334,7 @@
 </head>
 <body>
 
+
 <header class="topbar">
     <div class="logo">EduPlazas</div>
     <div class="topbar-right">
@@ -344,145 +345,150 @@
 <main class="page-wrapper">
     <div class="page-content">
 
-        <section id="step-1">
-            <a th:href="@{/admin/home}" class="back-link">← Volver a Convocatorias</a>
+        <a th:href="@{/admin/home}" class="back-link">← Volver a Convocatorias</a>
 
-            <h1 class="page-title">Nueva Convocatoria</h1>
-            <p class="page-subtitle">Complete todos los datos para crear una nueva convocatoria</p>
+        <h1 class="page-title">Nueva Convocatoria</h1>
+        <p class="page-subtitle">Complete todos los datos para crear una nueva convocatoria</p>
 
-            <div class="stepper">
-                <div class="step active">
-                    <div class="step-circle">1</div>
-                    <span>Información Básica</span>
-                </div>
+        <form th:action="@{/admin/convocatoria/guardar}" th:object="${nuevaConvocatoria}" method="post">
 
-                <div class="step-line"></div>
-
-                <div class="step">
-                    <div class="step-circle">2</div>
-                    <span>Centros y Plazas</span>
-                </div>
-            </div>
-
-            <section class="form-card">
-                <h2 class="form-title">Información Básica de la Convocatoria</h2>
-
-                <div class="form-group">
-                    <label for="nombreConvocatoria">Nombre de la convocatoria *</label>
-                    <input type="text" id="nombreConvocatoria" placeholder="Ej: Educación Infantil 2026-2027">
-                </div>
-
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="fechaInicio">Fecha de inicio *</label>
-                        <input type="date" id="fechaInicio">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="fechaFin">Fecha de fin *</label>
-                        <input type="date" id="fechaFin">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="descripcionConvocatoria">Descripción de la convocatoria</label>
-                    <textarea id="descripcionConvocatoria"></textarea>
-                </div>
-
-                <div class="config-box">
-                    <h3 class="config-title">Configuración General</h3>
-
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="tipoConvocatoria">Tipo de convocatoria</label>
-                            <select id="tipoConvocatoria">
-                                <option>Educación Infantil</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="estadoInicial">Estado inicial</label>
-                            <select id="estadoInicial">
-                                <option>Borrador</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="anioAcademico">Año académico</label>
-                            <input type="text" id="anioAcademico" placeholder="2026-2027">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="modalidad">Modalidad</label>
-                            <select id="modalidad">
-                                <option>Presencial</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="step-1-actions">
-                    <button type="button" class="primary-btn" onclick="showStep2()">Siguiente Paso →</button>
-                </div>
-            </section>
-        </section>
-
-        <section id="step-2" style="display: none;">
-            <section class="form-card">
+            <section id="step-1">
                 <div class="stepper">
-                    <div class="step">
+                    <div class="step active">
                         <div class="step-circle">1</div>
                         <span>Información Básica</span>
                     </div>
-
                     <div class="step-line"></div>
-
-                    <div class="step active">
+                    <div class="step">
                         <div class="step-circle">2</div>
                         <span>Centros y Plazas</span>
                     </div>
                 </div>
 
-                <p class="step-description">
-                    Seleccione los centros educativos participantes y asigne el número de plazas disponibles para cada uno
-                </p>
+                <section class="form-card">
+                    <h2 class="form-title">Información Básica de la Convocatoria</h2>
 
-                <div class="center-card">
-                    <div class="center-grid">
-                        <div class="center-column">
-                            <label class="center-label" for="centroEducativo">Centro Educativo</label>
-                            <input type="text" id="centroEducativo" value="CEIP San Francisco de Asís">
+                    <div class="form-group">
+                        <label for="nombreConvocatoria">Nombre de la convocatoria *</label>
+                        <input type="text" id="nombreConvocatoria" th:field="*{nombre}" placeholder="Ej: Educación Infantil 2026-2027" required>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="fechaInicio">Fecha de inicio *</label>
+                            <input type="date" id="fechaInicio" th:field="*{fechaInicio}" required>
                         </div>
 
-                        <div class="places-column">
-                            <label class="center-label" for="plazasDisponibles">Plazas Disponibles</label>
-                            <input type="number" id="plazasDisponibles" value="175">
+                        <div class="form-group">
+                            <label for="fechaFin">Fecha de fin *</label>
+                            <input type="date" id="fechaFin" th:field="*{fechaFin}" required>
                         </div>
                     </div>
-                </div>
 
-                <button type="button" class="add-center-btn">＋ Añadir Centro Educativo</button>
+                    <div class="form-group">
+                        <label for="descripcionConvocatoria">Descripción de la convocatoria</label>
+                        <textarea id="descripcionConvocatoria" th:field="*{descripcion}"></textarea>
+                    </div>
 
-                <hr class="divider">
+                    <div class="config-box">
+                        <h3 class="config-title">Configuración General</h3>
 
-                <div class="info-box">
-                    <div class="info-box-title">Información Importante</div>
-                    <ul class="info-list">
-                        <li>Debe asignar al menos un centro educativo con plazas disponibles</li>
-                        <li>El número de plazas debe ser mayor a 0</li>
-                        <li>Puede añadir múltiples centros educativos a la convocatoria</li>
-                        <li>Los centros se pueden eliminar antes de publicar la convocatoria</li>
-                    </ul>
-                </div>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="tipoConvocatoria">Tipo de convocatoria</label>
+                                <select id="tipoConvocatoria" th:field="*{tipo}">
+                                    <option value="Educación Infantil">Educación Infantil</option>
+                                    <option value="Educación Primaria">Educación Primaria</option>
+                                    <option value="Educación Secundaria">Educación Secundaria</option>
+                                </select>
+                            </div>
 
-                <div class="form-actions">
-                    <button type="button" class="secondary-btn" onclick="showStep1()">Anterior</button>
-                    <button type="button" class="primary-btn">Crear Convocatoria →</button>
-                </div>
+                            <div class="form-group">
+                                <label for="estadoInicial">Estado inicial</label>
+                                <select id="estadoInicial" th:field="*{estado}">
+                                    <option value="BORRADOR">Borrador</option>
+                                    <option value="ACTIVA">Publicar como Activa</option>
+                                    <option value="CERRADA">Cerrada</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="anioAcademico">Año académico</label>
+                                <input type="text" id="anioAcademico" th:field="*{anioAcademico}" placeholder="2026-2027">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="modalidad">Modalidad</label>
+                                <select id="modalidad" th:field="*{modalidad}">
+                                    <option value="Presencial">Presencial</option>
+                                    <option value="Online">Online</option>
+                                    <option value="Mixta">Mixta</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="step-1-actions">
+                        <button type="button" class="primary-btn" onclick="showStep2()">Siguiente Paso →</button>
+                    </div>
+                </section>
             </section>
-        </section>
 
-    </div>
+            <section id="step-2" style="display: none;">
+                <section class="form-card">
+                    <div class="stepper">
+                        <div class="step">
+                            <div class="step-circle">1</div>
+                            <span>Información Básica</span>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step active">
+                            <div class="step-circle">2</div>
+                            <span>Centros y Plazas</span>
+                        </div>
+                    </div>
+
+                    <p class="step-description">
+                        Seleccione los centros educativos participantes y asigne el número de plazas disponibles para cada uno
+                    </p>
+
+                    <div class="center-card">
+                        <div class="center-grid">
+                            <div class="center-column">
+                                <label class="center-label" for="centroEducativo">Centro Educativo</label>
+                                <input type="text" id="centroEducativo" th:field="*{nombreCentro}" placeholder="Ej. CEIP San Francisco de Asís" required>
+                            </div>
+
+                            <div class="places-column">
+                                <label class="center-label" for="plazasDisponibles">Plazas Disponibles</label>
+                                <input type="number" id="plazasDisponibles" th:field="*{numeroPlazas}" placeholder="175" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="add-center-btn">＋ Añadir Centro Educativo</button>
+
+                    <hr class="divider">
+
+                    <div class="info-box">
+                        <div class="info-box-title">Información Importante</div>
+                        <ul class="info-list">
+                            <li>Debe asignar al menos un centro educativo con plazas disponibles</li>
+                            <li>El número de plazas debe ser mayor a 0</li>
+                            <li>Puede añadir múltiples centros educativos a la convocatoria</li>
+                            <li>Los centros se pueden eliminar antes de publicar la convocatoria</li>
+                        </ul>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="secondary-btn" onclick="showStep1()">Anterior</button>
+                        <button type="submit" class="primary-btn">Crear Convocatoria →</button>
+                    </div>
+                </section>
+            </section>
+
+        </form>
+        </div>
 </main>
 
 <script>

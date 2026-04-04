@@ -270,20 +270,20 @@
             <a th:href="@{/admin/convocatoria}" class="primary-btn">+ Nueva Convocatoria</a>
         </div>
 
-        <section class="convocatoria-card">
+        <section th:each="convocatoria : ${convocatorias}" class="convocatoria-card">
             <div class="convocatoria-left">
                 <div>
-                    <div class="convocatoria-title">Educación Infantil<br>2026-2027</div>
+                    <div class="convocatoria-title" th:text="${convocatoria.nombre}">Educación Infantil<br>2026-2027</div>
 
                     <div class="convocatoria-dates">
-                        <p>Inicio: 2 de marzo de 2026</p>
-                        <p>Fin: 29 de mayo de 2026</p>
+                        <p th:text="'Inicio: ' + ${convocatoria.fechaInicio}">Inicio: 2 de marzo de 2026</p>
+                        <p th:text="'Fin: ' + ${convocatoria.fechaFin}">Fin: 29 de mayo de 2026</p>
                     </div>
                 </div>
 
                 <div class="convocatoria-box">
                     <div class="convocatoria-box-label">Solicitudes recibidas</div>
-                    <div class="convocatoria-box-value">247</div>
+                    <div class="convocatoria-box-value">0</div>
                 </div>
             </div>
 
@@ -291,29 +291,29 @@
                 <div class="convocatoria-status-row">
                     <div>
                         <div class="status-title">Estado de la convocatoria</div>
-                        <div class="status-pill">Activa</div>
+                        <div class="status-pill" th:text="${convocatoria.estado}">Activa</div>
                     </div>
 
                     <div class="status-indicator">
-                        <span class="status-dot green"></span>
-                        <span>En periodo de inscripción</span>
+                        <span th:class="${convocatoria.estado == 'ACTIVA' ? 'status-dot green' : 'status-dot red'}"></span>
+                        <span th:text="${convocatoria.estado == 'ACTIVA' ? 'En periodo de inscripción' : (convocatoria.estado == 'CERRADA' ? 'Finalizado' : 'Borrador')}">En periodo de inscripción</span>
                     </div>
                 </div>
 
                 <div class="info-grid">
                     <div class="info-box">
                         <div class="info-label">Fase actual</div>
-                        <div class="info-value">Registro</div>
+                        <div class="info-value" th:text="${convocatoria.estado == 'ACTIVA' ? 'Registro' : '-'}">Registro</div>
                     </div>
 
                     <div class="info-box">
                         <div class="info-label">Plazas disponibles</div>
-                        <div class="info-value">350</div>
+                        <div class="info-value" th:text="${convocatoria.numeroPlazas}">350</div>
                     </div>
 
                     <div class="info-box">
                         <div class="info-label">Tasa de ocupación</div>
-                        <div class="info-value">70.5%</div>
+                        <div class="info-value">0%</div>
                     </div>
                 </div>
 
@@ -323,116 +323,7 @@
                 </div>
             </div>
         </section>
-
-        <section class="convocatoria-card">
-            <div class="convocatoria-left">
-                <div>
-                    <div class="convocatoria-title">Educación Infantil<br>2025-2026</div>
-
-                    <div class="convocatoria-dates">
-                        <p>Inicio: 3 de marzo de 2025</p>
-                        <p>Fin: 13 de junio de 2025</p>
-                    </div>
-                </div>
-
-                <div class="convocatoria-box">
-                    <div class="convocatoria-box-label">Solicitudes recibidas</div>
-                    <div class="convocatoria-box-value">189</div>
-                </div>
-            </div>
-
-            <div class="convocatoria-right">
-                <div class="convocatoria-status-row">
-                    <div>
-                        <div class="status-title">Estado de la convocatoria</div>
-                        <div class="status-pill">Cerrada</div>
-                    </div>
-
-                    <div class="status-indicator">
-                        <span class="status-dot red"></span>
-                        <span>Finalizado</span>
-                    </div>
-                </div>
-
-                <div class="info-grid">
-                    <div class="info-box">
-                        <div class="info-label">Fase actual</div>
-                        <div class="info-value">-</div>
-                    </div>
-
-                    <div class="info-box">
-                        <div class="info-label">Plazas disponibles</div>
-                        <div class="info-value">350</div>
-                    </div>
-
-                    <div class="info-box">
-                        <div class="info-label">Tasa de ocupación</div>
-                        <div class="info-value">54%</div>
-                    </div>
-                </div>
-
-                <div class="action-row">
-                    <a th:href="@{/admin/publicaciones}" class="primary-btn">Ver Solicitudes</a>
-                    <a th:href="@{/admin/convocatoria}" class="secondary-btn">Editar</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="convocatoria-card">
-            <div class="convocatoria-left">
-                <div>
-                    <div class="convocatoria-title">Educación Infantil<br>2024-2025</div>
-
-                    <div class="convocatoria-dates">
-                        <p>Inicio: 1 de abril de 2024</p>
-                        <p>Fin: 28 de junio de 2024</p>
-                    </div>
-                </div>
-
-                <div class="convocatoria-box">
-                    <div class="convocatoria-box-label">Solicitudes recibidas</div>
-                    <div class="convocatoria-box-value">156</div>
-                </div>
-            </div>
-
-            <div class="convocatoria-right">
-                <div class="convocatoria-status-row">
-                    <div>
-                        <div class="status-title">Estado de la convocatoria</div>
-                        <div class="status-pill">Cerrada</div>
-                    </div>
-
-                    <div class="status-indicator">
-                        <span class="status-dot red"></span>
-                        <span>Finalizado</span>
-                    </div>
-                </div>
-
-                <div class="info-grid">
-                    <div class="info-box">
-                        <div class="info-label">Fase actual</div>
-                        <div class="info-value">-</div>
-                    </div>
-
-                    <div class="info-box">
-                        <div class="info-label">Plazas disponibles</div>
-                        <div class="info-value">350</div>
-                    </div>
-
-                    <div class="info-box">
-                        <div class="info-label">Tasa de ocupación</div>
-                        <div class="info-value">44.5%</div>
-                    </div>
-                </div>
-
-                <div class="action-row">
-                    <a th:href="@{/admin/publicaciones}" class="primary-btn">Ver Solicitudes</a>
-                    <a th:href="@{/admin/convocatoria}" class="secondary-btn">Editar</a>
-                </div>
-            </div>
-        </section>
-
-    </div>
+        </div>
 </main>
 
 </body>
