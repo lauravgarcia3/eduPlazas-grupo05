@@ -1,5 +1,6 @@
 package com.eduPlazas.eduPlazas.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,6 +12,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    @Autowired
+    private CustomAuthenticationSuccessHandler successHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -24,7 +27,7 @@ public class SecurityConfig {
             .formLogin(form -> form
                 .loginPage("/login")
                 .usernameParameter("email") // Le decimos que el usuario en el HTML se llama "email"
-                .defaultSuccessUrl("/solicitante/home", true) // A donde te lleva tras un login correcto
+                .successHandler(successHandler) // A donde te lleva tras un login correcto
                 .permitAll()
             )
             .logout(logout -> logout
@@ -38,7 +41,7 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Este es el "Bean" que te pedía el UsuarioService para encriptar
+    // Este es el "Bean" que pide el UsuarioService para encriptar
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
