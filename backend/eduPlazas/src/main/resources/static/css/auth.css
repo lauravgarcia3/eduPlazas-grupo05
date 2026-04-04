@@ -1,0 +1,94 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f3f3;
+    margin: 0;
+    display: flex;
+    height: 100vh;
+}
+
+.left {
+    width: 50%;
+    background-color: #ddb36a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.card {
+    background: #f3f3f3;
+    padding: 44px 36px;
+    border-radius: 35px;
+    width: 500px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+.top-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 28px;
+    gap: 20px;
+}
+
+.welcome-block {
+    text-align: left;
+}
+
+.welcome {
+    font-size: 22px;
+    margin: 0 0 2px 0;
+    color: #111;
+    font-weight: 600;
+}
+
+.register-block {
+    text-align: right;
+    margin-top: 2px;
+}
+
+.register-block p {
+    margin: 0 0 6px 0;
+    font-size: 15px;
+    color: #777;
+}
+
+.register-link {
+    color: #d88a00;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #d88a00;
+    background-color: white;
+}
+
+.form-group input::placeholder {
+    color: #9a9a9a;
+}
+
+.right {
+    width: 50%;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    overflow: hidden;
+    position: relative;
+}
+
+.right img {
+    width: 150%;
+    max-width: none;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.btn:hover {
+    background-color: #c77400;
+}

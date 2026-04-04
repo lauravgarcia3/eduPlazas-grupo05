@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de publicaciones - EduPlazas</title>
+
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <style>
+        .topbar-right {
+            gap: 10px;
+        }
+
+        .page-wrapper {
+            padding: 30px 0 50px 0;
+        }
+
+        .page-title {
+            font-size: 38px;
+            margin: 0 0 30px 0;
+        }
+
+        .selector-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 170px;
+            height: 44px;
+            padding: 0 22px;
+            background-color: #e58d00;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);
+            margin-bottom: 28px;
+        }
+
+        .admin-panel {
+            width: 100%;
+            max-width: 1320px;
+            margin: 0 auto;
+            background-color: #f7f7f7;
+            border-radius: 34px;
+            padding: 34px 34px 40px 34px;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 0 0 18px 0;
+            color: #111;
+        }
+
+        .section-subtitle {
+            font-size: 22px;
+            font-weight: 800;
+            color: #111;
+            margin: 0 0 22px 0;
+        }
+
+        .status-line {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 22px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .status-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            background-color: #49b35a;
+            flex-shrink: 0;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .summary-box {
+            background-color: #efefef;
+            border-radius: 14px;
+            padding: 16px 16px 18px 16px;
+        }
+
+        .summary-label {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .summary-value {
+            font-size: 22px;
+            font-weight: 800;
+            color: #111;
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid #e3e3e3;
+            margin: 0 0 28px 0;
+        }
+
+        .publication-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            margin-bottom: 42px;
+        }
+
+        .publication-card {
+            background-color: #fafafa;
+            border: 2px solid #dddddd;
+            border-radius: 18px;
+            padding: 22px 24px;
+        }
+
+        .publication-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .publication-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #111;
+        }
+
+        .status-pill {
+            background-color: #e6e6e6;
+            color: #777;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 20px;
+            padding: 8px 16px;
+        }
+
+        .publication-label {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .check-list {
+            background-color: #f3f3f3;
+            border-radius: 10px;
+            padding: 12px 12px 8px 12px;
+            margin-bottom: 18px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #222;
+            font-weight: 600;
+        }
+
+        .check-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .check-circle {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .check-circle.green {
+            background-color: #49b35a;
+            color: white;
+        }
+
+        .check-circle.gray {
+            background-color: #d4d4d4;
+
+        }
+
+        .action-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .primary-btn {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 42px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 800;
+            background-color: #e58d00;
+            color: white;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);
+            text-decoration: none;
+        }
+
+        .secondary-btn {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 42px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 800;
+            background-color: #b8b8b8;
+            color: white;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            text-decoration: none;
+        }
+
+        .assignment-card {
+            background-color: #f1f1f1;
+            border-radius: 18px;
+            padding: 22px 22px 24px 22px;
+        }
+
+        .assignment-top-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .assignment-stat {
+            background-color: #fafafa;
+            border-radius: 14px;
+            padding: 16px 18px;
+            min-height: 110px;
+        }
+
+        .assignment-stat.green {
+            border-left: 4px solid #49b35a;
+        }
+
+        .assignment-stat.orange {
+            border-left: 4px solid #f39a06;
+        }
+
+        .assignment-stat.red {
+            border-left: 4px solid #ef4b43;
+        }
+
+        .assignment-label {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 14px;
+        }
+
+        .assignment-value {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .assignment-value.green {
+            color: #49b35a;
+        }
+
+        .assignment-value.orange {
+            color: #f39a06;
+        }
+
+        .assignment-value.red {
+            color: #ef4b43;
+        }
+
+        .assignment-percent {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .table-card {
+            background-color: #fafafa;
+            border-radius: 14px;
+            padding: 18px 18px 12px 18px;
+        }
+
+        .table-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #111;
+            margin: 0 0 4px 0;
+        }
+
+        .table-subtitle {
+            font-size: 13px;
+            font-weight: 700;
+            color: #777;
+            margin: 0 0 16px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            font-size: 13px;
+            color: #777;
+            font-weight: 700;
+            padding: 10px 8px;
+            border-bottom: 1px solid #dddddd;
+        }
+
+        td {
+            font-size: 14px;
+            color: #222;
+            padding: 12px 8px;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .value-green {
+            color: #49b35a;
+            font-weight: 700;
+        }
+
+        .value-orange {
+            color: #f39a06;
+            font-weight: 700;
+        }
+
+        .progress-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .progress-bar {
+            width: 70px;
+            height: 6px;
+            background-color: #e5e5e5;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 999px;
+        }
+
+        .progress-fill.green {
+            background-color: #49b35a;
+        }
+
+        .progress-fill.orange {
+            background-color: #f39a06;
+        }
+    </style>
+</head>
+<body>
+
+<header class="topbar">
+    <div class="logo">EduPlazas</div>
+
+    <div class="topbar-right">
+        <div class="user-name">Panel de Administración</div>
+    </div>
+</header>
+
+<main class="page-wrapper">
+    <div class="page-content">
+        <h1 class="page-title">Gestión de Publicaciones</h1>
+
+        <button type="button" class="selector-btn">Educación Infantil</button>
+
+        <section class="admin-panel">
+            <h2 class="section-title">Educación Infantil 2026-2027</h2>
+
+            <div class="status-line">
+                <span class="status-dot"></span>
+                <span>Proceso de asignación completado</span>
+            </div>
+
+            <div class="summary-grid">
+                <div class="summary-box">
+                    <div class="summary-label">Total Solicitudes</div>
+                    <div class="summary-value">247</div>
+                </div>
+
+                <div class="summary-box">
+                    <div class="summary-label">Plazas Disponibles</div>
+                    <div class="summary-value">350</div>
+                </div>
+
+                <div class="summary-box">
+                    <div class="summary-label">Procesadas</div>
+                    <div class="summary-value">247</div>
+                </div>
+
+                <div class="summary-box">
+                    <div class="summary-label">Reclamaciones</div>
+                    <div class="summary-value">0</div>
+                </div>
+            </div>
+
+            <hr class="divider">
+
+            <h3 class="section-subtitle">Estado de Publicaciones</h3>
+
+            <div class="publication-grid">
+                <div class="publication-card">
+                    <div class="publication-header">
+                        <div class="publication-title">Listado Provisional</div>
+                        <div class="status-pill">No Publicado</div>
+                    </div>
+
+                    <div class="publication-label">Estado del proceso:</div>
+
+                    <div class="check-list">
+                        <div class="check-item">
+                            <span class="check-circle green">✓</span>
+                            <span>Cálculo de puntuaciones completado</span>
+                        </div>
+
+                        <div class="check-item">
+                            <span class="check-circle green">✓</span>
+                            <span>Asignación automática realizada</span>
+                        </div>
+
+                        <div class="check-item">
+                            <span class="check-circle green">✓</span>
+                            <span>Listado generado y validado</span>
+                        </div>
+                    </div>
+
+                    <div class="action-row">
+                        <a href="#" class="primary-btn">Publicar Listado</a>
+                        <a href="#" class="secondary-btn">Descargar PDF</a>
+                    </div>
+                </div>
+
+                <div class="publication-card">
+                    <div class="publication-header">
+                        <div class="publication-title">Listado Definitivo</div>
+                        <div class="status-pill">No Publicado</div>
+                    </div>
+
+                    <div class="publication-label">Estado del proceso:</div>
+
+                    <div class="check-list">
+                        <div class="check-item">
+                            <span class="check-circle gray"></span>
+                            <span>Listado provisional publicado</span>
+                        </div>
+
+                        <div class="check-item">
+                            <span class="check-circle gray"></span>
+                            <span>Periodo de reclamaciones</span>
+                        </div>
+
+                        <div class="check-item">
+                            <span class="check-circle gray"></span>
+                            <span>Reclamaciones procesadas</span>
+                        </div>
+                    </div>
+
+                    <div class="action-row">
+                        <a href="#" class="secondary-btn">Publicar Listado</a>
+                        <a href="#" class="secondary-btn">Descargar PDF</a>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="section-subtitle">Resumen de Asignaciones</h3>
+
+            <div class="assignment-card">
+                <div class="assignment-top-grid">
+                    <div class="assignment-stat green">
+                        <div class="assignment-label">Solicitudes Admitidas</div>
+                        <div class="assignment-value green">209</div>
+                        <div class="assignment-percent">85% del total</div>
+                    </div>
+
+                    <div class="assignment-stat orange">
+                        <div class="assignment-label">En Lista de Espera</div>
+                        <div class="assignment-value orange">29</div>
+                        <div class="assignment-percent">12% del total</div>
+                    </div>
+
+                    <div class="assignment-stat red">
+                        <div class="assignment-label">No Admitidas</div>
+                        <div class="assignment-value red">7</div>
+                        <div class="assignment-percent">3% del total</div>
+                    </div>
+                </div>
+
+                <div class="table-card">
+                    <div class="table-title">Distribución por<br>Centros</div>
+                    <div class="table-subtitle">Centro Educativo</div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Centro Educativo</th>
+                                <th>Plazas Totales</th>
+                                <th>Asignadas</th>
+                                <th>Disponibles</th>
+                                <th>Ocupación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>CEIP San Miguel</td>
+                                <td>75</td>
+                                <td class="value-green">68</td>
+                                <td>7</td>
+                                <td>
+                                    <div class="progress-cell">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill green" style="width: 90.6%;"></div>
+                                        </div>
+                                        <span>90.6%</span>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>CEIP Santa Teresa</td>
+                                <td>100</td>
+                                <td class="value-green">85</td>
+                                <td>15</td>
+                                <td>
+                                    <div class="progress-cell">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill green" style="width: 85%;"></div>
+                                        </div>
+                                        <span>85%</span>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>CEIP La Paz</td>
+                                <td>50</td>
+                                <td class="value-green">32</td>
+                                <td>18</td>
+                                <td>
+                                    <div class="progress-cell">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill orange" style="width: 64%;"></div>
+                                        </div>
+                                        <span>64%</span>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>CEIP Virgen del Carmen</td>
+                                <td>75</td>
+                                <td class="value-green">62</td>
+                                <td>13</td>
+                                <td>
+                                    <div class="progress-cell">
+                                        <div class="progress-bar">
+                                            <div class="progress-fill green" style="width: 82.6%;"></div>
+                                        </div>
+                                        <span>82.6%</span>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>CEIP El Pinar</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+</body>
+</html>
