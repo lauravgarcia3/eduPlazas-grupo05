@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nueva convocatoria</title>
+</head>
+<body>
+<h1>Nueva convocatoria</h1>
+
+<form th:action="@{/admin/convocatoria}" th:object="${convocatoria}" method="post">
+    <p>
+        Nombre:
+        <input type="text" th:field="*{nombre}">
+    </p>
+    <p>
+        Fecha inicio (YYYY-MM-DD):
+        <input type="text" th:field="*{fechaInicio}">
+    </p>
+    <p>
+        Fecha fin (YYYY-MM-DD):
+        <input type="text" th:field="*{fechaFin}">
+    </p>
+    <p>
+        Plazas totales:
+        <input type="number" th:field="*{plazasTotales}">
+    </p>
+    <p>
+        <button type="submit">Guardar</button>
+    </p>
+</form>
+
+<p><a th:href="@{/admin/convocatoria}">Volver al listado</a></p>
+
+</body>
+</html>
