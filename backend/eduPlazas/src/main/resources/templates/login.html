@@ -1,12 +1,165 @@
 <!DOCTYPE html>
-<html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login</title>
-</head>
-<body>
-    <h1>Login</h1>
+    <meta charset="UTF-8">
+    <title>Login - EduPlazas</title>
 
-    <a href="/solicitante/home">Entrar como solicitante</a><br>
-    <a href="/admin/home">Entrar como admin</a>
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+    <style>
+        h1 {
+            font-size: 38px;
+            font-weight: 800;
+            margin: 0;
+            color: #d88a00;
+            text-align: left;
+        }
+
+        .login-form {
+            margin-top: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 20px;
+            font-weight: 500;
+            color: #111;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 46px;
+            padding: 10px 12px;
+            border: 1.5px solid #bdbdbd;
+            border-radius: 12px;
+            font-size: 16px;
+            background-color: #f9f9f9;
+            box-sizing: border-box;
+        }
+
+        .forgot-link {
+            display: block;
+            text-align: right;
+            margin-top: 8px;
+            color: #c85c2d;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            margin-top: 18px;
+            padding: 11px;
+            background-color: #e58d00;
+            color: white;
+            border: none;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #c77400;
+        }
+
+        .right {
+            width: 50%;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .right img {
+            width: 150%;
+            max-width: none;
+            height: auto;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* Estilos para mensajes de feedback */
+        .alert {
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .alert-error {
+            background-color: #fceaea;
+            color: #b90707;
+            border: 1px solid #f5c6c6;
+        }
+        .alert-success {
+            background-color: #eaf6fc;
+            color: #2d6d95;
+            border: 1px solid #c6e3f5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="left">
+        <div class="card">
+            <div class="top-text">
+                <div class="welcome-block">
+                    <p class="welcome">Bienvenido a</p>
+                    <h1>EduPlazas</h1>
+                </div>
+
+                <div class="register-block">
+                    <p>No tienes cuenta?</p>
+                    <a th:href="@{/register}" class="register-link">Regístrate</a>
+                </div>
+            </div>
+
+            <form th:action="@{/login}" method="post" class="login-form">
+                
+                <div th:if="${param.error}" class="alert alert-error">
+                    El correo o la contraseña son incorrectos.
+                </div>
+
+                <div th:if="${param.registrado}" class="alert alert-success">
+                    ¡Registro completado! Ya puedes iniciar sesión.
+                </div>
+
+                <div th:if="${param.logout}" class="alert alert-success">
+                    Has cerrado sesión correctamente.
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Introduzca su correo electrónico</label>
+                    <input type="email" id="email" name="email" placeholder="Correo electrónico" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Introduzca su contraseña</label>
+                    <input type="password" id="password" name="password" placeholder="Contraseña" required>
+                    <a href="#" class="forgot-link">He olvidado mi contraseña</a>
+                </div>
+
+                <button type="submit" class="btn">Iniciar Sesión</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="right">
+        <img th:src="@{/images/login.png}" alt="Imagen login">
+    </div>
+    
 </body>
 </html>

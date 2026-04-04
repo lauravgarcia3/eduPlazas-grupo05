@@ -1,14 +1,594 @@
 <!DOCTYPE html>
-<html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>Estado Solicitud</title>
+    <meta charset="UTF-8">
+    <title>Estado de Solicitud - EduPlazas</title>
+
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <style>
+        .topbar-right {
+            gap: 10px;
+        }
+
+        .page-wrapper {
+            padding: 18px 0 56px 0;
+        }
+
+        .status-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .status-panel {
+            background-color: #f3f3f3;
+            border-radius: 34px;
+            padding: 28px 28px 40px 28px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .status-banner {
+            border-radius: 38px;
+            padding: 34px 40px;
+            color: white;
+            margin-bottom: 34px;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
+        }
+
+        .status-banner h2 {
+            margin: 0 0 12px 0;
+            font-size: 34px;
+            font-weight: 800;
+        }
+
+        .status-banner p {
+            margin: 0;
+            font-size: 18px;
+            line-height: 1.4;
+        }
+
+        .banner-proceso {
+            background-color: #67a8cf;
+        }
+
+        .banner-rechazada {
+            background-color: #b90707;
+        }
+
+        .banner-aceptada {
+            background-color: #67a8cf;
+			padding: 24px 28px;
+    		margin-bottom: 24px;
+        }
+
+		.banner-aceptada h2 {
+		    font-size: 26px;
+		    margin-bottom: 8px;
+		}
+
+		.banner-aceptada p {
+		    font-size: 14px;
+		}
+
+        .resolution-box {
+            max-width: 620px;
+            margin: 0 auto 40px auto;
+            background-color: #f3eee3;
+            border: 2px solid #e2b362;
+            border-radius: 24px;
+            padding: 20px 18px;
+            text-align: center;
+        }
+
+        .resolution-box h3 {
+            margin: 0 0 18px 0;
+            font-size: 24px;
+            color: #e58d00;
+            font-weight: 800;
+        }
+
+        .resolution-box .date {
+            margin: 0 0 18px 0;
+            font-size: 28px;
+            font-weight: 800;
+            color: #111;
+        }
+
+        .resolution-box p {
+            margin: 0;
+            font-size: 15px;
+            color: #2d6d95;
+        }
+
+        .section-subtitle {
+            font-size: 24px;
+            font-weight: 800;
+            color: #e58d00;
+            margin: 0 0 18px 0;
+        }
+
+        .minor-card {
+            background-color: #dfe8ee;
+            border-radius: 18px;
+            padding: 22px 24px;
+            margin-bottom: 30px;
+        }
+
+        .minor-card h3 {
+            margin: 0 0 14px 0;
+            font-size: 18px;
+            font-weight: 800;
+            color: #111;
+        }
+
+        .minor-card p {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: #222;
+        }
+
+        .minor-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .primary-btn {
+		    display: flex;
+    		justify-content: center;
+	    	align-items: center;
+		    width: 340px;
+    		height: 46px;
+		    margin: 0 auto;
+    		background-color: #e58d00;
+	    	border: none;
+	    	border-radius: 14px;
+		    font-size: 14px;
+	    	font-weight: 800;
+		    color: white;
+		    text-decoration: none;
+    		cursor: pointer;
+		    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.10);
+		}
+
+        .primary-btn:hover {
+            background-color: #c77400;
+        }
+
+        .accepted-card {
+    		background-color: white;
+		    border-radius: 24px;
+		    padding: 20px 22px 28px 22px;
+		    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+		    max-width: 920px;
+		    margin: 0 auto;
+		}
+
+        .accepted-image-box {
+    		position: relative;
+    		margin-bottom: 18px;
+		}
+
+        .accepted-image {
+		    width: 100%;
+		    height: 220px;
+		    object-fit: cover;
+    		border-radius: 8px;
+    		display: block;
+		}
+
+        .confirmed-badge {
+		    position: absolute;
+		    top: -10px;
+		    right: 18px;
+		    background-color: #e58d00;
+		    color: white;
+		    font-weight: 800;
+		    font-size: 14px;
+		    padding: 10px 16px;
+		    border-radius: 10px;
+		}
+
+        .center-name {
+		    font-size: 20px;
+		    font-weight: 800;
+		    color: #e58d00;
+		    margin: 0 0 18px 0;
+		}
+
+        .info-grid {
+		    display: grid;
+		    grid-template-columns: 1fr 1fr;
+		    gap: 18px 18px;
+		    margin-bottom: 24px;	
+		}
+
+        .info-box {
+		    border-radius: 14px;
+		    padding: 16px 16px;
+		    color: white;
+		    min-height: 96px;
+		}
+
+        .info-box.orange {
+            background-color: #ddb36a;
+        }
+
+        .info-box.blue {
+            background-color: #67a8cf;
+        }
+
+        .info-box h4 {
+		    margin: 0 0 10px 0;
+		    font-size: 16px;
+		    font-weight: 800;
+		}
+
+        .info-box p {
+		    margin: 0 0 6px 0;
+		    font-size: 13px;
+		    line-height: 1.3;
+		}
+
+        .divider {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 30px 0 26px 0;
+        }
+
+        .schedule-title {
+		    font-size: 18px;
+		    font-weight: 800;
+		    color: #e58d00;
+		    margin: 0 0 16px 0;
+		}
+
+        .schedule-card {
+		    background-color: #f3eee3;
+		    border-radius: 14px;
+		    padding: 16px 16px;
+		    margin-bottom: 14px;
+		}
+
+        .schedule-card.blue {
+            background-color: #dfe8ee;
+        }
+
+        .schedule-card h4 {
+		    margin: 0 0 12px 0;
+		    font-size: 16px;
+		    font-weight: 800;
+		    color: #e58d00;
+		}
+
+        .schedule-card.blue h4 {
+            color: #67a8cf;
+        }
+
+        .schedule-row {
+		    display: flex;
+		    justify-content: space-between;
+		    align-items: center;
+		    background-color: white;
+		    border-radius: 8px;
+		    padding: 8px 10px;
+		    margin-bottom: 8px;
+		    font-size: 13px;
+		    font-weight: 700;
+		}
+
+        .schedule-note {
+            background-color: #67a8cf;
+            color: white;
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-size: 12px;
+            line-height: 1.3;
+            margin-top: 8px;
+        }
+
+        .schedule-note.orange {
+            background-color: #e58d00;
+        }
+
+        .map-box {
+            background-color: #dfe8ee;
+            border-radius: 16px;
+            padding: 16px;
+        }
+
+        .map-image {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 8px;
+            display: block;
+            margin-bottom: 14px;
+        }
+
+        .map-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .map-info-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .map-info-item h5 {
+            margin: 0 0 6px 0;
+            font-size: 14px;
+            font-weight: 800;
+            color: #67a8cf;
+        }
+
+        .map-info-item p {
+            margin: 0;
+            font-size: 12px;
+            line-height: 1.3;
+            color: #222;
+        }
+
+        @media (max-width: 900px) {
+            .page-wrapper {
+                padding: 20px 16px 40px 16px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .status-panel {
+                padding: 18px 16px 28px 16px;
+            }
+
+            .status-banner {
+                padding: 24px 20px;
+                border-radius: 26px;
+            }
+
+            .status-banner h2 {
+                font-size: 28px;
+            }
+
+            .status-banner p {
+                font-size: 18px;
+            }
+
+            .resolution-box {
+                padding: 22px 16px;
+            }
+
+            .resolution-box h3 {
+                font-size: 24px;
+            }
+
+            .resolution-box .date {
+                font-size: 28px;
+            }
+
+            .primary-btn {
+                width: 100%;
+            }
+
+            .info-grid,
+            .map-info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .accepted-image {
+                height: 190px;
+            }
+
+            .map-image {
+                height: 220px;
+            }
+
+            .schedule-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<h1>Estado de la Solicitud</h1>
+<header class="topbar">
+    <div class="logo">EduPlazas</div>
 
-<p>Estado: En proceso</p>
-<a href="/solicitante/home">Volver</a>
+    <div class="topbar-right">
+        <!-- Futuro backend: th:text="'Hola, ' + ${solicitante.nombreCompleto}" -->
+        <div class="user-name">Hola, Familia López García</div>
+    </div>
+</header>
+
+<main class="page-wrapper">
+
+    <div class="status-container">
+        <div class="status-panel">
+
+            <!-- ========================= -->
+            <!-- ESTADO: EN PROCESO -->
+            <!-- Activar este bloque para pruebas frontend -->
+            <!-- Futuro backend: <section th:if="${estado == 'EN_PROCESO'}"> -->
+			<!--
+			<section>
+                <div class="status-banner banner-proceso">
+                    <h2>Solicitud en Proceso</h2>
+                    <p>Su solicitud está siendo revisada</p>
+                </div>
+
+                <div class="resolution-box">
+                    <h3>Fecha Estimada de Resolución</h3>
+                    <p class="date">15 de Junio de 2026</p>
+                    <p>Recibirá una notificación cuando se resuelva tu solicitud</p>
+                </div>
+
+                <h2 class="section-subtitle">Información del Menor</h2>
+
+                <div class="minor-card">
+                    <h3>Juan López García</h3>
+                    <p>Fecha de nacimiento: 15/03/2023</p>
+                    <p>Nivel solicitado: Educación Infantil 3 años</p>
+                </div>
+
+				<a th:href="@{/solicitante/home}" class="primary-btn">Volver a Mis Solicitudes</a>
+            </section>
+			-->
+            <!-- Futuro backend: </section> -->
+			
+
+            <!-- ========================= -->
+            <!-- ESTADO: RECHAZADA -->
+            <!-- Activar este bloque para pruebas frontend -->
+            <!-- Futuro backend: <section th:if="${estado == 'RECHAZADA'}"> -->
+			<!--
+			<section>
+                <div class="status-banner banner-rechazada">
+                    <h2>Solicitud rechazada</h2>
+                    <p>
+						Su solicitud ha sido rechazada por algún error en el proceso de matriculación,
+						si el proceso de registro de solicitudes sigue vigente, vuelva a rellenar el formulario siguiendo detalladamente las instrucciones.
+					</p>
+                </div>
+
+                <h2 class="section-subtitle">Información del Menor</h2>
+
+                <div class="minor-card">
+                    <h3>Juan López García</h3>
+                    <p>Fecha de nacimiento: 15/03/2023</p>
+                    <p>Nivel solicitado: Educación Infantil 3 años</p>
+                </div>
+
+				<a th:href="@{/solicitante/home}" class="primary-btn">Volver a Mis Solicitudes</a>
+            </section>
+			-->
+			<!-- Futuro backend: </section> -->
+
+
+            <!-- ========================= -->
+            <!-- ESTADO: ACEPTADA -->
+            <!-- Activar este bloque para pruebas frontend -->
+            <!-- Futuro backend: <section th:if="${estado == 'ACEPTADA'}"> -->
+			<section>
+                <div class="status-banner banner-aceptada">
+                    <h2>¡Solicitud Aceptada!</h2>
+                    <p>El alumno/alumna ha sido admitido en el centro educativo</p>
+                </div>
+
+                <div class="accepted-card">
+                    <div class="accepted-image-box">
+                        <img src="https://via.placeholder.com/900x250" alt="Centro educativo" class="accepted-image">
+                        <div class="confirmed-badge">Plaza Confirmada</div>
+                    </div>
+
+                    <h2 class="center-name">CEIP San Francisco de Asís</h2>
+
+                    <div class="info-grid">
+                        <div class="info-box orange">
+                            <h4>Dirección</h4>
+                            <p>Calle de la Educación, 123</p>
+                            <p>28001 Madrid, España</p>
+                        </div>
+
+                        <div class="info-box blue">
+                            <h4>Correo Electrónico</h4>
+                            <p>info@ceipsanfrancisco.edu.es</p>
+                        </div>
+
+                        <div class="info-box orange">
+                            <h4>Teléfono</h4>
+                            <p>+34 91 234 5678</p>
+                            <p>+34 91 234 5679 (Secretaría)</p>
+                        </div>
+
+                        <div class="info-box blue">
+                            <h4>Web</h4>
+                            <p>www.ceipsanfrancisco.edu.es</p>
+                        </div>
+                    </div>
+
+                    <hr class="divider">
+
+                    <h3 class="schedule-title">Horarios del Centro</h3>
+
+                    <div class="schedule-card">
+                        <h4>Horario Lectivo</h4>
+                        <div class="schedule-row">
+                            <span>Lunes a Viernes</span>
+                            <span>9:00 - 14:00</span>
+                        </div>
+                        <div class="schedule-row">
+                            <span>Tarde (opcional)</span>
+                            <span>15:00 - 17:00</span>
+                        </div>
+                        <div class="schedule-note">
+                            Recreo<br>
+                            11:00 - 11:30
+                        </div>
+                    </div>
+
+                    <div class="schedule-card blue">
+                        <h4>Horario Secretaría</h4>
+                        <div class="schedule-row">
+                            <span>Lunes a Viernes</span>
+                            <span>8:30 - 14:30</span>
+                        </div>
+                        <div class="schedule-row">
+                            <span>Tardes (Lunes y Miércoles)</span>
+                            <span>15:30 - 17:30</span>
+                        </div>
+                        <div class="schedule-note orange">
+                            Atención Telefónica<br>
+                            Se recomienda llamar en horario de mañana para una mejor atención
+                        </div>
+                    </div>
+
+                    <div class="schedule-card">
+                        <h4>Horario Comedor</h4>
+                        <div class="schedule-row">
+                            <span>Primer Turno</span>
+                            <span>13:00 - 14:00</span>
+                        </div>
+                        <div class="schedule-row">
+                            <span>Segundo Turno</span>
+                            <span>14:00 - 15:00</span>
+                        </div>
+                        <div class="schedule-note">
+                            Menú<br>
+                            Menús elaborados por nutricionistas. Disponibles opciones para alergias e intolerancias.
+                        </div>
+                    </div>
+
+                    <hr class="divider">
+
+                    <h3 class="schedule-title">Ubicación</h3>
+
+                    <div class="map-box">
+                        <img src="https://via.placeholder.com/900x320" alt="Mapa del centro" class="map-image">
+
+                        <div class="map-info-grid">
+                            <div class="map-info-item">
+                                <h5>Transporte Público</h5>
+                                <p>Metro: Línea 3 (Estación Educación)</p>
+                                <p>Autobús: Líneas 12, 45, 87</p>
+                            </div>
+
+                            <div class="map-info-item">
+                                <h5>Aparcamiento</h5>
+                                <p>Parking gratuito disponible</p>
+                                <p>Zona de carga y descarga</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Futuro backend: </section> -->
+
+        </div>
+    </div>
+</main>
 
 </body>
 </html>
