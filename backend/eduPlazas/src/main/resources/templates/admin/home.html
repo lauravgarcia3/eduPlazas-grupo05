@@ -4,53 +4,10 @@
     <meta charset="UTF-8">
     <title>Convocatorias - EduPlazas</title>
 
+    <link rel="stylesheet" th:href="@{/css/common.css}">
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #efefef;
-            color: #111;
-        }
-
-        .topbar {
-            background-color: #ddb36a;
-            height: 95px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 56px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        .logo {
-            font-size: 50px;
-            font-weight: 800;
-            color: white;
-        }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-        }
-
-        .user-name {
-            font-size: 24px;
-            font-weight: 500;
-            color: #111;
-        }
-
         .page-wrapper {
             padding: 30px 0 50px 0;
-        }
-
-        .page-content {
-            max-width: 1380px;
-            margin: 0 auto;
-            padding: 0 24px;
         }
 
         .page-header {
@@ -62,8 +19,6 @@
 
         .page-title {
             font-size: 38px;
-            font-weight: 800;
-            color: #e58d00;
             margin: 0;
         }
 
@@ -259,29 +214,8 @@
         }
 
         @media (max-width: 800px) {
-            .topbar {
-                flex-direction: column;
-                justify-content: center;
-                gap: 10px;
-                height: auto;
-                padding: 18px 20px;
-                text-align: center;
-            }
-
-            .logo {
-                font-size: 42px;
-            }
-
-            .user-name {
-                font-size: 22px;
-            }
-
             .page-wrapper {
                 padding: 24px 0 40px 0;
-            }
-
-            .page-content {
-                padding: 0 16px;
             }
 
             .page-header {
