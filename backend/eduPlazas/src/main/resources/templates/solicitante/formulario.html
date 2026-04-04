@@ -4,44 +4,10 @@
     <meta charset="UTF-8">
     <title>Formulario de Solicitud - EduPlazas</title>
 
+    <link rel="stylesheet" th:href="@{/css/common.css}">
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #efefef;
-            color: #111;
-        }
-
-        .topbar {
-            background-color: #ddb36a;
-            height: 95px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 56px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        .logo {
-            font-size: 50px;
-            font-weight: 800;
-            color: white;
-        }
-
         .topbar-right {
-            display: flex;
-            align-items: center;
             gap: 10px;
-        }
-
-        .user-name {
-            font-size: 24px;
-            font-weight: 500;
-            color: #111;
         }
 
         .logout-icon {
@@ -236,23 +202,6 @@
         }
 
         @media (max-width: 900px) {
-            .topbar {
-                flex-direction: column;
-                justify-content: center;
-                gap: 10px;
-                height: auto;
-                padding: 18px 20px;
-                text-align: center;
-            }
-
-            .logo {
-                font-size: 42px;
-            }
-
-            .user-name {
-                font-size: 22px;
-            }
-
             .page-wrapper {
                 padding: 20px 16px 40px 16px;
             }

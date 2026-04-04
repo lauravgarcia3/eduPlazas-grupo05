@@ -4,41 +4,10 @@
     <meta charset="UTF-8">
     <title>Inicio Solicitante - EduPlazas</title>
 
+	<link rel="stylesheet" th:href="@{/css/common.css}">
     <style>
-		* {
-		    box-sizing: border-box;
-		}
-		body {
-		    font-family: Arial, sans-serif;
-		    margin: 0;
-		    background-color: #efefef;
-		    color: #111;
-		}
-
 		.page-content {
 		    padding: 20px;
-		}
-
-		.topbar {
-		    background-color: #ddb36a;
-		    height: 95px;
-		    display: flex;
-		    align-items: center;
-		    justify-content: space-between;
-		    padding: 0 56px;
-		    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-		}
-
-		.logo {
-		    font-size: 50px;
-		    font-weight: 800;
-		    color: white;
-		}
-
-		.user-name {
-		    font-size: 24px;
-		    font-weight: 500;
-		    color: #111;
 		}
 
 		.hero-card {
@@ -248,23 +217,6 @@
 		}
 
 		@media (max-width: 768px) {
-		    .topbar {
-		        flex-direction: column;
-		        justify-content: center;
-		        gap: 10px;
-		        height: auto;
-		        padding: 20px;
-		        text-align: center;
-		    }
-
-		    .logo {
-		        font-size: 42px;
-		    }
-
-		    .user-name {
-		        font-size: 22px;
-		    }
-
 		    .hero-left h1 {
 		        font-size: 34px;
 		    }
