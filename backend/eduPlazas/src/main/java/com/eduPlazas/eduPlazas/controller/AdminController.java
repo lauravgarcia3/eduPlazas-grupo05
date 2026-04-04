@@ -16,4 +16,8 @@ public class AdminController {
 	public String convocatoria() {
 		return "admin/convocatoria";
 	}
+	@GetMapping("/publicaciones")
+	public String publicaciones() {
+		return "admin/publicaciones";
+	}
 }

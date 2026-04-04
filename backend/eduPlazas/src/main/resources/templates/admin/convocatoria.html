@@ -1,12 +1,501 @@
 <!DOCTYPE html>
-<html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>Crear Convocatoria</title>
+    <meta charset="UTF-8">
+    <title>Nueva Convocatoria - EduPlazas</title>
+
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <style>
+        .topbar-right {
+            gap: 10px;
+        }
+
+        .page-wrapper {
+            padding: 34px 0 60px 0;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: #e58d00;
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            margin-bottom: 24px;
+        }
+
+        .page-title {
+            font-size: 42px;
+            margin: 0 0 14px 0;
+        }
+
+        .page-subtitle {
+            font-size: 18px;
+            color: #666;
+            margin: 0 0 34px 0;
+        }
+
+        .stepper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 34px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #b3b3b3;
+        }
+
+        .step.active {
+            color: #e58d00;
+        }
+
+        .step-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 800;
+            background-color: #d9d9d9;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .step.active .step-circle {
+            background-color: #e58d00;
+        }
+
+        .step-line {
+            width: 82px;
+            height: 2px;
+            background-color: #d6d6d6;
+        }
+
+        .form-card {
+            background-color: #f7f7f7;
+            border-radius: 34px;
+            padding: 40px 46px 42px 46px;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #111;
+            margin: 0 0 28px 0;
+        }
+
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 800;
+            color: #111;
+            margin-bottom: 10px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            border: 2px solid #e58d00;
+            border-radius: 14px;
+            background-color: #f7f7f7;
+            padding: 0 16px;
+            font-size: 14px;
+            color: #111;
+            outline: none;
+        }
+
+        .form-group input,
+        .form-group select {
+            height: 52px;
+        }
+
+        .form-group textarea {
+            min-height: 160px;
+            resize: vertical;
+            padding: 14px 16px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+        }
+
+        .config-box {
+            background-color: #efefef;
+            border-radius: 22px;
+            padding: 26px 26px 6px 26px;
+            margin-top: 10px;
+        }
+
+        .config-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #111;
+            margin: 0 0 24px 0;
+        }
+
+        .step-description {
+            font-size: 22px;
+            line-height: 1.45;
+            color: #111;
+            margin: 26px 0 34px 0;
+            max-width: 1040px;
+        }
+
+        .center-card {
+            background-color: #f3eee3;
+            border-radius: 22px;
+            padding: 28px 30px;
+            margin-bottom: 24px;
+        }
+
+        .center-grid {
+            display: grid;
+            grid-template-columns: 1fr 260px;
+            gap: 26px;
+            align-items: end;
+        }
+
+        .center-label {
+            display: block;
+            font-size: 18px;
+            font-weight: 800;
+            color: #e58d00;
+            margin-bottom: 12px;
+        }
+
+        .center-column input,
+        .places-column input {
+            width: 100%;
+            height: 64px;
+            border: 2px solid #e58d00;
+            border-radius: 14px;
+            background-color: #f7f7f7;
+            padding: 0 18px;
+            font-size: 18px;
+            color: #111;
+            outline: none;
+        }
+
+        .places-column input {
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .add-center-btn {
+            width: 100%;
+            height: 76px;
+            border: none;
+            border-radius: 20px;
+            background-color: #ddb36a;
+            color: white;
+            font-size: 22px;
+            font-weight: 800;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
+            margin-bottom: 34px;
+            cursor: pointer;
+        }
+
+        .divider {
+            margin: 26px 0 42px 0;
+        }
+
+        .info-box {
+            border-radius: 24px;
+            padding: 28px 34px;
+            margin-bottom: 42px;
+        }
+
+        .info-box-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #67a8cf;
+            margin-bottom: 16px;
+        }
+
+        .info-list {
+            margin: 0;
+            padding-left: 22px;
+            font-size: 16px;
+            line-height: 1.7;
+            color: #111;
+        }
+
+        .form-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            margin-top: 10px;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 74px;
+            border: none;
+            border-radius: 20px;
+            font-size: 22px;
+            font-weight: 800;
+            text-decoration: none;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
+            cursor: pointer;
+        }
+
+        .primary-btn {
+            background-color: #e58d00;
+            color: white;
+        }
+
+        .secondary-btn {
+            background-color: #bdbdbd;
+            color: white;
+        }
+
+        .step-1-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .step-1-actions .primary-btn {
+            width: 430px;
+            height: 64px;
+            font-size: 18px;
+            border-radius: 18px;
+        }
+
+        @media (max-width: 1000px) {
+            .form-grid,
+            .center-grid,
+            .form-actions {
+                grid-template-columns: 1fr;
+            }
+
+            .step-1-actions .primary-btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .page-title {
+                font-size: 30px;
+            }
+
+            .page-subtitle {
+                font-size: 16px;
+            }
+
+            .stepper {
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .step-line {
+                width: 40px;
+            }
+
+            .form-card {
+                padding: 26px 18px 28px 18px;
+                border-radius: 24px;
+            }
+
+            .form-title {
+                font-size: 24px;
+            }
+
+            .step-description {
+                font-size: 18px;
+            }
+
+            .add-center-btn,
+            .primary-btn,
+            .secondary-btn {
+                font-size: 18px;
+            }
+        }
+    </style>
 </head>
 <body>
-	<h1>Crear Convocatoria</h1>
-	
-	<p>Aqui irá el formulario de convocatoria</p>
-	<a href="/admin/home">Volver</a>
+
+<header class="topbar">
+    <div class="logo">EduPlazas</div>
+    <div class="topbar-right">
+        <div class="user-name">Panel de Administración</div>
+    </div>
+</header>
+
+<main class="page-wrapper">
+    <div class="page-content">
+
+        <section id="step-1">
+            <a th:href="@{/admin/home}" class="back-link">← Volver a Convocatorias</a>
+
+            <h1 class="page-title">Nueva Convocatoria</h1>
+            <p class="page-subtitle">Complete todos los datos para crear una nueva convocatoria</p>
+
+            <div class="stepper">
+                <div class="step active">
+                    <div class="step-circle">1</div>
+                    <span>Información Básica</span>
+                </div>
+
+                <div class="step-line"></div>
+
+                <div class="step">
+                    <div class="step-circle">2</div>
+                    <span>Centros y Plazas</span>
+                </div>
+            </div>
+
+            <section class="form-card">
+                <h2 class="form-title">Información Básica de la Convocatoria</h2>
+
+                <div class="form-group">
+                    <label for="nombreConvocatoria">Nombre de la convocatoria *</label>
+                    <input type="text" id="nombreConvocatoria" placeholder="Ej: Educación Infantil 2026-2027">
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="fechaInicio">Fecha de inicio *</label>
+                        <input type="date" id="fechaInicio">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fechaFin">Fecha de fin *</label>
+                        <input type="date" id="fechaFin">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcionConvocatoria">Descripción de la convocatoria</label>
+                    <textarea id="descripcionConvocatoria"></textarea>
+                </div>
+
+                <div class="config-box">
+                    <h3 class="config-title">Configuración General</h3>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="tipoConvocatoria">Tipo de convocatoria</label>
+                            <select id="tipoConvocatoria">
+                                <option>Educación Infantil</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="estadoInicial">Estado inicial</label>
+                            <select id="estadoInicial">
+                                <option>Borrador</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="anioAcademico">Año académico</label>
+                            <input type="text" id="anioAcademico" placeholder="2026-2027">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="modalidad">Modalidad</label>
+                            <select id="modalidad">
+                                <option>Presencial</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-1-actions">
+                    <button type="button" class="primary-btn" onclick="showStep2()">Siguiente Paso →</button>
+                </div>
+            </section>
+        </section>
+
+        <section id="step-2" style="display: none;">
+            <section class="form-card">
+                <div class="stepper">
+                    <div class="step">
+                        <div class="step-circle">1</div>
+                        <span>Información Básica</span>
+                    </div>
+
+                    <div class="step-line"></div>
+
+                    <div class="step active">
+                        <div class="step-circle">2</div>
+                        <span>Centros y Plazas</span>
+                    </div>
+                </div>
+
+                <p class="step-description">
+                    Seleccione los centros educativos participantes y asigne el número de plazas disponibles para cada uno
+                </p>
+
+                <div class="center-card">
+                    <div class="center-grid">
+                        <div class="center-column">
+                            <label class="center-label" for="centroEducativo">Centro Educativo</label>
+                            <input type="text" id="centroEducativo" value="CEIP San Francisco de Asís">
+                        </div>
+
+                        <div class="places-column">
+                            <label class="center-label" for="plazasDisponibles">Plazas Disponibles</label>
+                            <input type="number" id="plazasDisponibles" value="175">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="button" class="add-center-btn">＋ Añadir Centro Educativo</button>
+
+                <hr class="divider">
+
+                <div class="info-box">
+                    <div class="info-box-title">Información Importante</div>
+                    <ul class="info-list">
+                        <li>Debe asignar al menos un centro educativo con plazas disponibles</li>
+                        <li>El número de plazas debe ser mayor a 0</li>
+                        <li>Puede añadir múltiples centros educativos a la convocatoria</li>
+                        <li>Los centros se pueden eliminar antes de publicar la convocatoria</li>
+                    </ul>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="secondary-btn" onclick="showStep1()">Anterior</button>
+                    <button type="button" class="primary-btn">Crear Convocatoria →</button>
+                </div>
+            </section>
+        </section>
+
+    </div>
+</main>
+
+<script>
+    function showStep2() {
+        document.getElementById('step-1').style.display = 'none';
+        document.getElementById('step-2').style.display = 'block';
+    }
+
+    function showStep1() {
+        document.getElementById('step-2').style.display = 'none';
+        document.getElementById('step-1').style.display = 'block';
+    }
+</script>
+
 </body>
 </html>
