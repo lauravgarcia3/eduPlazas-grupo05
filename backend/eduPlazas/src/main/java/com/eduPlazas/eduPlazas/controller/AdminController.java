@@ -42,3 +42,8 @@ public class AdminController {
 	}
 
 }
+	@GetMapping("/publicaciones")
+	public String publicaciones() {
+		return "admin/publicaciones";
+	}
+}

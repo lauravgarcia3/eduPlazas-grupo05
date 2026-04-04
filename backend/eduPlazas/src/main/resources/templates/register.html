@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - EduPlazas</title>
+
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+    <style>
+        h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin: 0;
+            color: #d88a00;
+            text-align: left;
+        }
+
+        .register-form {
+            margin-top: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 19px;
+            font-weight: 500;
+            color: #111;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 46px;
+            padding: 10px 14px;
+            border: 1.5px solid #bdbdbd;
+            border-radius: 12px;
+            font-size: 15px;
+            background-color: #f9f9f9;
+            box-sizing: border-box;
+        }
+
+        .double-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .half {
+            width: 50%;
+        }
+
+        .password-label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .password-label-row label {
+            margin-bottom: 0;
+        }
+
+        .eye-icon {
+            font-size: 20px;
+            color: #999;
+            line-height: 1;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            margin-top: 18px;
+            padding: 13px;
+            background-color: #e58d00;
+            color: white;
+            border: none;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="left">
+        <div class="card">
+            <div class="top-text">
+                <div class="welcome-block">
+                    <p class="welcome">Bienvenido a</p>
+                    <h1>EduPlazas</h1>
+                </div>
+
+                <div class="register-block">
+                    <p>¿Ya tienes cuenta?</p>
+                    <a th:href="@{/login}" class="register-link">Inicia sesión</a>
+                </div>
+            </div>
+
+<form th:action="@{/register}" th:object="${usuario}" method="post" class="register-form">
+                <div class="form-group">
+                    <label for="email">Introduzca su correo electrónico</label>
+                    <input type="email" id="email" th:field="*{email}" placeholder="Correo electrónico" required>
+                </div>
+
+                <div class="double-group">
+                    <div class="form-group half">
+                        <label for="nombreCompleto">Nombre del usuario</label>
+                        <input type="text" id="nombreCompleto" th:field="*{nombreCompleto}" placeholder="Ej. Familia López" required>
+                    </div>
+
+                    <div class="form-group half">
+                        <label for="telefono">Número de teléfono</label>
+                        <input type="text" id="telefono" name="telefono" placeholder="Número de teléfono">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="password-label-row">
+                        <label for="password">Introduzca su contraseña</label>
+                        <span class="eye-icon">👁</span>
+                    </div>
+                    <input type="password" id="password" th:field="*{password}" placeholder="Contraseña" required>
+                </div>
+
+                <button type="submit" class="btn">Registrarme</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="right">
+        <img th:src="@{/images/login.png}" alt="Imagen registro">
+    </div>
+
+</body>
+</html>
