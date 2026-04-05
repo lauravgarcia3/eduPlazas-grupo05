@@ -9,15 +9,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.eduPlazas.eduPlazas.repository.UsuarioRepository;
 import com.eduPlazas.eduPlazas.service.SolicitudService;
+import com.eduPlazas.eduPlazas.service.ConvocatoriaService;
 import com.eduPlazas.eduPlazas.model.Solicitud;
+import com.eduPlazas.eduPlazas.model.DomicilioFamiliar;
+import com.eduPlazas.eduPlazas.model.Menor;
+import com.eduPlazas.eduPlazas.model.Tutor;
+import com.eduPlazas.eduPlazas.model.Convocatoria;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/solicitante")
@@ -28,6 +37,9 @@ public class SolicitanteController {
 
     @Autowired
     private SolicitudService solicitudService;
+
+    @Autowired
+    private ConvocatoriaService convocatoriaService;
 
     @GetMapping("/home")
     public String home(Authentication authentication, Model model) {
