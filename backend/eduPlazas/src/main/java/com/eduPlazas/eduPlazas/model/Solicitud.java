@@ -6,8 +6,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Column;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +23,13 @@ private Long id;
 
 private String nombreSolicitante;
 private String estado;
-private String usuario;
 
 private String centroPreferencia;
 private String cursoSolicitado;
 
 private Boolean declaracionVeracidad;
 private Boolean autorizacionProteccionDatos;
+private Boolean completada = false;
 
 @OneToOne(cascade = CascadeType.ALL)
 @JoinColumn(name = "menor_id")
@@ -48,42 +50,46 @@ private DomicilioFamiliar domicilioFamiliar;
 @OneToMany(mappedBy = "solicitud", cascade = CascadeType.ALL)
 private List<DocumentoAdjunto> documentos = new ArrayList<>();
 
+@ManyToOne
+@JoinColumn(name = "usuario_id", nullable = false)
+private Usuario usuario;
+
 public Solicitud() {
 }
 
-public Solicitud(Long id, String nombreSolicitante, String estado, String usuario) {
+public Solicitud(Long id, String nombreSolicitante, String estado, Usuario usuario) {
 this.id = id;
 this.nombreSolicitante = nombreSolicitante;
 this.estado = estado;
 this.usuario = usuario;
 }
 
-public Solicitud(Long id, String nombreSolicitante, String estado, String usuario, Menor menor) {
-this.id = id;
-this.nombreSolicitante = nombreSolicitante;
-this.estado = estado;
-this.usuario = usuario;
-this.menor = menor;
+public Solicitud(Long id, String nombreSolicitante, String estado, Usuario usuario, Menor menor) {
+    this.id = id;
+    this.nombreSolicitante = nombreSolicitante;
+    this.estado = estado;
+    this.usuario = usuario;
+    this.menor = menor;
 }
 
-public Solicitud(Long id, String nombreSolicitante, String estado, String usuario,
-Menor menor, Tutor tutor1, Tutor tutor2,
-DomicilioFamiliar domicilioFamiliar,
-String centroPreferencia, String cursoSolicitado,
-Boolean declaracionVeracidad, Boolean autorizacionProteccionDatos) {
-this.id = id;
-this.nombreSolicitante = nombreSolicitante;
-this.estado = estado;
-this.usuario = usuario;
-this.menor = menor;
-this.tutor1 = tutor1;
-this.tutor2 = tutor2;
-this.domicilioFamiliar = domicilioFamiliar;
-this.centroPreferencia = centroPreferencia;
-this.cursoSolicitado = cursoSolicitado;
-this.declaracionVeracidad = declaracionVeracidad;
-this.autorizacionProteccionDatos = autorizacionProteccionDatos;
-}
+public Solicitud(Long id, String nombreSolicitante, String estado, Usuario usuario,
+                     Menor menor, Tutor tutor1, Tutor tutor2,
+                     DomicilioFamiliar domicilioFamiliar,
+                     String centroPreferencia, String cursoSolicitado,
+                     Boolean declaracionVeracidad, Boolean autorizacionProteccionDatos) {
+        this.id = id;
+        this.nombreSolicitante = nombreSolicitante;
+        this.estado = estado;
+        this.usuario = usuario;
+        this.menor = menor;
+        this.tutor1 = tutor1;
+        this.tutor2 = tutor2;
+        this.domicilioFamiliar = domicilioFamiliar;
+        this.centroPreferencia = centroPreferencia;
+        this.cursoSolicitado = cursoSolicitado;
+        this.declaracionVeracidad = declaracionVeracidad;
+        this.autorizacionProteccionDatos = autorizacionProteccionDatos;
+    }
 
 public Long getId() {
 return id;
@@ -109,11 +115,11 @@ public void setEstado(String estado) {
 this.estado = estado;
 }
 
-public String getUsuario() {
+public Usuario getUsuario() {
 return usuario;
 }
 
-public void setUsuario(String usuario) {
+public void setUsuario(Usuario usuario) {
 this.usuario = usuario;
 }
 
@@ -147,6 +153,14 @@ return autorizacionProteccionDatos;
 
 public void setAutorizacionProteccionDatos(Boolean autorizacionProteccionDatos) {
 this.autorizacionProteccionDatos = autorizacionProteccionDatos;
+}
+
+public Boolean getCompletada() {
+return completada;
+}
+
+public void setCompletada(Boolean completada) {
+this.completada = completada;
 }
 
 public Menor getMenor() {

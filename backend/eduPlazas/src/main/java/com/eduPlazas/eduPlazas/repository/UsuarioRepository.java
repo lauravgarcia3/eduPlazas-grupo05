@@ -1,6 +1,6 @@
 package com.eduPlazas.eduPlazas.repository;
 
-import com.eduPlazas.eduPlazas.model.Usuario; // Ojo: cambia esto a com.eduPlazas.model.Usuario si elegiste la Opción B
+import com.eduPlazas.eduPlazas.model.Usuario; 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
