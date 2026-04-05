@@ -2,6 +2,9 @@ package com.eduPlazas.eduPlazas.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+import java.util.ArrayList;
+
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
@@ -22,6 +25,9 @@ public class Usuario {
     @Column(nullable = false)
     private String rol;
 
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Solicitud> solicitudes = new ArrayList<>();
+
     // constructor vacío
     public Usuario() {
     }
@@ -41,4 +47,12 @@ public class Usuario {
 
     public String getRol() { return rol; }
     public void setRol(String rol) { this.rol = rol; }
+
+    public List<Solicitud> getSolicitudes() {
+        return solicitudes;
+    }
+
+    public void setSolicitudes(List<Solicitud> solicitudes) {
+        this.solicitudes = solicitudes;
+    }
 }

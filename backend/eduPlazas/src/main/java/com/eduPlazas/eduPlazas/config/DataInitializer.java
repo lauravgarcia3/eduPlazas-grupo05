@@ -1,9 +1,7 @@
 package com.eduPlazas.eduPlazas.config;
 
 import com.eduPlazas.eduPlazas.model.*;
-import com.eduPlazas.eduPlazas.repository.UsuarioRepository;
-import com.eduPlazas.eduPlazas.repository.ConvocatoriaRepository;
-import com.eduPlazas.eduPlazas.repository.SolicitudRepository;
+import com.eduPlazas.eduPlazas.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -40,8 +39,8 @@ public class DataInitializer {
 
                 usuarioRepository.save(admin);
                 usuarioRepository.save(solicitante);
-                System.out.println("✅ Usuario ADMIN creado por defecto: admin@eduplazas.com / admin123");
-                System.out.println("✅ Usuario SOLICITANTE creado por defecto: solicitante@eduplazas.com / solicitante123");
+                System.out.println("Usuario ADMIN creado por defecto: admin@eduplazas.com / admin123");
+                System.out.println("Usuario SOLICITANTE creado por defecto: solicitante@eduplazas.com / solicitante123");
             }
 
             // ==========================================
@@ -81,6 +80,9 @@ public class DataInitializer {
             // ==========================================
             if (solicitudRepository.count() == 0) {
 
+                // Recuperamos al solicitante que se acaba de crear arriba
+                Usuario usuarioSolicitante = usuarioRepository.findByEmail("solicitante@eduplazas.com").orElse(null);
+
                 // SOLICITUD 1 - PENDIENTE
                 Menor menor1 = new Menor(null, "Lucia", "Garcia", "2021-05-10", "Madrid", "F");
                 Tutor tutor1_1 = new Tutor(null, "Laura", "Vicente", "12345678A", "Madre", "600123123", "laura@email.com", "Trabajando");
@@ -90,7 +92,7 @@ public class DataInitializer {
                 Solicitud solicitud1 = new Solicitud();
                 solicitud1.setNombreSolicitante("Laura Vicente");
                 solicitud1.setEstado("Pendiente");
-                solicitud1.setUsuario("familia1");
+                solicitud1.setUsuario(usuarioSolicitante); // Asignamos el usuario recuperado
                 solicitud1.setMenor(menor1);
                 solicitud1.setTutor1(tutor1_1);
                 solicitud1.setTutor2(tutor2_1);
@@ -114,7 +116,7 @@ public class DataInitializer {
                 Solicitud solicitud2 = new Solicitud();
                 solicitud2.setNombreSolicitante("Daniel Sanchez");
                 solicitud2.setEstado("Aceptada");
-                solicitud2.setUsuario("familia2");
+                solicitud2.setUsuario(usuarioSolicitante); // Asignamos el usuario recuperado
                 solicitud2.setMenor(menor2);
                 solicitud2.setTutor1(tutor1_2);
                 solicitud2.setDomicilioFamiliar(domicilio2);

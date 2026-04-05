@@ -235,8 +235,8 @@
 <body>
 	<header class="topbar">
     	<div class="logo">EduPlazas</div>
-	    <!-- Futuro backend: th:text="'Hola, ' + ${nombreFamilia}" -->
-		<div class="user-name">Hola, Familia López García</div>
+	    <a th:href="@{/login}" class="primary-btn">Logout</a>
+		
 		
 	</header>
 
@@ -258,7 +258,7 @@
 				<h1>Convocatoria Abierta:<br>Educación Infantil 2026-2027</h1>
 				<p>Periodo de inscripción: 2 de marzo - 29 de mayo de 2026</p>
         	    <a th:href="@{/solicitante/solicitud}" class="primary-btn">Registrar nueva solicitud de plaza</a>
-            <a th:href="@{/login}" class="primary-btn">Logout</a>
+            
 	        </div>
 
     	    <div class="hero-right">
@@ -272,38 +272,23 @@
 	        <div class="solicitudes-header">
 	            <div>Nombre del Menor</div>
 	            <div>Estado</div>
-		        <div>Puntuación</div>
-        	    <div>Acciones</div>
-    	    </div>
-
-			<!-- Futuro backend:
-				<div class="solicitud-row" th:each="solicitud : ${solicitudes}">
-			    	<div class="nombre-menor" th:text="${solicitud.nombreMenor}">Juan López García</div>
-				    <div>
-			        <span class="estado-pill" th:text="${solicitud.estado}">Borrador</span>
-			    	</div>
-			    	<div class="puntuacion" th:text="${solicitud.puntuacion}">-</div>
-				    <div>
-				        <a th:href="${solicitud.accionUrl}" class="action-btn" th:text="${solicitud.accionTexto}">Continuar</a>
-				    </div>
-				</div>
-			-->
-        	<div class="solicitud-row">
-            	<div class="nombre-menor">Juan López García</div>
-	            <div>
-					<span class="estado-pill estado-borrador">Borrador</span></div>
-	            <div class="puntuacion">-</div>
-	            <div>
-					<a th:href="@{/solicitante/solicitud}" class="action-btn">Continuar</a>
-				</div>
+	            <div>Acciones</div>
 	        </div>
+			<div class="solicitud-row" th:each="solicitud : ${solicitudesIncompletas}">
+            	<div class="nombre-menor" th:text="${solicitud.nombreMenor}"></div>
+            	<div><span class="estado-pill estado-borrador">Borrador</span></div>
+            	<div>
+					<a th:href="@{/solicitante/solicitud/guardar(id=${solicitud.id})}" class="action-btn">Continuar</a>
+				</div>
+			</div>
 
-	        <div class="solicitud-row">
-	            <div class="nombre-menor">Gabriela López García</div>
-	            <div><span class="estado-pill estado-enviada">Enviada</span></div>
-	            <div class="puntuacion">-</div>
-	            <div><a th:href="@{/solicitante/estado}" class="action-btn">Ver detalle</a></div>
-	        </div>
+			<div class="solicitud-row" th:each="solicitud : ${solicitudesCompletas}">
+            	<div class="nombre-menor" th:text="${solicitud.nombreMenor}"></div>
+            	<div><span class="estado-pill estado-enviada">Enviada</span></div>
+            	<div>
+					<a th:href="@{/solicitante/estado(id=${solicitud.id})}" class="action-btn">Ver Detalle</a>
+				</div>
+			</div>
 	    </section>
 
     	<section class="fechas-card">

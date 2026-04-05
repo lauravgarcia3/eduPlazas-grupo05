@@ -1,6 +1,7 @@
 package com.eduPlazas.eduPlazas.controller;
 
 import com.eduPlazas.eduPlazas.model.Solicitud;
+import com.eduPlazas.eduPlazas.model.Usuario;
 import com.eduPlazas.eduPlazas.service.SolicitudService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,14 +62,14 @@ return solicitudService.cambiarEstado(id, estado);
 @GetMapping("/solicitante/mis-solicitudes")
 @ResponseBody
 public List<Solicitud> misSolicitudes() {
-String usuario = obtenerUsuarioActual();
+Usuario usuario = obtenerUsuarioActual();
 return solicitudService.obtenerPorUsuario(usuario);
 }
 
 @GetMapping("/solicitante/estado/{id}")
 @ResponseBody
 public Object verEstadoSolicitud(@PathVariable Long id) {
-String usuario = obtenerUsuarioActual();
+Usuario usuario = obtenerUsuarioActual();
 Optional<Solicitud> solicitud = solicitudService.buscarPorIdYUsuario(id, usuario);
 
 if (solicitud.isPresent()) {
@@ -113,10 +114,10 @@ return solicitudService.guardar(solicitud);
 // MÉTODO TEMPORAL PARA LOGIN
 // =========================
 
-private String obtenerUsuarioActual() {
-// TODO LOGIN:
-// Reemplazar este método por la forma real de obtener el usuario autenticado
-// (sesión, Spring Security, principal, etc.) cuando vuestro compañero termine el login.
-return "familia1";
-}
+private Usuario obtenerUsuarioActual() {
+        // TODO LOGIN: Reemplazar por la sesión real
+        Usuario usuarioTemp = new Usuario(); // <-- SIN NADA ENTRE LOS PARÉNTESIS
+        usuarioTemp.setEmail("solicitante@eduplazas.com");
+        return usuarioTemp;
+    }
 }
