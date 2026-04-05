@@ -2,6 +2,7 @@ package com.eduPlazas.eduPlazas.model;
 
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 
 @Entity
 public class DocumentoAdjunto {
