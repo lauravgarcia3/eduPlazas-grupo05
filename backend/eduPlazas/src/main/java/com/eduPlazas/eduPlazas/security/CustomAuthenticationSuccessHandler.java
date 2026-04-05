@@ -13,32 +13,34 @@ import java.io.IOException;
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        
-        // --- CHIVATOS PARA LA CONSOLA ---
-        System.out.println("=== LOGIN EXITOSO ===");
-        System.out.println("Usuario logueado: " + authentication.getName());
-        System.out.println("Roles detectados: " + authentication.getAuthorities());
-        // --------------------------------
+@Override
+public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
-        String redirectUrl = "/"; // Ruta por defecto si algo falla
+System.out.println("=== LOGIN EXITOSO ===");
+System.out.println("Usuario logueado: " + authentication.getName());
+System.out.println("Roles detectados: " + authentication.getAuthorities());
 
-        for (GrantedAuthority authority : authentication.getAuthorities()) {
-            String role = authority.getAuthority();
-            
-            if (role.equals("ROLE_ADMIN")) {
-                System.out.println("-> Detectado como ADMIN. Redirigiendo a /admin/home");
-                redirectUrl = "/admin/home";
-                break;
-            } else if (role.equals("ROLE_SOLICITANTE")) {
-                System.out.println("-> Detectado como SOLICITANTE. Redirigiendo a /solicitante/home");
-                redirectUrl = "/solicitante/home";
-                break;
-            }
-        }
+String redirectUrl = "/";
 
-        System.out.println("-> Destino final: " + redirectUrl);
-        response.sendRedirect(redirectUrl);
-    }
+for (GrantedAuthority authority : authentication.getAuthorities()) {
+String role = authority.getAuthority();
+
+if (role.equals("ROLE_ADMIN")) {
+System.out.println("-> Detectado como ADMIN. Redirigiendo a /admin/home");
+redirectUrl = "/admin/home";
+break;
+} else if (role.equals("ROLE_SOLICITANTE")) {
+System.out.println("-> Detectado como SOLICITANTE. Redirigiendo a /solicitante/home");
+redirectUrl = "/solicitante/home";
+break;
+} else if (role.equals("ROLE_CENTRO")) {
+System.out.println("-> Detectado como CENTRO. Redirigiendo a /centro/home");
+redirectUrl = "/centro/home";
+break;
+}
+}
+
+System.out.println("-> Destino final: " + redirectUrl);
+response.sendRedirect(redirectUrl);
+}
 }

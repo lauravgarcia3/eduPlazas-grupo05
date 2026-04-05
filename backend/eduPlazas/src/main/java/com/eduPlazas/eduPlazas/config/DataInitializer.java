@@ -26,8 +26,10 @@ public class DataInitializer {
             if (usuarioRepository.findByEmail("admin@eduplazas.com").isEmpty()) {
                 Usuario admin = new Usuario();
                 Usuario solicitante = new Usuario();
+		Usuario centro = new Usuario();
                 admin.setEmail("admin@eduplazas.com");
                 solicitante.setEmail("solicitante@eduplazas.com");
+		centro.setEmail("centro@eduplazas.com");
                 
                 admin.setPassword(passwordEncoder.encode("admin123"));
                 admin.setNombreCompleto("Administrador Principal");
@@ -36,6 +38,10 @@ public class DataInitializer {
                 solicitante.setPassword(passwordEncoder.encode("solicitante123"));
                 solicitante.setNombreCompleto("Solicitante Ejemplo");
                 solicitante.setRol("ROLE_SOLICITANTE");
+
+		centro.setPassword(passwordEncoder.encode("centro123"));
+		centro.setNombreCompleto("Centro prueba");
+		centro.setRol("ROL_CENTRO");
 
                 usuarioRepository.save(admin);
                 usuarioRepository.save(solicitante);

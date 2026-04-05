@@ -21,6 +21,9 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Estas rutas las puede ver cualquiera sin iniciar sesión
                 .requestMatchers("/", "/login", "/register", "/css/**", "/images/**", "/h2-console/**").permitAll()
+		.requestMatchers("/admin/**").hasRole("ADMIN")
+		.requestMatchers("/solicitante/**").hasRole("SOLICITANTE")
+		.requestMatchers("/centro/**").hasRole("CENTRO")
                 // Cualquier otra ruta obligará a iniciar sesión
                 .anyRequest().authenticated()
             )
