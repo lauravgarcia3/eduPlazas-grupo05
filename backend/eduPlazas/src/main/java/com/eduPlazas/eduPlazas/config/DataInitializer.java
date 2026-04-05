@@ -71,8 +71,20 @@ public class DataInitializer {
                 conv2025.setNombreCentro("Múltiples Centros");
                 conv2025.setDescripcion("Convocatoria histórica del curso 2025-2026.");
 
-                convocatoriaRepository.saveAll(List.of(conv2024, conv2025));
-                System.out.println("Convocatorias históricas (2024 y 2025) creadas.");
+                Convocatoria conv2026 = new Convocatoria();
+                conv2026.setNombre("Educación Infantil 2026-2027");
+                conv2026.setFechaInicio(LocalDate.of(2026, 3, 1));
+                conv2026.setFechaFin(LocalDate.of(2026, 5, 31));
+                conv2026.setEstado("ACTIVA");
+                conv2026.setNumeroPlazas(400);
+                conv2026.setTipo("Educación Infantil");
+                conv2026.setAnioAcademico("2026-2027");
+                conv2026.setModalidad("Presencial");
+                conv2026.setNombreCentro("Múltiples Centros");
+                conv2026.setDescripcion("Convocatoria abierta para el curso escolar 2026-2027.");
+
+                convocatoriaRepository.saveAll(List.of(conv2024, conv2025, conv2026));
+                System.out.println("Convocatorias históricas (2024, 2025 y 2026) creadas.");
             }
 
             // ==========================================
