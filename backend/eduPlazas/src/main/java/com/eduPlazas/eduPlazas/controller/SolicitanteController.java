@@ -1,22 +1,23 @@
 package com.eduPlazas.eduPlazas.controller;
 
-import com.eduPlazas.eduPlazas.model.*;
-import com.eduPlazas.eduPlazas.repository.UsuarioRepository;
-import com.eduPlazas.eduPlazas.service.ConvocatoriaService;
-import com.eduPlazas.eduPlazas.service.SolicitudService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import com.eduPlazas.eduPlazas.repository.UsuarioRepository;
+import com.eduPlazas.eduPlazas.service.SolicitudService;
+import com.eduPlazas.eduPlazas.model.Solicitud;
+
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-
+import java.util.Map;
 
 @Controller
 @RequestMapping("/solicitante")
@@ -28,65 +29,25 @@ public class SolicitanteController {
     @Autowired
     private SolicitudService solicitudService;
 
-    @Autowired
-    private ConvocatoriaService convocatoriaService;
-
-    private Usuario obtenerUsuarioSeguro(Authentication authentication) {
-        Usuario usuario = null;
-        if (authentication != null) {
-            usuario = usuarioRepository.findByEmail(authentication.getName()).orElse(null);
-        }
-        // Si no hay sesión (en desarrollo), usamos el solicitante por defecto de la DB
-        if (usuario == null) {
-            usuario = usuarioRepository.findByEmail("solicitante@eduplazas.com").orElse(null);
-        }
-        return usuario;
-    }
-
     @GetMapping("/home")
     public String home(Authentication authentication, Model model) {
-        // 1. Obtenemos el usuario de forma segura
-        Usuario usuarioActivo = obtenerUsuarioSeguro(authentication);
+        String email = authentication.getName();
+        var usuarioOpt = usuarioRepository.findByEmail(email);
 
-        if (usuarioActivo != null) {
-            // 2. Traemos TODAS las solicitudes de este usuario
-            List<Solicitud> todas = solicitudService.obtenerPorUsuario(usuarioActivo);
-            
-            // 3. Creamos los dos "montones" que el HTML necesita ver
-            List<Solicitud> incompletas = new ArrayList<>();
-            List<Solicitud> completas = new ArrayList<>();
-            
-            for (Solicitud s : todas) {
-                // Separamos según la columna COMPLETADA de la base de datos
-                if (s.getCompletada() != null && s.getCompletada()) {
-                    completas.add(s);
-                } else {
-                    incompletas.add(s);
-                }
+        if (usuarioOpt.isPresent()) {
+            var usuario = usuarioOpt.get();
+            List<Solicitud> solicitudes = usuario.getSolicitudes();
+
+            Map<Long, Double> puntosPorSolicitud = new LinkedHashMap<>();
+            for (Solicitud solicitud : solicitudes) {
+                puntosPorSolicitud.put(solicitud.getId(), solicitudService.obtenerTotalPuntos(solicitud));
             }
-            
-            // 4. Enviamos las listas con los nombres que usa el home.html
-            model.addAttribute("solicitudesIncompletas", incompletas);
-            model.addAttribute("solicitudesCompletas", completas);
+
+            model.addAttribute("solicitudes", solicitudes);
+            model.addAttribute("puntosPorSolicitud", puntosPorSolicitud);
         } else {
-            model.addAttribute("solicitudesIncompletas", new ArrayList<>());
-            model.addAttribute("solicitudesCompletas", new ArrayList<>());
-        }
-
-        // --- Resto del código de Convocatoria (fechas) ---
-        Optional<Convocatoria> activa = convocatoriaService.obtenerConvocatoriaActiva();
-        if (activa.isPresent()) {
-            Convocatoria conv = activa.get();
-            model.addAttribute("convocatoriaActiva", conv);
-
-            if (conv.getFechaInicio() != null && conv.getFechaFin() != null) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM", new Locale("es", "ES"));
-                model.addAttribute("fechaInicioFormat", conv.getFechaInicio().format(formatter));
-                model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
-                model.addAttribute("fechaProvisionales", conv.getFechaFin().plusDays(10).format(formatter));
-                model.addAttribute("fechaReclamaciones", conv.getFechaFin().plusDays(10).format(formatter) + " - " + conv.getFechaFin().plusDays(20).format(formatter));
-                model.addAttribute("fechaDefinitivos", conv.getFechaFin().plusDays(30).format(formatter));
-            }
+            model.addAttribute("solicitudes", new ArrayList<>());
+            model.addAttribute("puntosPorSolicitud", new LinkedHashMap<Long, Double>());
         }
 
         return "solicitante/home";
