@@ -23,24 +23,37 @@ public class DataInitializer {
             // ==========================================
             // 1. POBLAR USUARIOS
             // ==========================================
+           // ADMIN
             if (usuarioRepository.findByEmail("admin@eduplazas.com").isEmpty()) {
                 Usuario admin = new Usuario();
-                Usuario solicitante = new Usuario();
                 admin.setEmail("admin@eduplazas.com");
-                solicitante.setEmail("solicitante@eduplazas.com");
-                
                 admin.setPassword(passwordEncoder.encode("admin123"));
                 admin.setNombreCompleto("Administrador Principal");
                 admin.setRol("ROLE_ADMIN");
-                
+                usuarioRepository.save(admin);
+                System.out.println("Usuario ADMIN creado.");
+            }
+
+            // SOLICITANTE
+            if (usuarioRepository.findByEmail("solicitante@eduplazas.com").isEmpty()) {
+                Usuario solicitante = new Usuario();
+                solicitante.setEmail("solicitante@eduplazas.com");
                 solicitante.setPassword(passwordEncoder.encode("solicitante123"));
                 solicitante.setNombreCompleto("Solicitante Ejemplo");
                 solicitante.setRol("ROLE_SOLICITANTE");
-
-                usuarioRepository.save(admin);
                 usuarioRepository.save(solicitante);
-                System.out.println("Usuario ADMIN creado por defecto: admin@eduplazas.com / admin123");
-                System.out.println("Usuario SOLICITANTE creado por defecto: solicitante@eduplazas.com / solicitante123");
+                System.out.println("Usuario SOLICITANTE creado.");
+            }
+
+            // CENTRO
+            if (usuarioRepository.findByEmail("centro@eduplazas.com").isEmpty()) {
+                Usuario centroUser = new Usuario();
+                centroUser.setEmail("centro@eduplazas.com");
+                centroUser.setPassword(passwordEncoder.encode("centro123"));
+                centroUser.setNombreCompleto("CEIP San Francisco - Gestión");
+                centroUser.setRol("ROLE_CENTRO");
+                usuarioRepository.save(centroUser);
+                System.out.println("Usuario CENTRO creado.");
             }
 
             // ==========================================

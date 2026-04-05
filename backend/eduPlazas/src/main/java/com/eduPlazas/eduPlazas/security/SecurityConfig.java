@@ -16,31 +16,37 @@ public class SecurityConfig {
     private CustomAuthenticationSuccessHandler successHandler;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                // Estas rutas las puede ver cualquiera sin iniciar sesión
+                // Rutas públicas
                 .requestMatchers("/", "/login", "/register", "/css/**", "/images/**", "/h2-console/**").permitAll()
-                // Cualquier otra ruta obligará a iniciar sesión
+                
+                // Rutas protegidas por ROL
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/centro/**").hasRole("CENTRO") 
+                .requestMatchers("/solicitante/**").hasRole("SOLICITANTE")
+                
+                // Cualquier otra ruta requiere estar logueado
                 .anyRequest().authenticated()
             )
+           
             .formLogin(form -> form
                 .loginPage("/login")
-                .usernameParameter("email") // Le decimos que el usuario en el HTML se llama "email"
-                .successHandler(successHandler) // A donde te lleva tras un login correcto
+                .usernameParameter("email")
+                .successHandler(successHandler) 
                 .permitAll()
             )
+           
             .logout(logout -> logout
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
             )
-            // Estas dos líneas son obligatorias para que la consola H2 se pueda ver en el navegador
             .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
             .headers(headers -> headers.frameOptions(frame -> frame.disable()));
         
         return http.build();
     }
-
     // Este es el "Bean" que pide el UsuarioService para encriptar
     @Bean
     public PasswordEncoder passwordEncoder() {

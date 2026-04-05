@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Centro - EduPlazas</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+</head>
+<body>
+    <header class="topbar">
+        <div class="logo">EduPlazas - Panel de Centro</div>
+        <div class="topbar-right">
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="action-btn">Cerrar Sesión</button>
+            </form>
+        </div>
+    </header>
+
+    <main class="page-wrapper" style="padding: 40px;">
+        <h1>Bienvenido, <span th:text="${nombreCentro}">Centro Educativo</span></h1>
+        <p>Desde aquí podrás gestionar las solicitudes recibidas para tu centro.</p>
+        
+        <div style="background: #fdfdfd; padding: 20px; border-radius: 10px; border: 1px solid #ddd; margin-top: 20px;">
+            <h3>Próximamente: Listado de solicitudes</h3>
+            <p>Estado del sistema: <strong style="color: green;">Activo</strong></p>
+        </div>
+    </main>
+</body>
+</html>

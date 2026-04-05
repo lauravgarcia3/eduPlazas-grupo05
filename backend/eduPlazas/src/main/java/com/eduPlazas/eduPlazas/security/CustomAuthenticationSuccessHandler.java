@@ -35,6 +35,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                 System.out.println("-> Detectado como SOLICITANTE. Redirigiendo a /solicitante/home");
                 redirectUrl = "/solicitante/home";
                 break;
+                } else if (role.equals("ROLE_CENTRO")) {
+                System.out.println("-> Detectado como CENTRO. Redirigiendo a /centro/home");
+                redirectUrl = "/centro/home";
             }
         }
 

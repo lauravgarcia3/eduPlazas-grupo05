@@ -279,7 +279,7 @@
             	<div class="nombre-menor" th:text="${solicitud.menor != null ? solicitud.menor.nombre + ' ' + solicitud.menor.apellidos : 'Sin nombre'}"></div>
             	<div><span class="estado-pill estado-borrador">Borrador</span></div>
             	<div>
-					<a th:href="@{/solicitante/solicitud/guardar(id=${solicitud.id})}" class="action-btn">Continuar</a>
+					<a th:href="@{/solicitante/solicitud(id=${solicitud.id})}" class="action-btn">Continuar</a>
 				</div>
 			</div>
 
