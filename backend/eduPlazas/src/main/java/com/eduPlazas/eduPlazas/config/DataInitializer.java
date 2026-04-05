@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class DataInitializer {
 
     @Bean
-    public CommandLineRunner initData(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+    public CommandLineRunner initializeData(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             // Comprobamos si el admin ya existe para no duplicarlo
             if (usuarioRepository.findByEmail("admin@eduplazas.com").isEmpty()) {

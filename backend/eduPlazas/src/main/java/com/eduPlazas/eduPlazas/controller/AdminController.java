@@ -40,10 +40,10 @@ public class AdminController {
 		convocatoriaService.save(convocatoria);
 		return "redirect:/admin/convocatoria";
 	}
-
-}
-	@GetMapping("/publicaciones")
+ 	@GetMapping("/publicaciones")
 	public String publicaciones() {
 		return "admin/publicaciones";
 	}
 }
+
+
