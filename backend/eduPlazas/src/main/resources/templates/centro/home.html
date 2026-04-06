@@ -1,42 +1,217 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-<<<<<<< HEAD
-<meta charset="UTF-8">
-<title>Panel del centro</title>
-</head>
-<body>
-<h1>Panel del centro</h1>
-
-<p>Bienvenido al panel del centro educativo.</p>
-
-<ul>
-<li><a th:href="@{/centro/admitidos/1}">Ver admitidos del centro 1</a></li>
-</ul>
-=======
     <meta charset="UTF-8">
     <title>Panel de Centro - EduPlazas</title>
+
     <link rel="stylesheet" th:href="@{/css/common.css}">
+    <style>
+        /* Copiamos las clases del panel de admin para que quede calcado */
+        .page-wrapper {
+            padding: 30px 0 50px 0;
+        }
+
+        .page-content {
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 20px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 34px;
+        }
+
+        .page-title {
+            font-size: 38px;
+            margin: 0;
+            color: #e58d00;
+            font-weight: 800;
+        }
+
+        .primary-btn {
+            height: 46px;
+            padding: 0 28px;
+            border-radius: 10px;
+            background-color: #e58d00;
+            color: white;
+            font-weight: 800;
+            font-size: 15px;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);
+        }
+
+        .primary-btn:hover {
+            background-color: #c77400;
+        }
+
+        /* Recreamos la tarjeta redondeada de admin */
+        .convocatoria-card {
+            display: flex;
+            background-color: #ffffff;
+            border-radius: 30px;
+            overflow: hidden;
+            margin-bottom: 36px;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.10);
+        }
+
+        /* Panel lateral izquierdo mostaza */
+        .convocatoria-left {
+            width: 360px;
+            background-color: #ddb36a;
+            padding: 38px 32px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .convocatoria-title {
+            font-size: 26px;
+            font-weight: 800;
+            line-height: 1.35;
+            margin-bottom: 26px;
+        }
+        
+        .convocatoria-dates {
+            font-size: 15px;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        /* Panel derecho blanco para la tabla */
+        .convocatoria-right {
+            flex: 1;
+            padding: 38px 40px;
+        }
+
+        /* Estilos limpios para la tabla de admitidos */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 0 10px 15px 10px;
+            color: #111;
+            font-weight: 800;
+            border-bottom: 2px solid #efefef;
+            font-size: 16px;
+        }
+
+        td {
+            padding: 18px 10px;
+            border-bottom: 1px solid #efefef;
+            color: #555;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .status-pill {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+            display: inline-block;
+            text-align: center;
+            min-width: 90px;
+        }
+
+        .status-pill.aceptada {
+            background-color: #e6f4ea;
+            color: #1e8e3e;
+        }
+        
+        .status-pill.pendiente {
+            background-color: #fef7e0;
+            color: #e58d00;
+        }
+
+        .empty-message {
+            padding: 40px;
+            text-align: center;
+            color: #777;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 1100px) {
+            .convocatoria-card {
+                flex-direction: column;
+            }
+            .convocatoria-left {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header class="topbar">
-        <div class="logo">EduPlazas - Panel de Centro</div>
-        <div class="topbar-right">
-            <form th:action="@{/logout}" method="post">
-                <button type="submit" class="action-btn">Cerrar Sesión</button>
-            </form>
-        </div>
-    </header>
 
-    <main class="page-wrapper" style="padding: 40px;">
-        <h1>Bienvenido, <span th:text="${nombreCentro}">Centro Educativo</span></h1>
-        <p>Desde aquí podrás gestionar las solicitudes recibidas para tu centro.</p>
-        
-        <div style="background: #fdfdfd; padding: 20px; border-radius: 10px; border: 1px solid #ddd; margin-top: 20px;">
-            <h3>Próximamente: Listado de solicitudes</h3>
-            <p>Estado del sistema: <strong style="color: green;">Activo</strong></p>
+<header class="topbar">
+    <div class="logo">EduPlazas</div>
+    <div class="topbar-right">
+        <div class="user-name">Acceso de Centro Educativo</div>
+    </div>
+</header>
+
+<main class="page-wrapper">
+    <div class="page-content">
+
+        <div class="page-header">
+            <h1 class="page-title">Gestión de Solicitudes</h1>
+            <a th:href="@{/login?logout}" class="primary-btn">Logout</a>
         </div>
-    </main>
->>>>>>> main
+
+        <section class="convocatoria-card">
+            
+            <div class="convocatoria-left">
+                <div class="convocatoria-title" th:text="${nombreCentro}">CEIP San Francisco de Asís</div>
+                <div class="convocatoria-dates">
+                    <p>A continuación se muestran las solicitudes de plaza asignadas a este centro educativo para la convocatoria actual.</p>
+                </div>
+            </div>
+
+            <div class="convocatoria-right">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Solicitante (Tutor)</th>
+                            <th>Nombre del Menor</th>
+                            <th>Curso Solicitado</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="solicitud : ${solicitudes}">
+                            <td th:text="${solicitud.nombreSolicitante}">Nombre</td>
+                            <td th:text="${solicitud.menor.nombre + ' ' + solicitud.menor.apellidos}">Menor</td>
+                            <td th:text="${solicitud.cursoSolicitado}">Curso</td>
+                            <td>
+                                <span class="status-pill" 
+                                      th:classappend="${solicitud.estado == 'Aceptada' ? 'aceptada' : (solicitud.estado == 'Pendiente' ? 'pendiente' : '')}"
+                                      th:text="${solicitud.estado}">
+                                    Pendiente
+                                </span>
+                            </td>
+                        </tr>
+                        
+                        <tr th:if="${#lists.isEmpty(solicitudes)}">
+                            <td colspan="4" class="empty-message">
+                                Todavía no hay ninguna solicitud de plaza recibida para este centro.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </div>
+</main>
+
 </body>
 </html>

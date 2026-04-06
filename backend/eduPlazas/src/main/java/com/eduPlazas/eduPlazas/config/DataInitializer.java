@@ -23,6 +23,7 @@ public class DataInitializer {
             // ==========================================
             // 1. POBLAR USUARIOS
             // ==========================================
+            
             // ADMIN
             if (usuarioRepository.findByEmail("admin@eduplazas.com").isEmpty()) {
                 Usuario admin = new Usuario();
@@ -45,15 +46,26 @@ public class DataInitializer {
                 System.out.println("Usuario SOLICITANTE creado.");
             }
 
-            // CENTRO
-            if (usuarioRepository.findByEmail("centro@eduplazas.com").isEmpty()) {
+            // CENTRO 1 (CEIP San Francisco de Asís)
+            if (usuarioRepository.findByEmail("info@ceipsanfrancisco.edu.es").isEmpty()) {
                 Usuario centroUser = new Usuario();
-                centroUser.setEmail("centro@eduplazas.com");
+                centroUser.setEmail("info@ceipsanfrancisco.edu.es");
                 centroUser.setPassword(passwordEncoder.encode("centro123"));
-                centroUser.setNombreCompleto("CEIP San Francisco - Gestión");
-                centroUser.setRol("ROLE_CENTRO"); // Corregido: ROLE_CENTRO
+                centroUser.setNombreCompleto("CEIP San Francisco de Asís");
+                centroUser.setRol("ROLE_CENTRO");
                 usuarioRepository.save(centroUser);
-                System.out.println("Usuario CENTRO creado.");
+                System.out.println("Usuario CENTRO 1 (San Francisco) creado.");
+            }
+
+            // CENTRO 2 (CEIP Los Almendros)
+            if (usuarioRepository.findByEmail("contacto@ceipalmendros.edu.es").isEmpty()) {
+                Usuario otroCentro = new Usuario();
+                otroCentro.setEmail("contacto@ceipalmendros.edu.es");
+                otroCentro.setPassword(passwordEncoder.encode("centro123"));
+                otroCentro.setNombreCompleto("CEIP Los Almendros"); 
+                otroCentro.setRol("ROLE_CENTRO");
+                usuarioRepository.save(otroCentro);
+                System.out.println("Usuario CENTRO 2 (Los Almendros) creado.");
             }
 
             // ==========================================
@@ -105,10 +117,9 @@ public class DataInitializer {
             // ==========================================
             if (solicitudRepository.count() == 0) {
 
-                // Recuperamos al solicitante que se acaba de crear arriba
                 Usuario usuarioSolicitante = usuarioRepository.findByEmail("solicitante@eduplazas.com").orElse(null);
 
-                // SOLICITUD 1 - PENDIENTE
+                // SOLICITUD 1 - PENDIENTE (Va para el CEIP Los Almendros)
                 Menor menor1 = new Menor(null, "Lucia", "Garcia", "2021-05-10", "Madrid", "F");
                 Tutor tutor1_1 = new Tutor(null, "Laura", "Vicente", "12345678A", "Madre", "600123123", "laura@email.com", "Trabajando");
                 Tutor tutor2_1 = new Tutor(null, "Carlos", "Garcia", "87654321B", "Padre", "600999999", "carlos@email.com", "Desempleado");
@@ -117,12 +128,12 @@ public class DataInitializer {
                 Solicitud solicitud1 = new Solicitud();
                 solicitud1.setNombreSolicitante("Laura Vicente");
                 solicitud1.setEstado("Pendiente");
-                solicitud1.setUsuario(usuarioSolicitante); // Asignamos el usuario recuperado
+                solicitud1.setUsuario(usuarioSolicitante); 
                 solicitud1.setMenor(menor1);
                 solicitud1.setTutor1(tutor1_1);
                 solicitud1.setTutor2(tutor2_1);
                 solicitud1.setDomicilioFamiliar(domicilio1);
-                solicitud1.setCentroPreferencia("Colegio Público Madrid");
+                solicitud1.setCentroPreferencia("CEIP Los Almendros");
                 solicitud1.setCursoSolicitado("Infantil 3 años");
                 solicitud1.setDeclaracionVeracidad(true);
                 solicitud1.setAutorizacionProteccionDatos(true);
@@ -133,7 +144,7 @@ public class DataInitializer {
                 documentos1.add(doc1);
                 solicitud1.setDocumentos(documentos1);
 
-                // SOLICITUD 2 - ACEPTADA
+                // SOLICITUD 2 - ACEPTADA (Va para el CEIP San Francisco de Asís)
                 Menor menor2 = new Menor(null, "Pablo", "Sanchez", "2020-11-03", "Madrid", "M");
                 Tutor tutor1_2 = new Tutor(null, "Daniel", "Sanchez", "22222222C", "Padre", "611111111", "daniel@email.com", "Trabajando");
                 DomicilioFamiliar domicilio2 = new DomicilioFamiliar(null, "Calle Sol 5", "Madrid", "28002", "Madrid");
@@ -141,11 +152,11 @@ public class DataInitializer {
                 Solicitud solicitud2 = new Solicitud();
                 solicitud2.setNombreSolicitante("Daniel Sanchez");
                 solicitud2.setEstado("Aceptada");
-                solicitud2.setUsuario(usuarioSolicitante); // Asignamos el usuario recuperado
+                solicitud2.setUsuario(usuarioSolicitante); 
                 solicitud2.setMenor(menor2);
                 solicitud2.setTutor1(tutor1_2);
                 solicitud2.setDomicilioFamiliar(domicilio2);
-                solicitud2.setCentroPreferencia("Colegio San Juan");
+                solicitud2.setCentroPreferencia("CEIP San Francisco de Asís"); 
                 solicitud2.setCursoSolicitado("Infantil 4 años");
                 solicitud2.setDeclaracionVeracidad(true);
                 solicitud2.setAutorizacionProteccionDatos(true);
