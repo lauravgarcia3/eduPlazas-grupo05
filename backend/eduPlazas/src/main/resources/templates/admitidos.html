@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Admitidos del centro</title>
+</head>
+<body>
+<h1 th:text="'Alumnos admitidos en ' + ${centro.nombre}">Alumnos admitidos</h1>
+
+<p th:if="${#lists.isEmpty(solicitudes)}">
+No hay solicitudes para este centro.
+</p>
+
+<table border="1" th:if="${not #lists.isEmpty(solicitudes)}">
+<thead>
+<tr>
+<th>ID solicitud</th>
+<th>Nombre solicitante</th>
+<th>Estado</th>
+<th>Centro preferencia</th>
+<th>Curso solicitado</th>
+</tr>
+</thead>
+<tbody>
+<tr th:each="solicitud : ${solicitudes}">
+<td th:text="${solicitud.id}">1</td>
+<td th:text="${solicitud.nombreSolicitante}">Nombre</td>
+<td th:text="${solicitud.estado}">Estado</td>
+<td th:text="${solicitud.centroPreferencia}">Centro</td>
+<td th:text="${solicitud.cursoSolicitado}">Curso</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
