@@ -48,31 +48,82 @@ public class SolicitanteController {
 
         if (usuarioOpt.isPresent()) {
             var usuario = usuarioOpt.get();
-            List<Solicitud> solicitudes = usuario.getSolicitudes();
+            List<Solicitud> todas = usuario.getSolicitudes();
 
+            // --- LÓGICA DEL COMPAÑERO: Cálculo de Puntos ---
             Map<Long, Double> puntosPorSolicitud = new LinkedHashMap<>();
-            for (Solicitud solicitud : solicitudes) {
+            for (Solicitud solicitud : todas) {
                 puntosPorSolicitud.put(solicitud.getId(), solicitudService.obtenerTotalPuntos(solicitud));
             }
-
-            model.addAttribute("solicitudes", solicitudes);
             model.addAttribute("puntosPorSolicitud", puntosPorSolicitud);
+
+            // ---  Separación de listas ---
+            List<Solicitud> incompletas = new ArrayList<>();
+            List<Solicitud> completas = new ArrayList<>();
+            
+            for (Solicitud s : todas) {
+                if (s.getCompletada() != null && s.getCompletada()) {
+                    completas.add(s);
+                } else {
+                    incompletas.add(s);
+                }
+            }
+            
+            model.addAttribute("solicitudesIncompletas", incompletas);
+            model.addAttribute("solicitudesCompletas", completas);
+           
+
         } else {
             model.addAttribute("solicitudes", new ArrayList<>());
+            model.addAttribute("solicitudesIncompletas", new ArrayList<>());
+            model.addAttribute("solicitudesCompletas", new ArrayList<>());
             model.addAttribute("puntosPorSolicitud", new LinkedHashMap<Long, Double>());
+        }
+
+        // --- Fechas de la Convocatoria ---
+        Optional<Convocatoria> activa = convocatoriaService.obtenerConvocatoriaActiva();
+        if (activa.isPresent()) {
+            Convocatoria conv = activa.get();
+            model.addAttribute("convocatoriaActiva", conv);
+
+            if (conv.getFechaInicio() != null && conv.getFechaFin() != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM", new Locale("es", "ES"));
+                model.addAttribute("fechaInicioFormat", conv.getFechaInicio().format(formatter));
+                model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
+                model.addAttribute("fechaProvisionales", conv.getFechaFin().plusDays(10).format(formatter));
+                model.addAttribute("fechaReclamaciones", conv.getFechaFin().plusDays(10).format(formatter) + " - " + conv.getFechaFin().plusDays(20).format(formatter));
+                model.addAttribute("fechaDefinitivos", conv.getFechaFin().plusDays(30).format(formatter));
+            }
         }
 
         return "solicitante/home";
     }
-    @GetMapping("/solicitud")
-    public String formulario(Model model) {
 
-        Solicitud nuevaSolicitud = new Solicitud();
-        nuevaSolicitud.setMenor(new Menor());
-        nuevaSolicitud.setTutor1(new Tutor());
-        nuevaSolicitud.setTutor2(new Tutor());
-        nuevaSolicitud.setDomicilioFamiliar(new DomicilioFamiliar());
-        model.addAttribute("nuevaSolicitud", nuevaSolicitud);
+    @GetMapping("/solicitud")
+    public String formulario(@RequestParam(value = "id", required = false) Long id, Model model) {
+        Solicitud solicitudAMostrar;
+
+        // --- Recuperación de borradores ---
+        if (id != null) {
+            Optional<Solicitud> existente = solicitudService.obtenerPorId(id);
+            if (existente.isPresent()) {
+                solicitudAMostrar = existente.get();
+                if (solicitudAMostrar.getMenor() == null) solicitudAMostrar.setMenor(new Menor());
+                if (solicitudAMostrar.getTutor1() == null) solicitudAMostrar.setTutor1(new Tutor());
+                if (solicitudAMostrar.getTutor2() == null) solicitudAMostrar.setTutor2(new Tutor());
+                if (solicitudAMostrar.getDomicilioFamiliar() == null) solicitudAMostrar.setDomicilioFamiliar(new DomicilioFamiliar());
+            } else {
+                return "redirect:/solicitante/home";
+            }
+        } else {
+            solicitudAMostrar = new Solicitud();
+            solicitudAMostrar.setMenor(new Menor());
+            solicitudAMostrar.setTutor1(new Tutor());
+            solicitudAMostrar.setTutor2(new Tutor());
+            solicitudAMostrar.setDomicilioFamiliar(new DomicilioFamiliar());
+        }
+
+        model.addAttribute("nuevaSolicitud", solicitudAMostrar);
 
         Optional<Convocatoria> activa = convocatoriaService.obtenerConvocatoriaActiva();
         if (activa.isPresent()) {
@@ -89,7 +140,7 @@ public class SolicitanteController {
         return "solicitante/formulario";
     }
 
-@GetMapping("/estado")
+    @GetMapping("/estado")
     public String estado() {
         return "solicitante/estado";
     }
@@ -113,6 +164,5 @@ public class SolicitanteController {
 
         solicitudService.guardar(solicitud);
         return "redirect:/solicitante/home";
-    
     }
 }
