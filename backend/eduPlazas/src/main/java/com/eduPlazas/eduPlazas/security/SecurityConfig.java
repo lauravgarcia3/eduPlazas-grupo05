@@ -21,12 +21,6 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Rutas públicas
                 .requestMatchers("/", "/login", "/register", "/css/**", "/images/**", "/h2-console/**").permitAll()
-<<<<<<< HEAD
-		.requestMatchers("/admin/**").hasRole("ADMIN")
-		.requestMatchers("/solicitante/**").hasRole("SOLICITANTE")
-		.requestMatchers("/centro/**").hasRole("CENTRO")
-                // Cualquier otra ruta obligará a iniciar sesión
-=======
                 
                 // Rutas protegidas por ROL
                 .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -34,7 +28,6 @@ public class SecurityConfig {
                 .requestMatchers("/solicitante/**").hasRole("SOLICITANTE")
                 
                 // Cualquier otra ruta requiere estar logueado
->>>>>>> main
                 .anyRequest().authenticated()
             )
            
@@ -54,6 +47,7 @@ public class SecurityConfig {
         
         return http.build();
     }
+
     // Este es el "Bean" que pide el UsuarioService para encriptar
     @Bean
     public PasswordEncoder passwordEncoder() {
