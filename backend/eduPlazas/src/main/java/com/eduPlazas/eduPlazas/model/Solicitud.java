@@ -54,6 +54,9 @@ private List<DocumentoAdjunto> documentos = new ArrayList<>();
 @JoinColumn(name = "usuario_id", nullable = false)
 private Usuario usuario;
 
+@ManyToOne
+    @JoinColumn(name = "convocatoria_id")
+    private Convocatoria convocatoria;
 public Solicitud() {
 }
 
@@ -202,4 +205,12 @@ return documentos;
 public void setDocumentos(List<DocumentoAdjunto> documentos) {
 this.documentos = documentos;
 }
+
+public Convocatoria getConvocatoria() {
+        return convocatoria;
+    }
+
+public void setConvocatoria(Convocatoria convocatoria) {
+        this.convocatoria = convocatoria;
+    }
 }

@@ -258,7 +258,7 @@
     <div class="logo">EduPlazas</div>
 
     <div class="topbar-right">
-        <div class="user-name">Panel de Administración</div>
+        <a th:href="@{/login}" class="primary-btn">Logout</a>
     </div>
 </header>
 
@@ -268,7 +268,7 @@
         <div class="page-header">
             <h1 class="page-title">Convocatorias</h1>
             <a th:href="@{/admin/convocatoria}" class="primary-btn">+ Nueva Convocatoria</a>
-            <a th:href="@{/login}" class="primary-btn">Logout</a>
+            
         </div>
 
         <section th:each="convocatoria : ${convocatorias}" class="convocatoria-card">
@@ -284,7 +284,7 @@
 
                 <div class="convocatoria-box">
                     <div class="convocatoria-box-label">Solicitudes recibidas</div>
-                    <div class="convocatoria-box-value">0</div>
+                    <div class="convocatoria-box-value" th:text="${solicitudesPorConvocatoria.get(convocatoria.id)}">0</div>
                 </div>
             </div>
 
@@ -302,21 +302,28 @@
                 </div>
 
                 <div class="info-grid">
-                    <div class="info-box">
-                        <div class="info-label">Fase actual</div>
-                        <div class="info-value" th:text="${convocatoria.estado == 'ACTIVA' ? 'Registro' : '-'}">Registro</div>
-                    </div>
+    <div class="info-box">
+        <div class="info-label">Fase actual</div>
+        <div class="info-value" th:text="${convocatoria.estado == 'ACTIVA' ? 'Inscripción Abierta' : (convocatoria.estado == 'CERRADA' ? 'Proceso Finalizado' : 'Preparación')}">
+            Registro
+        </div>
+    </div>
 
-                    <div class="info-box">
-                        <div class="info-label">Plazas disponibles</div>
-                        <div class="info-value" th:text="${convocatoria.numeroPlazas}">350</div>
-                    </div>
+    <div class="info-box">
+        <div class="info-label">Tipo / Nivel</div>
+        <div class="info-value" th:text="${convocatoria.tipo}">
+            Educación Infantil
+        </div>
+    </div>
 
-                    <div class="info-box">
-                        <div class="info-label">Tasa de ocupación</div>
-                        <div class="info-value">0%</div>
-                    </div>
-                </div>
+    <div class="info-box">
+        <div class="info-label">Plazas ofertadas</div>
+        <div class="info-value" th:text="${convocatoria.numeroPlazas}">
+            0
+        </div>
+    </div>
+</div>
+
 
                 <div class="action-row">
                     <a th:href="@{/admin/publicaciones}" class="primary-btn">Ver Solicitudes</a>
@@ -324,7 +331,7 @@
                 </div>
             </div>
         </section>
-        </div>
+    </div>
 </main>
 
 </body>
