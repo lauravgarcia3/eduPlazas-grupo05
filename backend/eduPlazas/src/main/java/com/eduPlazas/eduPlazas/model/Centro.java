@@ -18,9 +18,10 @@ public class Centro {
     private String telefono;
     private String web;
     private String imagen;
+    private Integer numPlazas = 0;
 
     public Centro() {}
-    public Centro(String nombre, String direccion, String ciudad, String email, String telefono, String web, String imagen) {
+    public Centro(String nombre, String direccion, String ciudad, String email, String telefono, String web, String imagen, Integer numPlazas) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.ciudad = ciudad;
@@ -28,6 +29,7 @@ public class Centro {
         this.telefono = telefono;
         this.web = web;
         this.imagen = imagen;
+        this.numPlazas = numPlazas;
     }
 
     public Long getId() {
@@ -90,5 +92,11 @@ return imagen;
 }
 public void setImagen(String imagen) {
 this.imagen = imagen; 
+}
+public Integer getNumPlazas() {
+return numPlazas;
+}
+public void setNumPlazas(Integer numPlazas) {
+this.numPlazas = numPlazas;
 }
 }

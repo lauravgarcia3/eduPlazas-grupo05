@@ -166,8 +166,8 @@
 
         .center-grid {
             display: grid;
-            grid-template-columns: 1fr 260px;
-            gap: 26px;
+            grid-template-columns: 1fr 260px 64px;
+            gap: 20px;
             align-items: end;
         }
 
@@ -198,6 +198,36 @@
             font-weight: 800;
         }
 
+        .remove-center-btn {
+            width: 64px;
+            height: 64px;
+            border: 2px solid #ff4d4d;
+            border-radius: 14px;
+            background-color: white;
+            color: #ff4d4d;
+            font-size: 26px;
+            font-weight: 900;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .remove-center-btn:hover {
+            background-color: #ff4d4d;
+            color: white;
+        }
+
+        /* Oculta la 'X' en la primera fila para que siempre haya al menos una visible */
+        .fila-centro:first-child .remove-column {
+            display: none;
+        }
+
+        /* Ajuste de la primera fila al no tener la X para que cuadre bien */
+        .fila-centro:first-child .center-grid {
+            grid-template-columns: 1fr 260px;
+        }
         .add-center-btn {
             width: 100%;
             height: 76px;
@@ -456,6 +486,9 @@
                     <input type="hidden" id="nombreCentroReal" th:field="*{nombreCentro}">
                     <input type="hidden" id="numeroPlazasReal" th:field="*{numeroPlazas}">
 
+                    <input type="hidden" id="nombresCentrosArray" name="nombresCentrosArray">
+                    <input type="hidden" id="plazasCentrosArray" name="plazasCentrosArray">
+
                     <div id="contenedor-centros">
                         <div class="center-card fila-centro">
                             <div class="center-grid">
@@ -470,6 +503,9 @@
                                 <div class="places-column">
                                     <label class="center-label">Plazas Disponibles</label>
                                     <input type="number" class="plazas-input" placeholder="Ej: 50" required min="1">
+                                </div>
+                                <div class="remove-column">
+                                    <button type="button" class="remove-center-btn" onclick="eliminarCentro(this)" title="Quitar centro">✕</button>
                                 </div>
                             </div>
                         </div>
@@ -525,7 +561,14 @@
         contenedor.appendChild(nuevaFila);
         actualizarDesplegables();
     }
-
+    // ELIMINA LA FILA DEL CENTRO CORRESPONDIENTE
+    function eliminarCentro(btn) {
+        const fila = btn.closest('.fila-centro');
+        fila.remove();
+        
+        // Actualizamos los desplegables para que el centro borrado vuelva a estar disponible
+        actualizarDesplegables();
+    }
     // DESACTIVA LOS CENTROS YA SELECCIONADOS EN OTROS DESPLEGABLES
     function actualizarDesplegables() {
         const selects = document.querySelectorAll('.centro-select');
@@ -554,25 +597,29 @@
     }
 
     // SUMA LAS PLAZAS Y RECOPILA NOMBRES AL ENVIAR
-    function prepararEnvio() {
+   function prepararEnvio() {
         const selects = document.querySelectorAll('.centro-select');
         const inputs = document.querySelectorAll('.plazas-input');
         
         let nombresCentros = [];
+        let plazasIndividuales = [];
         let totalPlazas = 0;
         
         for(let i = 0; i < selects.length; i++) {
             if(selects[i].value && inputs[i].value) {
                 nombresCentros.push(selects[i].value);
+                plazasIndividuales.push(inputs[i].value);
                 totalPlazas += parseInt(inputs[i].value);
             }
         }
         
-        // Escribimos los resultados en los campos ocultos que viajan a Spring
         document.getElementById('nombreCentroReal').value = nombresCentros.join(", ");
         document.getElementById('numeroPlazasReal').value = totalPlazas;
         
-        return true; // Permite que el formulario se envíe
+        document.getElementById('nombresCentrosArray').value = nombresCentros.join(",");
+        document.getElementById('plazasCentrosArray').value = plazasIndividuales.join(",");
+        
+        return true;
     }
 </script>
 

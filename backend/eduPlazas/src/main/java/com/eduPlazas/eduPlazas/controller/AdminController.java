@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.List;
@@ -69,9 +70,46 @@ public class AdminController {
 
     // Recibir los datos del formulario y guardar
     @PostMapping("/convocatoria/guardar")
-    public String guardarConvocatoria(@ModelAttribute("nuevaConvocatoria") Convocatoria convocatoria) {
+    public String guardarConvocatoria(
+            @ModelAttribute("nuevaConvocatoria") Convocatoria convocatoria,
+            @RequestParam(value = "nombresCentrosArray", required = false) String nombresCentros,
+            @RequestParam(value = "plazasCentrosArray", required = false) String plazasCentros) {
+        
+        // 1. Guardamos la convocatoria general 
         convocatoriaService.guardarConvocatoria(convocatoria);
-        return "redirect:/admin/home"; // Le mandamos al home para que vea su nueva convocatoria
+
+        // Si se crea como ACTIVA, reseteamos primero TODOS los colegios a 0 plazas.
+        if ("ACTIVA".equals(convocatoria.getEstado())) {
+            List<Centro> todosLosCentros = centroRepository.findAll();
+            for (Centro c : todosLosCentros) {
+                c.setNumPlazas(0);
+                centroRepository.save(c);
+            }
+        }
+
+        // 2. Emparejamos y actualizamos las plazas de cada Centro
+        if (nombresCentros != null && !nombresCentros.isEmpty() && plazasCentros != null) {
+            String[] nombres = nombresCentros.split(",");
+            String[] plazas = plazasCentros.split(",");
+
+            for (int i = 0; i < nombres.length; i++) {
+                String nombreCentro = nombres[i].trim();
+                int plazasDelCentro = Integer.parseInt(plazas[i].trim());
+
+                // Buscamos el centro por su nombre y le inyectamos las plazas que escribió el Admin
+                Optional<Centro> centroOpt = centroRepository.findAll().stream()
+                        .filter(c -> c.getNombre().equals(nombreCentro))
+                        .findFirst();
+
+                if (centroOpt.isPresent()) {
+                    Centro centro = centroOpt.get();
+                    centro.setNumPlazas(plazasDelCentro);
+                    centroRepository.save(centro); // Actualizamos la BBDD
+                }
+            }
+        }
+
+        return "redirect:/admin/home"; 
     }
 
     @GetMapping("/publicaciones")

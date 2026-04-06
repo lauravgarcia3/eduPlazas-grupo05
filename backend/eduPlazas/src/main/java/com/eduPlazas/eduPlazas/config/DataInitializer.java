@@ -179,18 +179,17 @@ public class DataInitializer {
     public CommandLineRunner initializeCenters(CentroRepository centroRepository) {
         return args -> {
             List<Centro> centros = Arrays.asList(
-                new Centro("CEIP San Francisco de Asís", "Calle de la Educación, 123", "28001 Madrid", "info@ceipsanfrancisco.edu.es", "+34 91 234 5678", "www.ceipsanfrancisco.edu.es", "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=900&q=80"),
-                    new Centro("CEIP Los Almendros", "Avenida de los Almendros, 45", "28002 Madrid", "contacto@ceipalmendros.edu.es", "+34 91 345 6789", "www.ceipalmendros.edu.es", "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=900&q=80"),
-                    new Centro("CEIP El Prado", "Calle del Prado, 67", "28003 Madrid", "info@ceipelprado.edu.es", "+34 91 456 7890", "www.ceipelprado.edu.es", "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=900&q=80"),
-                    new Centro("CEIP Las Rosas", "Plaza de las Rosas, 12", "28004 Madrid", "contacto@ceiplasrosas.edu.es", "+34 91 567 8901", "www.ceiplasrosas.edu.es", "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=900&q=80"),
-                    new Centro("CEIP La Colina", "Camino de la Colina, 89", "28005 Madrid", "info@ceiplacolina.edu.es", "+34 91 678 9012", "www.ceiplacolina.edu.es", "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=900&q=80"),
-                    new Centro("CEIP Los Pinos", "Calle de los Pinos, 34", "28006 Madrid", "contacto@ceiplospinos.edu.es", "+34 91 789 0123", "www.ceiplospinos.edu.es", "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=900&q=80"),
-                    new Centro("CEIP El Olivo", "Avenida del Olivo, 56", "28007 Madrid", "info@ceipelolivo.edu.es", "+34 91 890 1234", "www.ceipelolivo.edu.es", "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=900&q=80"),
-                    new Centro("CEIP La Fuente", "Plaza de la Fuente, 78", "28008 Madrid", "contacto@ceiplafuente.edu.es", "+34 91 901 2345", "www.ceiplafuente.edu.es", "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=900&q=80"),
-                    new Centro("CEIP El Parque", "Calle del Parque, 90", "28009 Madrid", "info@ceipelparque.edu.es", "+34 91 012 3456", "www.ceipelparque.edu.es", "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=900&q=80"),
-                    new Centro("CEIP Las Estrellas", "Avenida de las Estrellas, 23", "28010 Madrid", "contacto@ceiplasestrellas.edu.es", "+34 91 123 4567", "www.ceiplasestrellas.edu.es", "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80")
-                    
-                    );
+                new Centro("CEIP San Francisco de Asís", "Calle de la Educación, 123", "28001 Madrid", "info@ceipsanfrancisco.edu.es", "+34 91 234 5678", "www.ceipsanfrancisco.edu.es", "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=900&q=80", 0),
+                new Centro("CEIP Los Almendros", "Avenida de los Almendros, 45", "28002 Madrid", "contacto@ceipalmendros.edu.es", "+34 91 345 6789", "www.ceipalmendros.edu.es", "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=900&q=80", 0),
+                new Centro("CEIP El Prado", "Calle del Prado, 67", "28003 Madrid", "info@ceipelprado.edu.es", "+34 91 456 7890", "www.ceipelprado.edu.es", "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=900&q=80", 0),
+                new Centro("CEIP Las Rosas", "Plaza de las Rosas, 12", "28004 Madrid", "contacto@ceiplasrosas.edu.es", "+34 91 567 8901", "www.ceiplasrosas.edu.es", "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=900&q=80", 0),
+                new Centro("CEIP La Colina", "Camino de la Colina, 89", "28005 Madrid", "info@ceiplacolina.edu.es", "+34 91 678 9012", "www.ceiplacolina.edu.es", "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=900&q=80", 0),
+                new Centro("CEIP Los Pinos", "Calle de los Pinos, 34", "28006 Madrid", "contacto@ceiplospinos.edu.es", "+34 91 789 0123", "www.ceiplospinos.edu.es", "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=900&q=80", 0),
+                new Centro("CEIP El Olivo", "Avenida del Olivo, 56", "28007 Madrid", "info@ceipelolivo.edu.es", "+34 91 890 1234", "www.ceipelolivo.edu.es", "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=900&q=80", 0),
+                new Centro("CEIP La Fuente", "Plaza de la Fuente, 78", "28008 Madrid", "contacto@ceiplafuente.edu.es", "+34 91 901 2345", "www.ceiplafuente.edu.es", "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=900&q=80", 0),
+                new Centro("CEIP El Parque", "Calle del Parque, 90", "28009 Madrid", "info@ceipelparque.edu.es", "+34 91 012 3456", "www.ceipelparque.edu.es", "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=900&q=80", 0),
+                new Centro("CEIP Las Estrellas", "Avenida de las Estrellas, 23", "28010 Madrid", "contacto@ceiplasestrellas.edu.es", "+34 91 123 4567", "www.ceiplasestrellas.edu.es", "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80", 0)
+          );
 
             centroRepository.saveAll(centros);
         };
