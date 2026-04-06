@@ -23,7 +23,8 @@ public class DataInitializer {
             // ==========================================
             // 1. POBLAR USUARIOS
             // ==========================================
-           // ADMIN
+            
+            // ADMIN
             if (usuarioRepository.findByEmail("admin@eduplazas.com").isEmpty()) {
                 Usuario admin = new Usuario();
                 admin.setEmail("admin@eduplazas.com");
@@ -45,15 +46,26 @@ public class DataInitializer {
                 System.out.println("Usuario SOLICITANTE creado.");
             }
 
-            // CENTRO
-            if (usuarioRepository.findByEmail("centro@eduplazas.com").isEmpty()) {
+            // CENTRO 1 (CEIP San Francisco de Asís)
+            if (usuarioRepository.findByEmail("info@ceipsanfrancisco.edu.es").isEmpty()) {
                 Usuario centroUser = new Usuario();
-                centroUser.setEmail("centro@eduplazas.com");
+                centroUser.setEmail("info@ceipsanfrancisco.edu.es");
                 centroUser.setPassword(passwordEncoder.encode("centro123"));
-                centroUser.setNombreCompleto("CEIP San Francisco - Gestión");
+                centroUser.setNombreCompleto("CEIP San Francisco de Asís");
                 centroUser.setRol("ROLE_CENTRO");
                 usuarioRepository.save(centroUser);
-                System.out.println("Usuario CENTRO creado.");
+                System.out.println("Usuario CENTRO 1 (San Francisco) creado.");
+            }
+
+            // CENTRO 2 (CEIP Los Almendros)
+            if (usuarioRepository.findByEmail("contacto@ceipalmendros.edu.es").isEmpty()) {
+                Usuario otroCentro = new Usuario();
+                otroCentro.setEmail("contacto@ceipalmendros.edu.es");
+                otroCentro.setPassword(passwordEncoder.encode("centro123"));
+                otroCentro.setNombreCompleto("CEIP Los Almendros"); 
+                otroCentro.setRol("ROLE_CENTRO");
+                usuarioRepository.save(otroCentro);
+                System.out.println("Usuario CENTRO 2 (Los Almendros) creado.");
             }
 
             // ==========================================
@@ -105,10 +117,9 @@ public class DataInitializer {
             // ==========================================
             if (solicitudRepository.count() == 0) {
 
-                // Recuperamos al solicitante que se acaba de crear arriba
                 Usuario usuarioSolicitante = usuarioRepository.findByEmail("solicitante@eduplazas.com").orElse(null);
-
-                // SOLICITUD 1 - PENDIENTE
+                Convocatoria convocatoriaActiva = convocatoriaRepository.findByEstado("ACTIVA").orElse(null);
+                // SOLICITUD 1 - PENDIENTE (Va para el CEIP Los Almendros)
                 Menor menor1 = new Menor(null, "Lucia", "Garcia", "2021-05-10", "Madrid", "F");
                 Tutor tutor1_1 = new Tutor(null, "Laura", "Vicente", "12345678A", "Madre", "600123123", "laura@email.com", "Trabajando");
                 Tutor tutor2_1 = new Tutor(null, "Carlos", "Garcia", "87654321B", "Padre", "600999999", "carlos@email.com", "Desempleado");
@@ -117,23 +128,23 @@ public class DataInitializer {
                 Solicitud solicitud1 = new Solicitud();
                 solicitud1.setNombreSolicitante("Laura Vicente");
                 solicitud1.setEstado("Pendiente");
-                solicitud1.setUsuario(usuarioSolicitante); // Asignamos el usuario recuperado
+                solicitud1.setUsuario(usuarioSolicitante); 
                 solicitud1.setMenor(menor1);
                 solicitud1.setTutor1(tutor1_1);
                 solicitud1.setTutor2(tutor2_1);
                 solicitud1.setDomicilioFamiliar(domicilio1);
-                solicitud1.setCentroPreferencia("Colegio Público Madrid");
+                solicitud1.setCentroPreferencia("CEIP Los Almendros");
                 solicitud1.setCursoSolicitado("Infantil 3 años");
                 solicitud1.setDeclaracionVeracidad(true);
                 solicitud1.setAutorizacionProteccionDatos(true);
-
+                solicitud1.setConvocatoria(convocatoriaActiva);
                 DocumentoAdjunto doc1 = new DocumentoAdjunto(null, "empadronamiento.pdf", "Empadronamiento");
                 doc1.setSolicitud(solicitud1);
                 List<DocumentoAdjunto> documentos1 = new ArrayList<>();
                 documentos1.add(doc1);
                 solicitud1.setDocumentos(documentos1);
 
-                // SOLICITUD 2 - ACEPTADA
+                // SOLICITUD 2 - ACEPTADA (Va para el CEIP San Francisco de Asís)
                 Menor menor2 = new Menor(null, "Pablo", "Sanchez", "2020-11-03", "Madrid", "M");
                 Tutor tutor1_2 = new Tutor(null, "Daniel", "Sanchez", "22222222C", "Padre", "611111111", "daniel@email.com", "Trabajando");
                 DomicilioFamiliar domicilio2 = new DomicilioFamiliar(null, "Calle Sol 5", "Madrid", "28002", "Madrid");
@@ -141,14 +152,15 @@ public class DataInitializer {
                 Solicitud solicitud2 = new Solicitud();
                 solicitud2.setNombreSolicitante("Daniel Sanchez");
                 solicitud2.setEstado("Aceptada");
-                solicitud2.setUsuario(usuarioSolicitante); // Asignamos el usuario recuperado
+                solicitud2.setUsuario(usuarioSolicitante); 
                 solicitud2.setMenor(menor2);
                 solicitud2.setTutor1(tutor1_2);
                 solicitud2.setDomicilioFamiliar(domicilio2);
-                solicitud2.setCentroPreferencia("Colegio San Juan");
+                solicitud2.setCentroPreferencia("CEIP San Francisco de Asís"); 
                 solicitud2.setCursoSolicitado("Infantil 4 años");
                 solicitud2.setDeclaracionVeracidad(true);
                 solicitud2.setAutorizacionProteccionDatos(true);
+                solicitud2.setConvocatoria(convocatoriaActiva);
 
                 DocumentoAdjunto doc2 = new DocumentoAdjunto(null, "renta.pdf", "Renta");
                 doc2.setSolicitud(solicitud2);
@@ -167,17 +179,18 @@ public class DataInitializer {
     public CommandLineRunner initializeCenters(CentroRepository centroRepository) {
         return args -> {
             List<Centro> centros = Arrays.asList(
-                new Centro("CEIP San Francisco de Asís", "Calle de la Educación, 123", "28001 Madrid", "info@ceipsanfrancisco.edu.es", "+34 91 234 5678", "www.ceipsanfrancisco.edu.es"),
-                new Centro("CEIP Los Almendros", "Avenida de los Almendros, 45", "28002 Madrid", "contacto@ceipalmendros.edu.es", "+34 91 345 6789", "www.ceipalmendros.edu.es"),
-                new Centro("CEIP El Prado", "Calle del Prado, 67", "28003 Madrid", "info@ceipelprado.edu.es", "+34 91 456 7890", "www.ceipelprado.edu.es"),
-                new Centro("CEIP Las Rosas", "Plaza de las Rosas, 12", "28004 Madrid", "contacto@ceiplasrosas.edu.es", "+34 91 567 8901", "www.ceiplasrosas.edu.es"),
-                new Centro("CEIP La Colina", "Camino de la Colina, 89", "28005 Madrid", "info@ceiplacolina.edu.es", "+34 91 678 9012", "www.ceiplacolina.edu.es"),
-                new Centro("CEIP Los Pinos", "Calle de los Pinos, 34", "28006 Madrid", "contacto@ceiplospinos.edu.es", "+34 91 789 0123", "www.ceiplospinos.edu.es"),
-                new Centro("CEIP El Olivo", "Avenida del Olivo, 56", "28007 Madrid", "info@ceipelolivo.edu.es", "+34 91 890 1234", "www.ceipelolivo.edu.es"),
-                new Centro("CEIP La Fuente", "Plaza de la Fuente, 78", "28008 Madrid", "contacto@ceiplafuente.edu.es", "+34 91 901 2345", "www.ceiplafuente.edu.es"),
-                new Centro("CEIP El Parque", "Calle del Parque, 90", "28009 Madrid", "info@ceipelparque.edu.es", "+34 91 012 3456", "www.ceipelparque.edu.es"),
-                new Centro("CEIP Las Estrellas", "Avenida de las Estrellas, 23", "28010 Madrid", "contacto@ceiplasestrellas.edu.es", "+34 91 123 4567", "www.ceiplasestrellas.edu.es")
-            );
+                new Centro("CEIP San Francisco de Asís", "Calle de la Educación, 123", "28001 Madrid", "info@ceipsanfrancisco.edu.es", "+34 91 234 5678", "www.ceipsanfrancisco.edu.es", "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=900&q=80"),
+                    new Centro("CEIP Los Almendros", "Avenida de los Almendros, 45", "28002 Madrid", "contacto@ceipalmendros.edu.es", "+34 91 345 6789", "www.ceipalmendros.edu.es", "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=900&q=80"),
+                    new Centro("CEIP El Prado", "Calle del Prado, 67", "28003 Madrid", "info@ceipelprado.edu.es", "+34 91 456 7890", "www.ceipelprado.edu.es", "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=900&q=80"),
+                    new Centro("CEIP Las Rosas", "Plaza de las Rosas, 12", "28004 Madrid", "contacto@ceiplasrosas.edu.es", "+34 91 567 8901", "www.ceiplasrosas.edu.es", "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=900&q=80"),
+                    new Centro("CEIP La Colina", "Camino de la Colina, 89", "28005 Madrid", "info@ceiplacolina.edu.es", "+34 91 678 9012", "www.ceiplacolina.edu.es", "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=900&q=80"),
+                    new Centro("CEIP Los Pinos", "Calle de los Pinos, 34", "28006 Madrid", "contacto@ceiplospinos.edu.es", "+34 91 789 0123", "www.ceiplospinos.edu.es", "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=900&q=80"),
+                    new Centro("CEIP El Olivo", "Avenida del Olivo, 56", "28007 Madrid", "info@ceipelolivo.edu.es", "+34 91 890 1234", "www.ceipelolivo.edu.es", "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=900&q=80"),
+                    new Centro("CEIP La Fuente", "Plaza de la Fuente, 78", "28008 Madrid", "contacto@ceiplafuente.edu.es", "+34 91 901 2345", "www.ceiplafuente.edu.es", "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=900&q=80"),
+                    new Centro("CEIP El Parque", "Calle del Parque, 90", "28009 Madrid", "info@ceipelparque.edu.es", "+34 91 012 3456", "www.ceipelparque.edu.es", "https://images.unsplash.com/photo-1577896851231-70ef18881754?w=900&q=80"),
+                    new Centro("CEIP Las Estrellas", "Avenida de las Estrellas, 23", "28010 Madrid", "contacto@ceiplasestrellas.edu.es", "+34 91 123 4567", "www.ceiplasestrellas.edu.es", "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=900&q=80")
+                    
+                    );
 
             centroRepository.saveAll(centros);
         };

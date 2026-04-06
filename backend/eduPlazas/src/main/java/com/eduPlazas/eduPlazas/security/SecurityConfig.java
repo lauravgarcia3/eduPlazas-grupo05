@@ -47,6 +47,7 @@ public class SecurityConfig {
         
         return http.build();
     }
+
     // Este es el "Bean" que pide el UsuarioService para encriptar
     @Bean
     public PasswordEncoder passwordEncoder() {

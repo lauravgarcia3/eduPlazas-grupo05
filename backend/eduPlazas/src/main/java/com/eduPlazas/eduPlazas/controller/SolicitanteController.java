@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.eduPlazas.eduPlazas.repository.UsuarioRepository;
+import com.eduPlazas.eduPlazas.repository.CentroRepository;
 import com.eduPlazas.eduPlazas.service.SolicitudService;
 import com.eduPlazas.eduPlazas.service.ConvocatoriaService;
 import com.eduPlazas.eduPlazas.model.Solicitud;
 import com.eduPlazas.eduPlazas.model.DomicilioFamiliar;
 import com.eduPlazas.eduPlazas.model.Menor;
 import com.eduPlazas.eduPlazas.model.Tutor;
+import com.eduPlazas.eduPlazas.model.Centro;
 import com.eduPlazas.eduPlazas.model.Convocatoria;
 import com.eduPlazas.eduPlazas.model.DocumentoAdjunto;
 
@@ -222,4 +224,161 @@ solicitud.getDocumentos().add(doc);
 solicitudService.guardar(solicitud);
 return "redirect:/solicitante/home";
 }
+}
+    @Autowired
+    private CentroRepository centroRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private SolicitudService solicitudService;
+
+    @Autowired
+    private ConvocatoriaService convocatoriaService;
+
+    @GetMapping("/home")
+    public String home(Authentication authentication, Model model) {
+        String email = authentication.getName();
+        var usuarioOpt = usuarioRepository.findByEmail(email);
+
+        if (usuarioOpt.isPresent()) {
+            var usuario = usuarioOpt.get();
+            List<Solicitud> todas = usuario.getSolicitudes();
+
+            // --- LÓGICA DEL COMPAÑERO: Cálculo de Puntos ---
+            Map<Long, Double> puntosPorSolicitud = new LinkedHashMap<>();
+            for (Solicitud solicitud : todas) {
+                puntosPorSolicitud.put(solicitud.getId(), solicitudService.obtenerTotalPuntos(solicitud));
+            }
+            model.addAttribute("puntosPorSolicitud", puntosPorSolicitud);
+
+            // ---  Separación de listas ---
+            List<Solicitud> incompletas = new ArrayList<>();
+            List<Solicitud> completas = new ArrayList<>();
+            
+            for (Solicitud s : todas) {
+                if (s.getCompletada() != null && s.getCompletada()) {
+                    completas.add(s);
+                } else {
+                    incompletas.add(s);
+                }
+            }
+            
+            model.addAttribute("solicitudesIncompletas", incompletas);
+            model.addAttribute("solicitudesCompletas", completas);
+           
+
+        } else {
+            model.addAttribute("solicitudes", new ArrayList<>());
+            model.addAttribute("solicitudesIncompletas", new ArrayList<>());
+            model.addAttribute("solicitudesCompletas", new ArrayList<>());
+            model.addAttribute("puntosPorSolicitud", new LinkedHashMap<Long, Double>());
+        }
+
+        // --- Fechas de la Convocatoria ---
+        Optional<Convocatoria> activa = convocatoriaService.obtenerConvocatoriaActiva();
+        if (activa.isPresent()) {
+            Convocatoria conv = activa.get();
+            model.addAttribute("convocatoriaActiva", conv);
+
+            if (conv.getFechaInicio() != null && conv.getFechaFin() != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM", new Locale("es", "ES"));
+                model.addAttribute("fechaInicioFormat", conv.getFechaInicio().format(formatter));
+                model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
+                model.addAttribute("fechaProvisionales", conv.getFechaFin().plusDays(10).format(formatter));
+                model.addAttribute("fechaReclamaciones", conv.getFechaFin().plusDays(10).format(formatter) + " - " + conv.getFechaFin().plusDays(20).format(formatter));
+                model.addAttribute("fechaDefinitivos", conv.getFechaFin().plusDays(30).format(formatter));
+            }
+        }
+
+        return "solicitante/home";
+    }
+
+    @GetMapping("/solicitud")
+    public String formulario(@RequestParam(value = "id", required = false) Long id, Model model) {
+        Solicitud solicitudAMostrar;
+
+        // --- Recuperación de borradores ---
+        if (id != null) {
+            Optional<Solicitud> existente = solicitudService.obtenerPorId(id);
+            if (existente.isPresent()) {
+                solicitudAMostrar = existente.get();
+                if (solicitudAMostrar.getMenor() == null) solicitudAMostrar.setMenor(new Menor());
+                if (solicitudAMostrar.getTutor1() == null) solicitudAMostrar.setTutor1(new Tutor());
+                if (solicitudAMostrar.getTutor2() == null) solicitudAMostrar.setTutor2(new Tutor());
+                if (solicitudAMostrar.getDomicilioFamiliar() == null) solicitudAMostrar.setDomicilioFamiliar(new DomicilioFamiliar());
+            } else {
+                return "redirect:/solicitante/home";
+            }
+        } else {
+            solicitudAMostrar = new Solicitud();
+            solicitudAMostrar.setMenor(new Menor());
+            solicitudAMostrar.setTutor1(new Tutor());
+            solicitudAMostrar.setTutor2(new Tutor());
+            solicitudAMostrar.setDomicilioFamiliar(new DomicilioFamiliar());
+        }
+
+        model.addAttribute("nuevaSolicitud", solicitudAMostrar);
+
+        Optional<Convocatoria> activa = convocatoriaService.obtenerConvocatoriaActiva();
+        if (activa.isPresent()) {
+            Convocatoria conv = activa.get();
+            model.addAttribute("convocatoriaActiva", conv);
+
+            if (conv.getFechaInicio() != null && conv.getFechaFin() != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
+                model.addAttribute("fechaInicioFormat", conv.getFechaInicio().format(formatter));
+                model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
+            }
+        }
+
+        return "solicitante/formulario";
+    }
+
+    @GetMapping("/estado")
+    public String estado(@RequestParam(value = "id", required = true) Long id, Model model) {
+        Optional<Solicitud> solicitudOpt = solicitudService.obtenerPorId(id);
+        
+        if (solicitudOpt.isPresent()) {
+            Solicitud solicitud = solicitudOpt.get();
+            model.addAttribute("solicitud", solicitud);
+            
+            // Buscamos el centro basándonos en el nombre que se eligió en la solicitud
+            if (solicitud.getCentroPreferencia() != null) {
+                Optional<Centro> centroOpt = centroRepository.findAll().stream()
+                    .filter(c -> c.getNombre().equals(solicitud.getCentroPreferencia()))
+                    .findFirst();
+                centroOpt.ifPresent(centro -> model.addAttribute("centro", centro));
+            }
+        } else {
+            return "redirect:/solicitante/home"; // Si no existe, al home
+        }
+        
+        return "solicitante/estado";
+    }
+
+    @PostMapping("/solicitud/guardar")
+    public String guardarSolicitud(@ModelAttribute("nuevaSolicitud") Solicitud solicitud, 
+                                   @RequestParam("accion") String accion,
+                                   Authentication authentication) {
+                                       
+        String email = authentication.getName();
+        var usuarioOpt = usuarioRepository.findByEmail(email);
+        usuarioOpt.ifPresent(solicitud::setUsuario);
+
+        Optional<Convocatoria> activa = convocatoriaService.obtenerConvocatoriaActiva();
+        activa.ifPresent(solicitud::setConvocatoria);
+        
+        if ("borrador".equals(accion)) {
+            solicitud.setCompletada(false);
+            solicitud.setEstado("Borrador");
+        } else if ("completar".equals(accion)) {
+            solicitud.setCompletada(true);
+            solicitud.setEstado("Enviada");
+        }
+
+        solicitudService.guardar(solicitud);
+        return "redirect:/solicitante/home";
+    }
 }

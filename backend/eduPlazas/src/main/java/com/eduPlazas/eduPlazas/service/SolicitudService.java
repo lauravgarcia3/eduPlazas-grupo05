@@ -62,6 +62,9 @@ public class SolicitudService {
     public Optional<Solicitud> buscarPorId(Long id) {
         return solicitudRepository.findById(id);
     }
+    public Optional<Solicitud> obtenerPorId(Long id) {
+        return solicitudRepository.findById(id);
+    }
 
     public Optional<Solicitud> buscarPorIdYUsuario(Long id, Usuario usuario) {
         return solicitudRepository.findByIdAndUsuario(id, usuario);

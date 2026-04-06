@@ -479,33 +479,32 @@
 
                 <div class="accepted-card">
                     <div class="accepted-image-box">
-                        <img src="https://via.placeholder.com/900x250" alt="Centro educativo" class="accepted-image">
+                        <img th:src="${centro != null ? centro.imagen : 'https://via.placeholder.com/900x250'}" alt="Centro educativo" class="accepted-image">
                         <div class="confirmed-badge">Plaza Confirmada</div>
                     </div>
 
-                    <h2 class="center-name">CEIP San Francisco de Asís</h2>
+                    <h2 class="center-name" th:text="${solicitud.centroPreferencia}">CEIP San Frafifincisco de Asís</h2>
 
                     <div class="info-grid">
                         <div class="info-box orange">
                             <h4>Dirección</h4>
-                            <p>Calle de la Educación, 123</p>
-                            <p>28001 Madrid, España</p>
+                            <p th:text="${centro != null ? centro.direccion : 'Dirección no disponible'}">Calle de la Educación, 123</p>
+                            <p th:text="${centro != null ? centro.ciudad + ', España' : ''}">28001 Madrid, España</p>
                         </div>
 
                         <div class="info-box blue">
                             <h4>Correo Electrónico</h4>
-                            <p>info@ceipsanfrancisco.edu.es</p>
+                            <p th:text="${centro != null ? centro.email : 'Email no disponible'}">info@ceipsanfrancisco.edu.es</p>
                         </div>
 
                         <div class="info-box orange">
                             <h4>Teléfono</h4>
-                            <p>+34 91 234 5678</p>
-                            <p>+34 91 234 5679 (Secretaría)</p>
+                            <p th:text="${centro != null ? centro.telefono : 'Teléfono no disponible'}">+34 91 234 5678</p>
                         </div>
 
                         <div class="info-box blue">
                             <h4>Web</h4>
-                            <p>www.ceipsanfrancisco.edu.es</p>
+                            <p th:text="${centro != null ? centro.web : 'Web no disponible'}">www.ceipsanfrancisco.edu.es</p>
                         </div>
                     </div>
 
@@ -526,38 +525,6 @@
                         <div class="schedule-note">
                             Recreo<br>
                             11:00 - 11:30
-                        </div>
-                    </div>
-
-                    <div class="schedule-card blue">
-                        <h4>Horario Secretaría</h4>
-                        <div class="schedule-row">
-                            <span>Lunes a Viernes</span>
-                            <span>8:30 - 14:30</span>
-                        </div>
-                        <div class="schedule-row">
-                            <span>Tardes (Lunes y Miércoles)</span>
-                            <span>15:30 - 17:30</span>
-                        </div>
-                        <div class="schedule-note orange">
-                            Atención Telefónica<br>
-                            Se recomienda llamar en horario de mañana para una mejor atención
-                        </div>
-                    </div>
-
-                    <div class="schedule-card">
-                        <h4>Horario Comedor</h4>
-                        <div class="schedule-row">
-                            <span>Primer Turno</span>
-                            <span>13:00 - 14:00</span>
-                        </div>
-                        <div class="schedule-row">
-                            <span>Segundo Turno</span>
-                            <span>14:00 - 15:00</span>
-                        </div>
-                        <div class="schedule-note">
-                            Menú<br>
-                            Menús elaborados por nutricionistas. Disponibles opciones para alergias e intolerancias.
                         </div>
                     </div>
 
@@ -583,8 +550,9 @@
                         </div>
                     </div>
                 </div>
+                
+                <a th:href="@{/solicitante/home}" class="primary-btn" style="margin-top: 24px;">Volver a Mis Solicitudes</a>
             </section>
-            <!-- Futuro backend: </section> -->
 
         </div>
     </div>
