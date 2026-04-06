@@ -1,5 +1,6 @@
 package com.eduPlazas.eduPlazas.repository;
 
+import com.eduPlazas.eduPlazas.model.Convocatoria;
 import com.eduPlazas.eduPlazas.model.Solicitud;
 import com.eduPlazas.eduPlazas.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,10 +11,19 @@ import java.util.Optional;
 
 @Repository
 public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
-    
+
     List<Solicitud> findByUsuario(Usuario usuario);
-    
+
     Optional<Solicitud> findByIdAndUsuario(Long id, Usuario usuario);
 
-	List<Solicitud> findByCentroPreferencia(String centroPreferencia);
+    List<Solicitud> findByCentroPreferencia(String centroPreferencia);
+
+    long countByConvocatoria(Convocatoria convocatoria);
+
+    List<Solicitud> findByConvocatoria(Convocatoria convocatoria);
+
+    // NUEVOS MÉTODOS PARA MÉTRICAS POR CONVOCATORIA
+    long countByConvocatoriaAndCompletadaTrue(Convocatoria convocatoria);
+
+    long countByConvocatoriaAndEstado(Convocatoria convocatoria, String estado);
 }
