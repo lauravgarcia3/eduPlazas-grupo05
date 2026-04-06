@@ -23,19 +23,10 @@ public class DataInitializer {
             // ==========================================
             // 1. POBLAR USUARIOS
             // ==========================================
-           // ADMIN
+            // ADMIN
             if (usuarioRepository.findByEmail("admin@eduplazas.com").isEmpty()) {
                 Usuario admin = new Usuario();
-<<<<<<< HEAD
-                Usuario solicitante = new Usuario();
-		Usuario centro = new Usuario();
                 admin.setEmail("admin@eduplazas.com");
-                solicitante.setEmail("solicitante@eduplazas.com");
-		centro.setEmail("centro@eduplazas.com");
-                
-=======
-                admin.setEmail("admin@eduplazas.com");
->>>>>>> main
                 admin.setPassword(passwordEncoder.encode("admin123"));
                 admin.setNombreCompleto("Administrador Principal");
                 admin.setRol("ROLE_ADMIN");
@@ -50,15 +41,6 @@ public class DataInitializer {
                 solicitante.setPassword(passwordEncoder.encode("solicitante123"));
                 solicitante.setNombreCompleto("Solicitante Ejemplo");
                 solicitante.setRol("ROLE_SOLICITANTE");
-<<<<<<< HEAD
-
-		centro.setPassword(passwordEncoder.encode("centro123"));
-		centro.setNombreCompleto("Centro prueba");
-		centro.setRol("ROLE_CENTRO");
-
-                usuarioRepository.save(admin);
-=======
->>>>>>> main
                 usuarioRepository.save(solicitante);
                 System.out.println("Usuario SOLICITANTE creado.");
             }
@@ -69,7 +51,7 @@ public class DataInitializer {
                 centroUser.setEmail("centro@eduplazas.com");
                 centroUser.setPassword(passwordEncoder.encode("centro123"));
                 centroUser.setNombreCompleto("CEIP San Francisco - Gestión");
-                centroUser.setRol("ROLE_CENTRO");
+                centroUser.setRol("ROLE_CENTRO"); // Corregido: ROLE_CENTRO
                 usuarioRepository.save(centroUser);
                 System.out.println("Usuario CENTRO creado.");
             }
