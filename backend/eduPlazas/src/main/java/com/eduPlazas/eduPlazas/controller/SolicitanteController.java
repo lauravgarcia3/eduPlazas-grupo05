@@ -12,12 +12,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.eduPlazas.eduPlazas.repository.UsuarioRepository;
+import com.eduPlazas.eduPlazas.repository.CentroRepository;
 import com.eduPlazas.eduPlazas.service.SolicitudService;
 import com.eduPlazas.eduPlazas.service.ConvocatoriaService;
 import com.eduPlazas.eduPlazas.model.Solicitud;
 import com.eduPlazas.eduPlazas.model.DomicilioFamiliar;
 import com.eduPlazas.eduPlazas.model.Menor;
 import com.eduPlazas.eduPlazas.model.Tutor;
+import com.eduPlazas.eduPlazas.model.Centro;
 import com.eduPlazas.eduPlazas.model.Convocatoria;
 
 import java.time.format.DateTimeFormatter;
@@ -31,6 +33,9 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/solicitante")
 public class SolicitanteController {
+
+    @Autowired
+    private CentroRepository centroRepository;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -141,7 +146,24 @@ public class SolicitanteController {
     }
 
     @GetMapping("/estado")
-    public String estado() {
+    public String estado(@RequestParam(value = "id", required = true) Long id, Model model) {
+        Optional<Solicitud> solicitudOpt = solicitudService.obtenerPorId(id);
+        
+        if (solicitudOpt.isPresent()) {
+            Solicitud solicitud = solicitudOpt.get();
+            model.addAttribute("solicitud", solicitud);
+            
+            // Buscamos el centro basándonos en el nombre que se eligió en la solicitud
+            if (solicitud.getCentroPreferencia() != null) {
+                Optional<Centro> centroOpt = centroRepository.findAll().stream()
+                    .filter(c -> c.getNombre().equals(solicitud.getCentroPreferencia()))
+                    .findFirst();
+                centroOpt.ifPresent(centro -> model.addAttribute("centro", centro));
+            }
+        } else {
+            return "redirect:/solicitante/home"; // Si no existe, al home
+        }
+        
         return "solicitante/estado";
     }
 
@@ -154,6 +176,9 @@ public class SolicitanteController {
         var usuarioOpt = usuarioRepository.findByEmail(email);
         usuarioOpt.ifPresent(solicitud::setUsuario);
 
+        Optional<Convocatoria> activa = convocatoriaService.obtenerConvocatoriaActiva();
+        activa.ifPresent(solicitud::setConvocatoria);
+        
         if ("borrador".equals(accion)) {
             solicitud.setCompletada(false);
             solicitud.setEstado("Borrador");

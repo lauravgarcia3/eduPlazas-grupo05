@@ -17,14 +17,17 @@ public class Centro {
     private String email;
     private String telefono;
     private String web;
+    private String imagen;
 
-    public Centro(String nombre, String direccion, String ciudad, String email, String telefono, String web) {
+    public Centro() {}
+    public Centro(String nombre, String direccion, String ciudad, String email, String telefono, String web, String imagen) {
         this.nombre = nombre;
         this.direccion = direccion;
         this.ciudad = ciudad;
         this.email = email;
         this.telefono = telefono;
         this.web = web;
+        this.imagen = imagen;
     }
 
     public Long getId() {
@@ -81,5 +84,11 @@ return web;
 
 public void setWeb(String web) {
 this.web = web;
+}
+public String getImagen() { 
+return imagen; 
+}
+public void setImagen(String imagen) {
+this.imagen = imagen; 
 }
 }
