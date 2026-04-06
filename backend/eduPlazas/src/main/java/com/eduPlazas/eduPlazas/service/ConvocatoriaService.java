@@ -35,4 +35,8 @@ public class ConvocatoriaService {
     public List<Convocatoria> obtenerTodas() {
         return repository.findAllOrdered();
     }
+
+    public Optional<Convocatoria> obtenerConvocatoriaActiva() {
+        return repository.findByEstado("ACTIVA");
+    }
 }

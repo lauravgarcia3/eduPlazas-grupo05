@@ -1,294 +1,388 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>Inicio Solicitante - EduPlazas</title>
+    <meta charset="UTF-8">
+    <title>Inicio Solicitante - EduPlazas</title>
 
-<link rel="stylesheet" th:href="@{/css/common.css}">
-<style>
-.page-content {
-padding: 20px;
-}
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <style>
+        .page-content {
+            padding: 20px;
+        }
 
-.hero-card {
-display: flex;
-background-color: #e1b76f;
-border-radius: 34px;
-overflow: hidden;
-margin-bottom: 28px;
-box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
-}
+        .hero-card {
+            display: flex;
+            background-color: #e1b76f;
+            border-radius: 34px;
+            overflow: hidden;
+            margin-bottom: 28px;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+        }
 
-.hero-left {
-width: 50%;
-padding: 18px 22px 18px 22px;
-position: relative;
-color: white;
-}
+        .hero-left {
+            width: 50%;
+            padding: 18px 22px 18px 22px;
+            position: relative;
+            color: white;
+        }
 
-.hero-circle {
-position: absolute;
-top: 18px;
-right: 18px;
-width: 54px;
-height: 54px;
-border-radius: 50%;
-background-color: rgba(255, 255, 255, 0.35);
-}
+        .hero-circle {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.35);
+        }
 
-.hero-left h1 {
-font-size: 30px;
-line-height: 1.15;
-margin: 0 0 10px 0;
-font-weight: 800;
-}
+        .hero-left h1 {
+            font-size: 30px;
+            line-height: 1.15;
+            margin: 0 0 10px 0;
+            font-weight: 800;
+        }
 
-.hero-left p {
-font-size: 15px;
-margin: 0 0 12px 0;
-color: #fff;
-}
+        .hero-left p {
+            font-size: 15px;
+            margin: 0 0 12px 0;
+            color: #fff;
+        }
 
-.primary-btn {
-display: inline-block;
-background-color: #e58d00;
-color: white;
-text-decoration: none;
-font-size: 16px;
-font-weight: 700;
-padding: 10px 20px;
-border-radius: 14px;
-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
-}
+        .primary-btn {
+            display: inline-block;
+            background-color: #e58d00;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 10px 20px;
+            border-radius: 14px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+        }
 
-.primary-btn:hover {
-background-color: #c77400;
-}
+        .primary-btn:hover {
+            background-color: #c77400;
+        }
 
-.hero-right {
-width: 50%;
-background-color: white;
-}
+        .hero-right {
+            width: 50%;
+            background-color: white;
+        }
 
-.hero-right img {
-width: 100%;
-height: 100%;
-object-fit: cover;
-object-position: center;
-display: block;
-}
+        .hero-right img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
 
-.solicitudes-card {
-background-color: #ddb36a;
-border-radius: 34px;
-padding: 22px 26px 16px 26px;
-margin-bottom: 28px;
-}
+        .solicitudes-card {
+            background-color: #ddb36a;
+            border-radius: 34px;
+            padding: 22px 26px 16px 26px;
+            margin-bottom: 28px;
+        }
 
-.solicitudes-card h2 {
-margin: 0 0 22px 0;
-font-size: 36px;
-color: #e58d00;
-font-weight: 800;
-}
+        .solicitudes-card h2 {
+            margin: 0 0 22px 0;
+            font-size: 36px;
+            color: #e58d00;
+            font-weight: 800;
+        }
 
-.solicitudes-header,
-.solicitud-row {
-display: grid;
-grid-template-columns: 2.2fr 1.2fr 1.2fr;
-align-items: center;
-column-gap: 24px;
-}
+        .solicitudes-header,
+        .solicitud-row {
+            display: grid;
+            grid-template-columns: 2.2fr 1.2fr 1fr 1fr 1.2fr;
+            align-items: center;
+            column-gap: 24px;
+        }
 
-.solicitudes-header {
-font-size: 22px;
-color: white;
-font-weight: 700;
-margin-bottom: 16px;
-}
+        .solicitudes-header {
+            font-size: 22px;
+            color: white;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
 
-.solicitud-row {
-font-size: 18px;
-color: white;
-padding: 6px 0;
-}
+        .solicitud-row {
+            font-size: 18px;
+            color: white;
+            padding: 6px 0;
+        }
 
-.nombre-menor {
-color: white;
-}
+        .nombre-menor {
+            color: white;
+        }
 
-.estado-pill {
-display: inline-block;
-background-color: rgba(255,255,255,0.35);
-color: white;
-padding: 7px 14px;
-border-radius: 999px;
-font-size: 16px;
-}
+        .estado-pill {
+            display: inline-block;
+            background-color: rgba(255,255,255,0.35);
+            color: white;
+            padding: 7px 14px;
+            border-radius: 999px;
+            font-size: 16px;
+        }
 
-.action-btn {
-display: inline-block;
-min-width: 145px;
-text-align: center;
-background-color: #e58d00;
-color: white;
-text-decoration: none;
-font-size: 16px;
-font-weight: 700;
-padding: 8px 14px;
-border-radius: 12px;
-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.10);
-}
+        .puntuacion {
+            text-align: center;
+            font-weight: 700;
+        }
 
-.action-btn:hover {
-background-color: #c77400;
-}
+        .action-btn {
+            display: inline-block;
+            min-width: 145px;
+            text-align: center;
+            background-color: #e58d00;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 700;
+            padding: 8px 14px;
+            border-radius: 12px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.10);
+        }
 
-.fechas-card {
-background-color: #67a8cf;
-border-radius: 34px;
-padding: 20px 24px;
-}
+        .action-btn:hover {
+            background-color: #c77400;
+        }
 
-.fechas-card h2 {
-margin: 0 0 22px 0;
-font-size: 34px;
-color: white;
-font-weight: 800;
-}
+        .fechas-card {
+            background-color: #67a8cf;
+            border-radius: 34px;
+            padding: 20px 24px;
+        }
 
-.fechas-grid {
-display: grid;
-grid-template-columns: repeat(4, 1fr);
-gap: 18px;
-}
+        .fechas-card h2 {
+            margin: 0 0 22px 0;
+            font-size: 34px;
+            color: white;
+            font-weight: 800;
+        }
 
-.fecha-item {
-background-color: rgba(255,255,255,0.28);
-border-radius: 999px;
-text-align: center;
-padding: 10px 8px;
-color: white;
-}
+        .fechas-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+        }
 
-.fecha-titulo {
-font-size: 16px;
-font-weight: 500;
-margin-bottom: 6px;
-}
+        .fecha-item {
+            background-color: rgba(255,255,255,0.28);
+            border-radius: 999px;
+            text-align: center;
+            padding: 10px 8px;
+            color: white;
+        }
 
-.fecha-texto {
-font-size: 13px;
-color: #184f72;
-font-weight: 500;
-}
+        .fecha-titulo {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
 
-@media (max-width: 1200px) {
-.hero-card {
-flex-direction: column;
-}
+        .fecha-texto {
+            font-size: 13px;
+            color: #184f72;
+            font-weight: 500;
+        }
 
-.hero-left,
-.hero-right {
-width: 100%;
-}
+        .estado-borrador {
+            background-color: rgba(255,255,255,0.35);
+        }
 
-.solicitudes-header,
-.solicitud-row {
-grid-template-columns: 1fr;
-row-gap: 10px;
-}
+        .estado-enviada {
+            background-color: rgba(255,255,255,0.5);
+        }
 
-.fechas-grid {
-grid-template-columns: 1fr 1fr;
-}
-}
+        .sin-solicitudes {
+            color: white;
+            font-size: 18px;
+            padding: 10px 0;
+        }
 
-@media (max-width: 768px) {
-.hero-left h1 {
-font-size: 34px;
-}
+        @media (max-width: 1200px) {
+            .hero-card {
+                flex-direction: column;
+            }
 
-.solicitudes-card h2,
-.fechas-card h2 {
-font-size: 34px;
-}
+            .hero-left,
+            .hero-right {
+                width: 100%;
+            }
 
-.fechas-grid {
-grid-template-columns: 1fr;
-}
-}
-</style>
+            .solicitudes-header,
+            .solicitud-row {
+                grid-template-columns: 1fr;
+                row-gap: 10px;
+            }
+
+            .fechas-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-left h1 {
+                font-size: 34px;
+            }
+
+            .solicitudes-card h2,
+            .fechas-card h2 {
+                font-size: 34px;
+            }
+
+            .fechas-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
-<header class="topbar">
-<div class="logo">EduPlazas</div>
-<form th:action="@{/logout}" method="post" style="margin:0;">
-<button type="submit" class="primary-btn">Logout</button>
-</form>
-</header>
+    <header class="topbar">
+        <div class="logo">EduPlazas</div>
+        <a th:href="@{/login}" class="primary-btn">Logout</a>
+    </header>
 
-<main class="page-content">
+    <main class="page-content">
 
-<section class="hero-card">
-<div class="hero-left">
-<div class="hero-circle"></div>
-<h1>Convocatoria Abierta:<br>Educación Infantil 2026-2027</h1>
-<p>Periodo de inscripción: 2 de marzo - 29 de mayo de 2026</p>
-<a th:href="@{/solicitante/solicitud}" class="primary-btn">Registrar nueva solicitud de plaza</a>
+        <section class="hero-card">
+            <div class="hero-left">
+                <div class="hero-circle"></div>
+                <h1>Convocatoria Abierta:<br>Educación Infantil 2026-2027</h1>
+                <p>Periodo de inscripción: 2 de marzo - 29 de mayo de 2026</p>
+                <a th:href="@{/solicitante/solicitud}" class="primary-btn">Registrar nueva solicitud de plaza</a>
+            </div>
+    	<section class="hero-card">
+        	<div class="hero-left">
+    <div class="hero-circle"></div>
+    
+    <div th:if="${convocatoriaActiva != null}">
+        <h1>Convocatoria Abierta:<br>
+            <span th:text="${convocatoriaActiva.nombre}">Educación Infantil 2026-2027</span>
+        </h1>
+        <p>Periodo de inscripción: 
+            <span th:text="${fechaInicioFormat} + ' - ' + ${fechaFinFormat}">2 de marzo - 29 de mayo de 2026</span>
+        </p>
+        <a th:href="@{/solicitante/solicitud}" class="primary-btn">Registrar nueva solicitud de plaza</a>
+    </div>
+
+    <div th:unless="${convocatoriaActiva != null}">
+        <h1>No hay convocatorias<br>abiertas actualmente</h1>
+        <p>Por favor, consulte las fechas clave más abajo para el próximo proceso.</p>
+    </div>
 </div>
 
-<div class="hero-right">
-<img th:src="@{/images/home-solicitante.png}" alt="Imagen convocatoria solicitante">
-</div>
-</section>
+            <div class="hero-right">
+                <img th:src="@{/images/home-solicitante.png}" alt="Imagen convocatoria solicitante">
+            </div>
+        </section>
 
-<section class="solicitudes-card">
-<h2>Mis solicitudes</h2>
+        <section class="solicitudes-card">
+            <h2>Mis solicitudes</h2>
 
-<div class="solicitudes-header">
-<div>Nombre del Menor</div>
-<div>Estado</div>
-<div>Acciones</div>
-</div>
+            <div class="solicitudes-header">
+                <div>Nombre del Menor</div>
+                <div>Estado</div>
+                <div>Puntuación</div>
+                <div>Acciones</div>
+            </div>
 
-<div class="solicitud-row" th:each="solicitud : ${solicitudes}">
-<div class="nombre-menor" th:text="${solicitud.menor.nombre + ' ' + solicitud.menor.apellidos}"></div>
-<div>
-<span class="estado-pill" th:text="${solicitud.estado}"></span>
-</div>
-<div>
-<a th:href="@{/solicitante/estado(id=${solicitud.id})}" class="action-btn">Ver detalle</a>
-</div>
-</div>
-</section>
+            <div th:if="${#lists.isEmpty(solicitudesIncompletas) and #lists.isEmpty(solicitudesCompletas)}" class="sin-solicitudes">
+                No tienes solicitudes registradas todavía.
+            </div>
 
-<section class="fechas-card">
-<h2>Fechas Clave del Proceso:</h2>
+            <div class="solicitud-row" th:each="solicitud : ${solicitudesIncompletas}">
+                <div class="nombre-menor" th:text="${solicitud.menor != null ? solicitud.menor.nombre + ' ' + solicitud.menor.apellidos : 'Sin datos del menor'}"></div>
+                <div><span class="estado-pill estado-borrador">Borrador</span></div>
+                <div class="puntuacion" th:text="${puntosPorSolicitud[solicitud.id]}">0.0</div>
+                <div>
+                    <a th:href="@{/solicitante/solicitud}" class="action-btn">Continuar</a>
+                </div>
+            </div>
+	        <div class="solicitudes-header">
+	            <div>Nombre del Menor</div>
+	            <div>Estado</div>
+	            <div>Acciones</div>
+	        </div>
+			<div class="solicitud-row" th:each="solicitud : ${solicitudesIncompletas}">
+            	<div class="nombre-menor" th:text="${solicitud.menor != null ? solicitud.menor.nombre + ' ' + solicitud.menor.apellidos : 'Sin nombre'}"></div>
+            	<div><span class="estado-pill estado-borrador">Borrador</span></div>
+            	<div>
+					<a th:href="@{/solicitante/solicitud(id=${solicitud.id})}" class="action-btn">Continuar</a>
+				</div>
+			</div>
 
-<div class="fechas-grid">
-<div class="fecha-item">
-<div class="fecha-titulo">Registro de solicitudes</div>
-<div class="fecha-texto">2 de marzo - 29 de mayo</div>
-</div>
+            <div class="solicitud-row" th:each="solicitud : ${solicitudesCompletas}">
+                <div class="nombre-menor" th:text="${solicitud.menor != null ? solicitud.menor.nombre + ' ' + solicitud.menor.apellidos : 'Sin datos del menor'}"></div>
+                <div><span class="estado-pill estado-enviada">Enviada</span></div>
+                <div class="puntuacion" th:text="${puntosPorSolicitud[solicitud.id]}">0.0</div>
+                <div>
+                    <a th:href="@{/solicitante/estado}" class="action-btn">Ver detalle</a>
+                </div>
+            </div>
+        </section>
 
-<div class="fecha-item">
-<div class="fecha-titulo">Listados provisionales</div>
-<div class="fecha-texto">15 de junio</div>
-</div>
+        <section class="fechas-card">
+            <h2>Fechas Clave del Proceso:</h2>
+    	<section class="fechas-card">
+            <h2>Fechas Clave del Proceso:</h2>
 
-<div class="fecha-item">
-<div class="fecha-titulo">Reclamaciones</div>
-<div class="fecha-texto">20 de junio - 25 de junio</div>
-</div>
+            <div class="fechas-grid">
+                <div class="fecha-item">
+                    <div class="fecha-titulo">Registro de solicitudes</div>
+                    <div class="fecha-texto">2 de marzo - 29 de mayo</div>
+                </div>
+            <div class="fechas-grid" th:if="${convocatoriaActiva != null}">
+                
+                <div class="fecha-item">
+                    <div class="fecha-titulo">Registro de solicitudes</div>
+                    <div class="fecha-texto" th:text="${fechaInicioFormat} + ' - ' + ${fechaFinFormat}"></div>
+                </div>
 
-<div class="fecha-item">
-<div class="fecha-titulo">Listados definitivos</div>
-<div class="fecha-texto">28 de junio</div>
-</div>
-</div>
-</section>
+                <div class="fecha-item">
+                    <div class="fecha-titulo">Listados provisionales</div>
+                    <div class="fecha-texto">15 de junio</div>
+                </div>
+                <div class="fecha-item">
+                    <div class="fecha-titulo">Listados provisionales</div>
+                    <div class="fecha-texto" th:text="${fechaProvisionales}"></div>
+                </div>
 
-</main>
+                <div class="fecha-item">
+                    <div class="fecha-titulo">Reclamaciones</div>
+                    <div class="fecha-texto">20 de junio - 25 de junio</div>
+                </div>
+                <div class="fecha-item">
+                    <div class="fecha-titulo">Reclamaciones</div>
+                    <div class="fecha-texto" th:text="${fechaReclamaciones}"></div>
+                </div>
+
+                <div class="fecha-item">
+                    <div class="fecha-titulo">Listados definitivos</div>
+                    <div class="fecha-texto">28 de junio</div>
+                </div>
+            </div>
+        </section>
+                <div class="fecha-item">
+                    <div class="fecha-titulo">Listados definitivos</div>
+                    <div class="fecha-texto" th:text="${fechaDefinitivos}"></div>
+                </div>
+
+            </div>
+
+            <div class="fechas-grid" th:unless="${convocatoriaActiva != null}">
+                
+                <div class="fecha-item">
+                    <div class="fecha-titulo">Aviso</div>
+                    <div class="fecha-texto">Fechas pendientes de publicación</div>
+                </div>
+
+            </div>
+            
+        </section>
+
+    </main>
 </body>
 </html>
