@@ -10,6 +10,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.Valid;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,23 +25,32 @@ public class Solicitud {
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
 
+@NotBlank(message = "Debe seleccionar el campo «Centro de preferencia».")
+private String centroPreferencia;
+
+@NotBlank(message = "Debe seleccionar el campo «Curso solicitado».")
+private String cursoSolicitado;
+
+@AssertTrue(message = "Debes aceptar la declaración de veracidad")
+private Boolean declaracionVeracidad;
+
+@AssertTrue(message = "Debes aceptar la protección de datos")
+private Boolean autorizacionProteccionDatos;
+
 private String nombreSolicitante;
 private String estado;
 
-private String centroPreferencia;
-private String cursoSolicitado;
-
-private Boolean declaracionVeracidad;
-private Boolean autorizacionProteccionDatos;
 private Boolean completada = false;
 
 @OneToOne(cascade = CascadeType.ALL)
 @JoinColumn(name = "menor_id")
-private Menor menor;
+@Valid
+private Menor menor = new Menor();
 
 @OneToOne(cascade = CascadeType.ALL)
 @JoinColumn(name = "tutor1_id")
-private Tutor tutor1;
+@Valid
+private Tutor tutor1 = new Tutor();
 
 @OneToOne(cascade = CascadeType.ALL)
 @JoinColumn(name = "tutor2_id")
@@ -45,7 +58,8 @@ private Tutor tutor2;
 
 @OneToOne(cascade = CascadeType.ALL)
 @JoinColumn(name = "domicilio_id")
-private DomicilioFamiliar domicilioFamiliar;
+@Valid
+private DomicilioFamiliar domicilioFamiliar = new DomicilioFamiliar();
 
 @OneToMany(mappedBy = "solicitud", cascade = CascadeType.ALL)
 private List<DocumentoAdjunto> documentos = new ArrayList<>();

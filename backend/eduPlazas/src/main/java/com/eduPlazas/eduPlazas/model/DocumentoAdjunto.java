@@ -3,6 +3,8 @@ package com.eduPlazas.eduPlazas.model;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.persistence.Lob;
+import jakarta.persistence.Column;
 
 @Entity
 public class DocumentoAdjunto {
@@ -18,6 +20,14 @@ private String tipoDocumento;
 @JsonIgnore
 @JoinColumn(name = "solicitud_id")
 private Solicitud solicitud;
+
+@Lob
+@Column(columnDefinition = "LONGBLOB")
+private byte[] contenido;
+
+private String nombre;
+
+private String tipo;
 
 public DocumentoAdjunto() {
 }
@@ -58,5 +68,29 @@ return solicitud;
 
 public void setSolicitud(Solicitud solicitud) {
 this.solicitud = solicitud;
+}
+
+public byte[] getContenido() {
+return contenido;
+}
+
+public void setContenido(byte[] contenido) {
+this.contenido = contenido;
+}
+
+public String getNombre() {
+return nombre;
+}
+
+public void setNombre(String nombre) {
+this.nombre = nombre;
+}
+
+public String getTipo() {
+return tipo;
+}
+
+public void setTipo(String tipo) {
+this.tipo = tipo;
 }
 }
