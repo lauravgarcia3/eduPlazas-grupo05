@@ -1,6 +1,7 @@
 package com.eduPlazas.eduPlazas.service;
 
 import com.eduPlazas.eduPlazas.model.DocumentoAdjunto;
+import com.eduPlazas.eduPlazas.model.Puntuacion;
 import com.eduPlazas.eduPlazas.model.Usuario;
 import com.eduPlazas.eduPlazas.model.Solicitud;
 import com.eduPlazas.eduPlazas.repository.SolicitudRepository;
@@ -12,64 +13,85 @@ import java.util.Optional;
 @Service
 public class SolicitudService {
 
-private final SolicitudRepository solicitudRepository;
+    private final SolicitudRepository solicitudRepository;
+    private final PuntuacionService puntuacionService;
 
-public SolicitudService(SolicitudRepository solicitudRepository) {
-this.solicitudRepository = solicitudRepository;
-}
+    public SolicitudService(SolicitudRepository solicitudRepository,
+                            PuntuacionService puntuacionService) {
+        this.solicitudRepository = solicitudRepository;
+        this.puntuacionService = puntuacionService;
+    }
 
-public List<Solicitud> obtenerTodas() {
-return solicitudRepository.findAll();
-}
+    public List<Solicitud> obtenerTodas() {
+        return solicitudRepository.findAll();
+    }
 
-public List<Solicitud> obtenerPorUsuario(Usuario usuario) {
-return solicitudRepository.findByUsuario(usuario);
-}
+    public List<Solicitud> obtenerPorUsuario(Usuario usuario) {
+        return solicitudRepository.findByUsuario(usuario);
+    }
 
-public List<Solicitud> obtenerIncompletasPorUsuario(Usuario usuario) {
-    return solicitudRepository.findByUsuario(usuario).stream()
-            .filter(solicitud -> !solicitud.getCompletada())
-            .toList();
-}
+    public List<Solicitud> obtenerIncompletasPorUsuario(Usuario usuario) {
+        return solicitudRepository.findByUsuario(usuario).stream()
+                .filter(solicitud -> !solicitud.getCompletada())
+                .toList();
+    }
 
-public Solicitud guardar(Solicitud solicitud) {
-if (solicitud.getDocumentos() != null) {
-for (DocumentoAdjunto documento : solicitud.getDocumentos()) {
-documento.setSolicitud(solicitud);
-}
-}
-return solicitudRepository.save(solicitud);
-}
+    public Solicitud guardar(Solicitud solicitud) {
+        if (solicitud.getDocumentos() != null) {
+            for (DocumentoAdjunto documento : solicitud.getDocumentos()) {
+                documento.setSolicitud(solicitud);
+            }
+        }
 
-public Optional<Solicitud> buscarPorId(Long id) {
-return solicitudRepository.findById(id);
-}
+        Solicitud guardada = solicitudRepository.save(solicitud);
 
-public Optional<Solicitud> buscarPorIdYUsuario(Long id, Usuario usuario) {
-return solicitudRepository.findByIdAndUsuario(id, usuario);
-}
+        puntuacionService.calcularYGuardar(
+                guardada,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+        );
 
-public Solicitud cambiarEstado(Long id, String estado) {
+        return guardada;
+    }
 
-Solicitud solicitud = solicitudRepository.findById(id)
-.orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
+    public Optional<Solicitud> buscarPorId(Long id) {
+        return solicitudRepository.findById(id);
+    }
 
-// Validación básica (opcional pero recomendable)
-if (!estado.equals("Pendiente") && !estado.equals("Aceptada") && !estado.equals("Rechazada")) {
-throw new RuntimeException("Estado inválido");
-}
+    public Optional<Solicitud> buscarPorIdYUsuario(Long id, Usuario usuario) {
+        return solicitudRepository.findByIdAndUsuario(id, usuario);
+    }
 
-solicitud.setEstado(estado);
-return solicitudRepository.save(solicitud);
-}
+    public Solicitud cambiarEstado(Long id, String estado) {
+        Solicitud solicitud = solicitudRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
 
-public Solicitud actualizarEstado(Long id, boolean completada) {
-    Optional<Solicitud> solicitudOpt = solicitudRepository.findById(id);
-    if (solicitudOpt.isPresent()) {
-        Solicitud solicitud = solicitudOpt.get();
-        solicitud.setCompletada(completada);
+        if (!estado.equals("Pendiente") && !estado.equals("Aceptada") && !estado.equals("Rechazada")) {
+            throw new RuntimeException("Estado inválido");
+        }
+
+        solicitud.setEstado(estado);
         return solicitudRepository.save(solicitud);
     }
-    throw new IllegalArgumentException("Solicitud no encontrada");
-}
+
+    public Solicitud actualizarEstado(Long id, boolean completada) {
+        Optional<Solicitud> solicitudOpt = solicitudRepository.findById(id);
+        if (solicitudOpt.isPresent()) {
+            Solicitud solicitud = solicitudOpt.get();
+            solicitud.setCompletada(completada);
+            return solicitudRepository.save(solicitud);
+        }
+        throw new IllegalArgumentException("Solicitud no encontrada");
+    }
+
+    public double obtenerTotalPuntos(Solicitud solicitud) {
+        return puntuacionService.obtenerPorSolicitud(solicitud)
+                .map(Puntuacion::getTotalPuntos)
+                .orElse(0.0);
+    }
 }

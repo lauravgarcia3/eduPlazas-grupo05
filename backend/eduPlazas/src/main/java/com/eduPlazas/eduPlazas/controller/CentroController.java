@@ -1,5 +1,6 @@
 package com.eduPlazas.eduPlazas.controller;
 
+<<<<<<< HEAD
 import com.eduPlazas.eduPlazas.model.Centro;
 import com.eduPlazas.eduPlazas.model.Solicitud;
 import com.eduPlazas.eduPlazas.repository.CentroRepository;
@@ -11,11 +12,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+=======
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import java.security.Principal;
+>>>>>>> main
 
 @Controller
 @RequestMapping("/centro")
 public class CentroController {
 
+<<<<<<< HEAD
 private final CentroRepository centroRepository;
 private final SolicitudRepository solicitudRepository;
 
@@ -44,4 +53,12 @@ model.addAttribute("solicitudes", solicitudes);
 
 return "centro/admitidos";
 }
+=======
+    @GetMapping("/home")
+    public String home(Model model) {
+        // Por ahora pasamos un nombre fijo, luego lo sacaremos de la base de datos
+        model.addAttribute("nombreCentro", "CEIP San Francisco de Asís");
+        return "centro/home"; 
+    }
+>>>>>>> main
 }

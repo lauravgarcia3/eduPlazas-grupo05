@@ -6,39 +6,31 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.eduPlazas.eduPlazas.repository.UsuarioRepository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
+import com.eduPlazas.eduPlazas.repository.UsuarioRepository;
 import com.eduPlazas.eduPlazas.service.SolicitudService;
+import com.eduPlazas.eduPlazas.service.ConvocatoriaService;
+import com.eduPlazas.eduPlazas.model.Solicitud;
+import com.eduPlazas.eduPlazas.model.DomicilioFamiliar;
+import com.eduPlazas.eduPlazas.model.Menor;
+import com.eduPlazas.eduPlazas.model.Tutor;
+import com.eduPlazas.eduPlazas.model.Convocatoria;
+
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/solicitante")
 public class SolicitanteController {
-
-    @GetMapping("/home")
-    public String home(Authentication authentication, Model model) {
-        String email = authentication.getName();
-        var usuarioOpt = usuarioRepository.findByEmail(email);
-        if (usuarioOpt.isPresent()) {
-            var usuario = usuarioOpt.get();
-            model.addAttribute("solicitudes", usuario.getSolicitudes());
-        } else {
-            model.addAttribute("solicitudes", new ArrayList<>());
-        }
-        return "solicitante/home";
-    }
-
-    @GetMapping("/solicitud")
-    public String formulario() {
-        return "solicitante/formulario";
-    }
-
-    @GetMapping("/estado")
-    public String estado() {
-        return "solicitante/estado";
-    }
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -46,15 +38,81 @@ public class SolicitanteController {
     @Autowired
     private SolicitudService solicitudService;
 
-    @PostMapping("/solicitud/guardar")
-    public String guardarSolicitudIncompleta(@RequestParam Long id) {
-        solicitudService.actualizarEstado(id, false);
-        return "redirect:/solicitante/home";
+    @Autowired
+    private ConvocatoriaService convocatoriaService;
+
+    @GetMapping("/home")
+    public String home(Authentication authentication, Model model) {
+        String email = authentication.getName();
+        var usuarioOpt = usuarioRepository.findByEmail(email);
+
+        if (usuarioOpt.isPresent()) {
+            var usuario = usuarioOpt.get();
+            List<Solicitud> solicitudes = usuario.getSolicitudes();
+
+            Map<Long, Double> puntosPorSolicitud = new LinkedHashMap<>();
+            for (Solicitud solicitud : solicitudes) {
+                puntosPorSolicitud.put(solicitud.getId(), solicitudService.obtenerTotalPuntos(solicitud));
+            }
+
+            model.addAttribute("solicitudes", solicitudes);
+            model.addAttribute("puntosPorSolicitud", puntosPorSolicitud);
+        } else {
+            model.addAttribute("solicitudes", new ArrayList<>());
+            model.addAttribute("puntosPorSolicitud", new LinkedHashMap<Long, Double>());
+        }
+
+        return "solicitante/home";
+    }
+    @GetMapping("/solicitud")
+    public String formulario(Model model) {
+
+        Solicitud nuevaSolicitud = new Solicitud();
+        nuevaSolicitud.setMenor(new Menor());
+        nuevaSolicitud.setTutor1(new Tutor());
+        nuevaSolicitud.setTutor2(new Tutor());
+        nuevaSolicitud.setDomicilioFamiliar(new DomicilioFamiliar());
+        model.addAttribute("nuevaSolicitud", nuevaSolicitud);
+
+        Optional<Convocatoria> activa = convocatoriaService.obtenerConvocatoriaActiva();
+        if (activa.isPresent()) {
+            Convocatoria conv = activa.get();
+            model.addAttribute("convocatoriaActiva", conv);
+
+            if (conv.getFechaInicio() != null && conv.getFechaFin() != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
+                model.addAttribute("fechaInicioFormat", conv.getFechaInicio().format(formatter));
+                model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
+            }
+        }
+
+        return "solicitante/formulario";
     }
 
-    @PostMapping("/solicitud/completar/{id}")
-    public String completarSolicitud(@PathVariable Long id) {
-        solicitudService.actualizarEstado(id, true);
+@GetMapping("/estado")
+    public String estado() {
+        return "solicitante/estado";
+    }
+
+    @PostMapping("/solicitud/guardar")
+    public String guardarSolicitud(@ModelAttribute("nuevaSolicitud") Solicitud solicitud, 
+                                   @RequestParam("accion") String accion,
+                                   Authentication authentication) {
+                                       
+        String email = authentication.getName();
+        var usuarioOpt = usuarioRepository.findByEmail(email);
+        usuarioOpt.ifPresent(solicitud::setUsuario);
+
+        if ("borrador".equals(accion)) {
+            solicitud.setCompletada(false);
+            solicitud.setEstado("Borrador");
+        } else if ("completar".equals(accion)) {
+            solicitud.setCompletada(true);
+            solicitud.setEstado("Enviada");
+        }
+
+        solicitudService.guardar(solicitud);
         return "redirect:/solicitante/home";
+    
     }
 }
