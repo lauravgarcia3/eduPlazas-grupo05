@@ -265,11 +265,17 @@ Complete todos los campos obligatorios marcados con (*). La información proporc
 </div>
 
 <div class="form-container">
-<form id="form-solicitud"
-th:action="@{/solicitante/solicitud/guardar}"
-th:object="${nuevaSolicitud}"
-method="post"
-enctype="multipart/form-data">
+            <form id="form-solicitud"
+                  th:action="@{/solicitante/solicitud/guardar}"
+                  th:object="${nuevaSolicitud}"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                <input type="hidden" th:field="*{id}" />
+                <input type="hidden" th:field="*{menor.id}" />
+                <input type="hidden" th:field="*{tutor1.id}" />
+                <input type="hidden" th:field="*{tutor2.id}" />
+                <input type="hidden" th:field="*{domicilioFamiliar.id}" />
 
 <div th:if="${#fields.hasErrors('*')}"
 style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; color: #842029; padding: 16px 20px; border-radius: 10px; border: 1px solid #f5c2c7;">
