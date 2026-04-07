@@ -300,9 +300,12 @@
 
                 <div class="actions-footer">
                     <a th:href="@{/admin/convocatoria/{id}/solicitudes(id=${convocatoria.id})}" class="primary-btn">Ver solicitudes</a>
-                    <a th:href="@{/admin/convocatoria}" class="primary-btn" style="background-color:#67a8cf;">
+                    <a th:if="${convocatoria.estado == 'ACTIVA'}" th:href="@{/admin/convocatoria}" class="primary-btn" style="background-color:#67a8cf;">
                         Editar convocatoria
                     </a>
+                    <span th:unless="${convocatoria.estado == 'ACTIVA'}" class="primary-btn" style="background-color:#b8b8b8; cursor:not-allowed;">
+                        Convocatoria cerrada
+                    </span>
                 </div>
             </div>
         </section>

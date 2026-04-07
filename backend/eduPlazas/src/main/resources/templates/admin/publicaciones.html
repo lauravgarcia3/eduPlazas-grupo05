@@ -549,72 +549,21 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>CEIP San Miguel</td>
-                            <td>75</td>
-                            <td class="value-green">68</td>
-                            <td>7</td>
+                        <tr th:each="centroData : ${centrosData}">
+                            <td th:text="${centroData.centro.nombre}">Centro Nombre</td>
+                            <td th:text="${centroData.plazasTotales}">0</td>
+                            <td th:text="${centroData.asignadas}" th:classappend="${centroData.asignadas > 0} ? ' value-green' : ''">0</td>
+                            <td th:text="${centroData.disponibles}">0</td>
                             <td>
                                 <div class="progress-cell">
                                     <div class="progress-bar">
-                                        <div class="progress-fill green" style="width: 90.6%;"></div>
+                                        <div th:class="'progress-fill ' + (${centroData.ocupacion} >= 80 ? 'green' : (${centroData.ocupacion} >= 50 ? 'orange' : 'red'))"
+                                             th:style="'width: ' + ${centroData.ocupacion} + '%;'">
+                                        </div>
                                     </div>
-                                    <span>90.6%</span>
+                                    <span th:text="${centroData.ocupacion} + '%'">0%</span>
                                 </div>
                             </td>
-                        </tr>
-
-                        <tr>
-                            <td>CEIP Santa Teresa</td>
-                            <td>100</td>
-                            <td class="value-green">85</td>
-                            <td>15</td>
-                            <td>
-                                <div class="progress-cell">
-                                    <div class="progress-bar">
-                                        <div class="progress-fill green" style="width: 85%;"></div>
-                                    </div>
-                                    <span>85%</span>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>CEIP La Paz</td>
-                            <td>50</td>
-                            <td class="value-green">32</td>
-                            <td>18</td>
-                            <td>
-                                <div class="progress-cell">
-                                    <div class="progress-bar">
-                                        <div class="progress-fill orange" style="width: 64%;"></div>
-                                    </div>
-                                    <span>64%</span>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>CEIP Virgen del Carmen</td>
-                            <td>75</td>
-                            <td class="value-green">62</td>
-                            <td>13</td>
-                            <td>
-                                <div class="progress-cell">
-                                    <div class="progress-bar">
-                                        <div class="progress-fill green" style="width: 82.6%;"></div>
-                                    </div>
-                                    <span>82.6%</span>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>CEIP El Pinar</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
                         </tr>
                         </tbody>
                     </table>

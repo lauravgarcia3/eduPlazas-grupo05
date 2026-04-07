@@ -144,11 +144,35 @@ public class AdminController {
 
         Convocatoria convocatoria = convocatoriaOpt.get();
 
-        long totalSolicitudes = solicitudRepository.countByConvocatoria(convocatoria);
+        List<Solicitud> solicitudes = solicitudRepository.findByConvocatoria(convocatoria);
+        long totalSolicitudes = solicitudes.size();
         long totalCompletadas = solicitudRepository.countByConvocatoriaAndCompletadaTrue(convocatoria);
         long totalAdmitidas = solicitudRepository.countByConvocatoriaAndEstado(convocatoria, "ADMITIDA");
         long totalListaEspera = solicitudRepository.countByConvocatoriaAndEstado(convocatoria, "LISTA_ESPERA");
         long totalNoAdmitidas = solicitudRepository.countByConvocatoriaAndEstado(convocatoria, "NO_ADMITIDA");
+
+        List<Centro> centros = centroRepository.findAll();
+        centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
+
+        List<Map<String, Object>> centrosData = new java.util.ArrayList<>();
+        for (Centro centro : centros) {
+            Map<String, Object> centroData = new HashMap<>();
+            centroData.put("centro", centro);
+            long asignadas = solicitudes.stream()
+                    .filter(s -> "ADMITIDA".equals(s.getEstado()) && centro.getNombre().equals(s.getCentroPreferencia()))
+                    .count();
+            int plazasTotales = centro.getNumPlazas() != null ? centro.getNumPlazas() : 0;
+            int disponibles = plazasTotales - (int) asignadas;
+            if (disponibles < 0) {
+                disponibles = 0;
+            }
+            double ocupacion = plazasTotales > 0 ? (asignadas * 100.0) / plazasTotales : 0.0;
+            centroData.put("plazasTotales", plazasTotales);
+            centroData.put("asignadas", asignadas);
+            centroData.put("disponibles", disponibles);
+            centroData.put("ocupacion", Math.round(ocupacion * 10.0) / 10.0);
+            centrosData.add(centroData);
+        }
 
         model.addAttribute("convocatoria", convocatoria);
         model.addAttribute("totalSolicitudes", totalSolicitudes);
@@ -156,6 +180,7 @@ public class AdminController {
         model.addAttribute("totalAdmitidas", totalAdmitidas);
         model.addAttribute("totalListaEspera", totalListaEspera);
         model.addAttribute("totalNoAdmitidas", totalNoAdmitidas);
+        model.addAttribute("centrosData", centrosData);
 
         return "admin/publicaciones";
     }
