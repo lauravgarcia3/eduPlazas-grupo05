@@ -1,6 +1,7 @@
 package com.eduPlazas.eduPlazas.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Menor {
@@ -9,12 +10,19 @@ public class Menor {
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
 
+@NotBlank(message = "Debe cumplimentar el campo «Nombre del niño/a».")
 private String nombre;
+
+@NotBlank(message = "Debe cumplimentar el campo «Apellidos del niño/a».")
 private String apellidos;
+
+@NotBlank(message = "Debe cumplimentar el campo «Fecha de nacimiento».")
 private String fechaNacimiento;
 
-// NUEVOS CAMPOS (mockup)
+@NotBlank(message = "Debe cumplimentar el campo «Lugar de nacimiento».")
 private String lugarNacimiento;
+
+@NotBlank(message = "Debe seleccionar el campo «Sexo».")
 private String sexo;
 
 public Menor() {

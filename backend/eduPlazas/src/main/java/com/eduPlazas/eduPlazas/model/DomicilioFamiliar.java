@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+
 
 @Entity
 public class DomicilioFamiliar {
@@ -12,9 +14,16 @@ public class DomicilioFamiliar {
 @GeneratedValue(strategy = GenerationType.IDENTITY)
 private Long id;
 
+@NotBlank(message = "Debe cumplimentar el campo «Dirección completa».")
 private String direccionCompleta;
+
+@NotBlank(message = "Debe cumplimentar el campo «Ciudad».")
 private String ciudad;
+
+@NotBlank(message = "Debe cumplimentar el campo «Código postal».")
 private String codigoPostal;
+
+@NotBlank(message = "Debe cumplimentar el campo «Provincia».")
 private String provincia;
 
 public DomicilioFamiliar() {
