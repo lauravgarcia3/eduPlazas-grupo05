@@ -458,13 +458,11 @@ style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; co
 
 <div class="form-grid">
 <div class="form-group">
-<label for="centroPreferencia">Centro de preferencia*</label>
-<select id="centroPreferencia" th:field="*{centroPreferencia}">
-<option value="" selected disabled>Seleccione...</option>
-<option value="CEIP San Francisco de Asís">CEIP San Francisco de Asís</option>
-<option value="EEI El Bosque">EEI El Bosque</option>
-<option value="CEIP Los Almendros">CEIP Los Almendros</option>
-</select>
+    <label for="centroPreferencia">Centro de preferencia*</label>
+    <select id="centroPreferencia" th:field="*{centroPreferencia}">
+        <option value="" selected disabled>Seleccione...</option>
+        <option th:each="centro : ${centros}" th:value="${centro.nombre}" th:text="${centro.nombre}"></option>
+    </select>
 </div>
 
 <div class="form-group">

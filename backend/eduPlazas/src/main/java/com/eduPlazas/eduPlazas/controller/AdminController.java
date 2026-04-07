@@ -159,7 +159,8 @@ public class AdminController {
             Map<String, Object> centroData = new HashMap<>();
             centroData.put("centro", centro);
             long asignadas = solicitudes.stream()
-                    .filter(s -> "ADMITIDA".equals(s.getEstado()) && centro.getNombre().equals(s.getCentroPreferencia()))
+                    .filter(s -> ("ADMITIDA".equals(s.getEstado()) || "Enviada".equals(s.getEstado())) 
+                              && centro.getNombre().equals(s.getCentroPreferencia()))
                     .count();
             int plazasTotales = centro.getNumPlazas() != null ? centro.getNumPlazas() : 0;
             int disponibles = plazasTotales - (int) asignadas;

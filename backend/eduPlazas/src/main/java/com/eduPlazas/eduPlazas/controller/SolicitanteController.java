@@ -140,6 +140,10 @@ public class SolicitanteController {
                 model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
             }
         }
+        // Obtenemos los centros, los ordenamos y los pasamos al modelo
+        List<Centro> centros = centroRepository.findAll();
+        centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
+        model.addAttribute("centros", centros);
 
         return "solicitante/formulario";
     }
