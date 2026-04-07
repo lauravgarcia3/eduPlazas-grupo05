@@ -2,7 +2,9 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Gestión de publicaciones - EduPlazas</title>
+    <title th:text="'Gestión de publicaciones - ' + ${convocatoria.nombre}">
+        Gestión de publicaciones - EduPlazas
+    </title>
 
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <style>
@@ -191,7 +193,6 @@
 
         .check-circle.gray {
             background-color: #d4d4d4;
-
         }
 
         .action-row {
@@ -377,7 +378,7 @@
     <div class="logo">EduPlazas</div>
 
     <div class="topbar-right">
-         <a th:href="@{/admin/home}" class="primary-btn">Volver</a>
+        <a th:href="@{/admin/home}" class="primary-btn">Volver</a>
     </div>
 </header>
 
@@ -385,30 +386,43 @@
     <div class="page-content">
         <h1 class="page-title">Gestión de Publicaciones</h1>
 
-        <button type="button" class="selector-btn">Educación Infantil</button>
+        <!-- Botón con el nombre de la convocatoria seleccionada -->
+        <button type="button" class="selector-btn"
+                th:text="${convocatoria.nombre}">
+            Educación Infantil
+        </button>
 
         <section class="admin-panel">
-            <h2 class="section-title">Educación Infantil 2026-2027</h2>
+            <!-- Título dinámico de la convocatoria -->
+            <h2 class="section-title"
+                th:text="${convocatoria.nombre + ' ' + (convocatoria.fechaInicio != null ? '(' + #temporals.year(convocatoria.fechaInicio) + ')' : '')}">
+                Educación Infantil 2026-2027
+            </h2>
 
             <div class="status-line">
                 <span class="status-dot"></span>
-                <span>Proceso de asignación completado</span>
+                <span th:text="${convocatoria.estado == 'CERRADA' ? 'Proceso de asignación completado' :
+                                (convocatoria.estado == 'ACTIVA' ? 'Proceso de inscripción en curso' :
+                                 'Convocatoria en borrador')}">
+                    Proceso de asignación completado
+                </span>
             </div>
 
+            <!-- RESUMEN SUPERIOR: ya dinámico -->
             <div class="summary-grid">
                 <div class="summary-box">
                     <div class="summary-label">Total Solicitudes</div>
-                    <div class="summary-value">247</div>
+                    <div class="summary-value" th:text="${totalSolicitudes}">247</div>
                 </div>
 
                 <div class="summary-box">
                     <div class="summary-label">Plazas Disponibles</div>
-                    <div class="summary-value">350</div>
+                    <div class="summary-value" th:text="${convocatoria.numeroPlazas}">350</div>
                 </div>
 
                 <div class="summary-box">
                     <div class="summary-label">Procesadas</div>
-                    <div class="summary-value">247</div>
+                    <div class="summary-value" th:text="${totalCompletadas}">247</div>
                 </div>
 
                 <div class="summary-box">
@@ -491,105 +505,117 @@
                 <div class="assignment-top-grid">
                     <div class="assignment-stat green">
                         <div class="assignment-label">Solicitudes Admitidas</div>
-                        <div class="assignment-value green">209</div>
-                        <div class="assignment-percent">85% del total</div>
+                        <div class="assignment-value green" th:text="${totalAdmitidas}">209</div>
+                        <div class="assignment-percent"
+                             th:text="${totalSolicitudes > 0} ? ${#numbers.formatDecimal((totalAdmitidas * 100.0) / totalSolicitudes, 1, 1)} + '%' : '0%'">
+                            85% del total
+                        </div>
                     </div>
 
                     <div class="assignment-stat orange">
                         <div class="assignment-label">En Lista de Espera</div>
-                        <div class="assignment-value orange">29</div>
-                        <div class="assignment-percent">12% del total</div>
+                        <div class="assignment-value orange" th:text="${totalListaEspera}">0</div>
+                        <div class="assignment-percent"
+                             th:text="${totalSolicitudes > 0} ? ${#numbers.formatDecimal((totalListaEspera * 100.0) / totalSolicitudes, 1, 1)} + '%' : '0%'">
+                            0% del total
+                        </div>
                     </div>
 
                     <div class="assignment-stat red">
                         <div class="assignment-label">No Admitidas</div>
-                        <div class="assignment-value red">7</div>
-                        <div class="assignment-percent">3% del total</div>
+                        <div class="assignment-value red" th:text="${totalNoAdmitidas}">0</div>
+                        <div class="assignment-percent"
+                             th:text="${totalSolicitudes > 0} ? ${#numbers.formatDecimal((totalNoAdmitidas * 100.0) / totalSolicitudes, 1, 1)} + '%' : '0%'">
+                            0% del total
+                        </div>
                     </div>
                 </div>
 
                 <div class="table-card">
-                    <div class="table-title">Distribución por<br>Centros</div>
+                    <div class="table-title">
+                        Distribución por<br>Centros
+                    </div>
                     <div class="table-subtitle">Centro Educativo</div>
 
+                    <!-- TODO: hacer dinámica esta tabla cuando Centro esté relacionado con Solicitud/Convocatoria -->
                     <table>
                         <thead>
-                            <tr>
-                                <th>Centro Educativo</th>
-                                <th>Plazas Totales</th>
-                                <th>Asignadas</th>
-                                <th>Disponibles</th>
-                                <th>Ocupación</th>
-                            </tr>
+                        <tr>
+                            <th>Centro Educativo</th>
+                            <th>Plazas Totales</th>
+                            <th>Asignadas</th>
+                            <th>Disponibles</th>
+                            <th>Ocupación</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>CEIP San Miguel</td>
-                                <td>75</td>
-                                <td class="value-green">68</td>
-                                <td>7</td>
-                                <td>
-                                    <div class="progress-cell">
-                                        <div class="progress-bar">
-                                            <div class="progress-fill green" style="width: 90.6%;"></div>
-                                        </div>
-                                        <span>90.6%</span>
+                        <tr>
+                            <td>CEIP San Miguel</td>
+                            <td>75</td>
+                            <td class="value-green">68</td>
+                            <td>7</td>
+                            <td>
+                                <div class="progress-cell">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill green" style="width: 90.6%;"></div>
                                     </div>
-                                </td>
-                            </tr>
+                                    <span>90.6%</span>
+                                </div>
+                            </td>
+                        </tr>
 
-                            <tr>
-                                <td>CEIP Santa Teresa</td>
-                                <td>100</td>
-                                <td class="value-green">85</td>
-                                <td>15</td>
-                                <td>
-                                    <div class="progress-cell">
-                                        <div class="progress-bar">
-                                            <div class="progress-fill green" style="width: 85%;"></div>
-                                        </div>
-                                        <span>85%</span>
+                        <tr>
+                            <td>CEIP Santa Teresa</td>
+                            <td>100</td>
+                            <td class="value-green">85</td>
+                            <td>15</td>
+                            <td>
+                                <div class="progress-cell">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill green" style="width: 85%;"></div>
                                     </div>
-                                </td>
-                            </tr>
+                                    <span>85%</span>
+                                </div>
+                            </td>
+                        </tr>
 
-                            <tr>
-                                <td>CEIP La Paz</td>
-                                <td>50</td>
-                                <td class="value-green">32</td>
-                                <td>18</td>
-                                <td>
-                                    <div class="progress-cell">
-                                        <div class="progress-bar">
-                                            <div class="progress-fill orange" style="width: 64%;"></div>
-                                        </div>
-                                        <span>64%</span>
+                        <tr>
+                            <td>CEIP La Paz</td>
+                            <td>50</td>
+                            <td class="value-green">32</td>
+                            <td>18</td>
+                            <td>
+                                <div class="progress-cell">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill orange" style="width: 64%;"></div>
                                     </div>
-                                </td>
-                            </tr>
+                                    <span>64%</span>
+                                </div>
+                            </td>
+                        </tr>
 
-                            <tr>
-                                <td>CEIP Virgen del Carmen</td>
-                                <td>75</td>
-                                <td class="value-green">62</td>
-                                <td>13</td>
-                                <td>
-                                    <div class="progress-cell">
-                                        <div class="progress-bar">
-                                            <div class="progress-fill green" style="width: 82.6%;"></div>
-                                        </div>
-                                        <span>82.6%</span>
+                        <tr>
+                            <td>CEIP Virgen del Carmen</td>
+                            <td>75</td>
+                            <td class="value-green">62</td>
+                            <td>13</td>
+                            <td>
+                                <div class="progress-cell">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill green" style="width: 82.6%;"></div>
                                     </div>
-                                </td>
-                            </tr>
+                                    <span>82.6%</span>
+                                </div>
+                            </td>
+                        </tr>
 
-                            <tr>
-                                <td>CEIP El Pinar</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                        <tr>
+                            <td>CEIP El Pinar</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>

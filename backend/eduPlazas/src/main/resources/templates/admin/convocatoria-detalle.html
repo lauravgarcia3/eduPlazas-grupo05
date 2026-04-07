@@ -2,7 +2,7 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Convocatorias - EduPlazas</title>
+    <title th:text="'Detalle - ' + ${convocatoria.nombre}">Detalle Convocatoria</title>
 
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <style>
@@ -18,7 +18,7 @@
         }
 
         .page-title {
-            font-size: 38px;
+            font-size: 34px;
             margin: 0;
         }
 
@@ -42,32 +42,11 @@
             background-color: #c77400;
         }
 
-        .secondary-btn {
-            height: 46px;
-            padding: 0 28px;
-            border-radius: 10px;
-            background-color: #67a8cf;
-            color: white;
-            font-weight: 800;
-            font-size: 15px;
-            border: none;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-        }
-
-        .secondary-btn:hover {
-            background-color: #5799bf;
-        }
-
         .convocatoria-card {
             display: flex;
             background-color: #f7f7f7;
             border-radius: 30px;
             overflow: hidden;
-            margin-bottom: 36px;
             box-shadow: 0 14px 28px rgba(0, 0, 0, 0.10);
         }
 
@@ -120,18 +99,36 @@
             padding: 38px 40px;
         }
 
-        .convocatoria-status-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 28px;
-        }
-
-        .status-title {
+        .section-title {
             font-size: 18px;
             font-weight: 800;
             color: #111;
-            margin-bottom: 12px;
+            margin-bottom: 18px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin-bottom: 26px;
+        }
+
+        .detail-box {
+            background-color: #efefef;
+            border-radius: 14px;
+            padding: 18px 20px 20px 20px;
+        }
+
+        .detail-label {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 8px;
+        }
+
+        .detail-value {
+            font-size: 17px;
+            font-weight: 700;
+            color: #111;
         }
 
         .status-pill {
@@ -152,6 +149,7 @@
             gap: 10px;
             font-size: 14px;
             color: #666;
+            margin-top: 10px;
         }
 
         .status-dot {
@@ -169,37 +167,13 @@
             background-color: #ef4b43;
         }
 
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-            margin-bottom: 22px;
-        }
-
-        .info-box {
-            background-color: #efefef;
-            border-radius: 14px;
-            padding: 20px 20px 22px 20px;
-        }
-
-        .info-label {
-            font-size: 13px;
-            color: #777;
-            margin-bottom: 10px;
-        }
-
-        .info-value {
-            font-size: 18px;
-            font-weight: 800;
-            color: #111;
-        }
-
-        .action-row {
+        .actions-footer {
+            margin-top: 26px;
             display: flex;
             gap: 14px;
         }
 
-        @media (max-width: 1100px) {
+        @media (max-width: 1000px) {
             .convocatoria-card {
                 flex-direction: column;
             }
@@ -208,7 +182,7 @@
                 width: 100%;
             }
 
-            .info-grid {
+            .detail-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -225,7 +199,7 @@
             }
 
             .page-title {
-                font-size: 30px;
+                font-size: 28px;
             }
 
             .convocatoria-right {
@@ -236,17 +210,11 @@
                 padding: 24px 20px;
             }
 
-            .convocatoria-status-row {
-                flex-direction: column;
-                gap: 16px;
-            }
-
-            .action-row {
+            .actions-footer {
                 flex-direction: column;
             }
 
-            .primary-btn,
-            .secondary-btn {
+            .primary-btn {
                 width: 100%;
             }
         }
@@ -258,7 +226,7 @@
     <div class="logo">EduPlazas</div>
 
     <div class="topbar-right">
-        <a th:href="@{/login}" class="primary-btn">Logout</a>
+        <div class="user-name">Panel de Administración</div>
     </div>
 </header>
 
@@ -266,16 +234,15 @@
     <div class="page-content">
 
         <div class="page-header">
-            <h1 class="page-title">Convocatorias</h1>
-            <a th:href="@{/admin/convocatoria}" class="primary-btn">+ Nueva Convocatoria</a>
-            
+            <h1 class="page-title" th:text="${convocatoria.nombre}">Detalle convocatoria</h1>
+            <a th:href="@{/admin/home}" class="primary-btn">← Volver al listado</a>
         </div>
 
-        <section th:each="convocatoria : ${convocatorias}" class="convocatoria-card">
+        <section class="convocatoria-card">
             <div class="convocatoria-left">
                 <div>
                     <div class="convocatoria-title" th:text="${convocatoria.nombre}">
-                        Educación Infantil<br>2026-2027
+                        Educación Infantil 2026-2027
                     </div>
 
                     <div class="convocatoria-dates">
@@ -286,67 +253,61 @@
 
                 <div class="convocatoria-box">
                     <div class="convocatoria-box-label">Solicitudes recibidas</div>
-                    <div class="convocatoria-box-value" th:text="${solicitudesPorConvocatoria.get(convocatoria.id)}">0</div>
+                    <div class="convocatoria-box-value" th:text="${totalSolicitudes}">0</div>
                 </div>
             </div>
 
             <div class="convocatoria-right">
-                <div class="convocatoria-status-row">
-                    <div>
-                        <div class="status-title">Estado de la convocatoria</div>
-                        <div class="status-pill" th:text="${convocatoria.estado}">Activa</div>
-                    </div>
+                <div>
+                    <div class="section-title">Estado y resumen</div>
 
-                    <div class="status-indicator">
-                        <span th:class="${convocatoria.estado == 'ACTIVA' ? 'status-dot green' : 'status-dot red'}"></span>
-                        <span th:text="${convocatoria.estado == 'ACTIVA' ? 'En periodo de inscripción' : (convocatoria.estado == 'CERRADA' ? 'Finalizado' : 'Borrador')}">
-                            En periodo de inscripción
-                        </span>
+                    <div>
+                        <span class="status-pill" th:text="${convocatoria.estado}">ACTIVA</span>
+
+                        <div class="status-indicator">
+                            <span th:class="${convocatoria.estado == 'ACTIVA' ? 'status-dot green' : 'status-dot red'}"></span>
+                            <span th:text="${convocatoria.estado == 'ACTIVA' ? 'En periodo de inscripción' : (convocatoria.estado == 'CERRADA' ? 'Finalizado' : 'Borrador')}">
+                                En periodo de inscripción
+                            </span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="info-grid">
-    <div class="info-box">
-        <div class="info-label">Fase actual</div>
-        <div class="info-value" th:text="${convocatoria.estado == 'ACTIVA' ? 'Inscripción Abierta' : (convocatoria.estado == 'CERRADA' ? 'Proceso Finalizado' : 'Preparación')}">
-            Registro
-        </div>
-    </div>
+                <div class="detail-grid" style="margin-top: 24px;">
+                    <div class="detail-box">
+                        <div class="detail-label">Plazas totales</div>
+                        <div class="detail-value" th:text="${convocatoria.numeroPlazas}">350</div>
+                    </div>
 
-    <div class="info-box">
-        <div class="info-label">Tipo / Nivel</div>
-        <div class="info-value" th:text="${convocatoria.tipo}">
-            Educación Infantil
-        </div>
-    </div>
+                    <div class="detail-box">
+                        <div class="detail-label">Solicitudes recibidas</div>
+                        <div class="detail-value" th:text="${totalSolicitudes}">0</div>
+                    </div>
 
-    <div class="info-box">
-        <div class="info-label">Plazas ofertadas</div>
-        <div class="info-value" th:text="${convocatoria.numeroPlazas}">
-            0
-        </div>
-    </div>
-</div>
+                    <div class="detail-box">
+                        <div class="detail-label">Tasa de ocupación</div>
+                        <div class="detail-value"
+                             th:text="${convocatoria.numeroPlazas > 0} ? ${#numbers.formatDecimal((totalSolicitudes * 100.0) / convocatoria.numeroPlazas, 1, 1)} + '%' : '0%'">
+                            0%
+                        </div>
+                    </div>
 
+                    <div class="detail-box">
+                        <div class="detail-label">Identificador</div>
+                        <div class="detail-value" th:text="${convocatoria.id}">1</div>
+                    </div>
+                </div>
 
-                <div class="action-row">
-                    <!-- Enlace al detalle de la convocatoria -->
-                    <a th:href="@{/admin/convocatoria/{id}(id=${convocatoria.id})}" class="primary-btn">
-                        Ver detalle
+                <div class="actions-footer">
+                    <a th:href="@{/admin/convocatoria/{id}/solicitudes(id=${convocatoria.id})}" class="primary-btn">Ver solicitudes</a>
+                    <a th:href="@{/admin/convocatoria}" class="primary-btn" style="background-color:#67a8cf;">
+                        Editar convocatoria
                     </a>
-
-                    <!-- Enlace a solicitudes de ESTA convocatoria -->
-                    <a th:href="@{/admin/convocatoria/{id}/solicitudes(id=${convocatoria.id})}" class="secondary-btn">
-                        Ver Solicitudes
-                    </a>
-
-                    <!-- Enlace a edición (de momento va al formulario genérico) -->
-                    <a th:href="@{/admin/convocatoria}" class="secondary-btn">Editar</a>
                 </div>
             </div>
         </section>
+
     </div>
 </main>
-
 </body>
 </html>

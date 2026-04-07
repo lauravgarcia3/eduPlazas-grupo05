@@ -1,6 +1,7 @@
 package com.eduPlazas.eduPlazas.controller;
 
 import com.eduPlazas.eduPlazas.model.Convocatoria;
+import com.eduPlazas.eduPlazas.repository.SolicitudRepository;
 import com.eduPlazas.eduPlazas.model.Solicitud;
 import com.eduPlazas.eduPlazas.model.Centro;
 import com.eduPlazas.eduPlazas.service.ConvocatoriaService;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +32,9 @@ public class AdminController {
 
     @Autowired
     private ConvocatoriaService convocatoriaService;
+
+    @Autowired
+    private SolicitudRepository solicitudRepository;
 
     // Mostrar el listado en el Home
     @GetMapping("/home")
@@ -112,10 +117,51 @@ public class AdminController {
         return "redirect:/admin/home"; 
     }
 
+    @GetMapping("/convocatoria/{id}")
+    public String verDetalleConvocatoria(@PathVariable Long id, Model model) {
+        Optional<Convocatoria> convocatoriaOpt = convocatoriaService.obtenerPorId(id);
+
+        if (convocatoriaOpt.isEmpty()) {
+            return "redirect:/admin/home";
+        }
+
+        Convocatoria convocatoria = convocatoriaOpt.get();
+        long totalSolicitudes = convocatoriaService.contarSolicitudesPorConvocatoria(convocatoria);
+
+        model.addAttribute("convocatoria", convocatoria);
+        model.addAttribute("totalSolicitudes", totalSolicitudes);
+
+        return "admin/convocatoria-detalle";
+    }
+
+    @GetMapping("/convocatoria/{id}/solicitudes")
+    public String verSolicitudesPorConvocatoria(@PathVariable Long id, Model model) {
+        Optional<Convocatoria> convocatoriaOpt = convocatoriaService.obtenerPorId(id);
+
+        if (convocatoriaOpt.isEmpty()) {
+            return "redirect:/admin/home";
+        }
+
+        Convocatoria convocatoria = convocatoriaOpt.get();
+
+        long totalSolicitudes = solicitudRepository.countByConvocatoria(convocatoria);
+        long totalCompletadas = solicitudRepository.countByConvocatoriaAndCompletadaTrue(convocatoria);
+        long totalAdmitidas = solicitudRepository.countByConvocatoriaAndEstado(convocatoria, "ADMITIDA");
+        long totalListaEspera = solicitudRepository.countByConvocatoriaAndEstado(convocatoria, "LISTA_ESPERA");
+        long totalNoAdmitidas = solicitudRepository.countByConvocatoriaAndEstado(convocatoria, "NO_ADMITIDA");
+
+        model.addAttribute("convocatoria", convocatoria);
+        model.addAttribute("totalSolicitudes", totalSolicitudes);
+        model.addAttribute("totalCompletadas", totalCompletadas);
+        model.addAttribute("totalAdmitidas", totalAdmitidas);
+        model.addAttribute("totalListaEspera", totalListaEspera);
+        model.addAttribute("totalNoAdmitidas", totalNoAdmitidas);
+
+        return "admin/publicaciones";
+    }
+
     @GetMapping("/publicaciones")
     public String publicaciones() {
         return "admin/publicaciones";
     }
 }
-
-

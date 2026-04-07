@@ -108,123 +108,124 @@ public Solicitud(Long id, String nombreSolicitante, String estado, Usuario usuar
         this.autorizacionProteccionDatos = autorizacionProteccionDatos;
     }
 
-public Long getId() {
-return id;
-}
+    public Long getId() {
+        return id;
+    }
 
-public void setId(Long id) {
-this.id = id;
-}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-public String getNombreSolicitante() {
-return nombreSolicitante;
-}
+    public String getNombreSolicitante() {
+        return nombreSolicitante;
+    }
 
-public void setNombreSolicitante(String nombreSolicitante) {
-this.nombreSolicitante = nombreSolicitante;
-}
+    public void setNombreSolicitante(String nombreSolicitante) {
+        this.nombreSolicitante = nombreSolicitante;
+    }
 
-public String getEstado() {
-return estado;
-}
+    public String getEstado() {
+        return estado;
+    }
 
-public void setEstado(String estado) {
-this.estado = estado;
-}
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 
-public Usuario getUsuario() {
-return usuario;
-}
+    public Usuario getUsuario() {
+        return usuario;
+    }
 
-public void setUsuario(Usuario usuario) {
-this.usuario = usuario;
-}
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 
-public String getCentroPreferencia() {
-return centroPreferencia;
-}
+    public String getCentroPreferencia() {
+        return centroPreferencia;
+    }
 
-public void setCentroPreferencia(String centroPreferencia) {
-this.centroPreferencia = centroPreferencia;
-}
+    public void setCentroPreferencia(String centroPreferencia) {
+        this.centroPreferencia = centroPreferencia;
+    }
 
-public String getCursoSolicitado() {
-return cursoSolicitado;
-}
+    public String getCursoSolicitado() {
+        return cursoSolicitado;
+    }
 
-public void setCursoSolicitado(String cursoSolicitado) {
-this.cursoSolicitado = cursoSolicitado;
-}
+    public void setCursoSolicitado(String cursoSolicitado) {
+        this.cursoSolicitado = cursoSolicitado;
+    }
 
-public Boolean getDeclaracionVeracidad() {
-return declaracionVeracidad;
-}
+    public Boolean getDeclaracionVeracidad() {
+        return declaracionVeracidad;
+    }
 
-public void setDeclaracionVeracidad(Boolean declaracionVeracidad) {
-this.declaracionVeracidad = declaracionVeracidad;
-}
+    public void setDeclaracionVeracidad(Boolean declaracionVeracidad) {
+        this.declaracionVeracidad = declaracionVeracidad;
+    }
 
-public Boolean getAutorizacionProteccionDatos() {
-return autorizacionProteccionDatos;
-}
+    public Boolean getAutorizacionProteccionDatos() {
+        return autorizacionProteccionDatos;
+    }
 
-public void setAutorizacionProteccionDatos(Boolean autorizacionProteccionDatos) {
-this.autorizacionProteccionDatos = autorizacionProteccionDatos;
-}
+    public void setAutorizacionProteccionDatos(Boolean autorizacionProteccionDatos) {
+        this.autorizacionProteccionDatos = autorizacionProteccionDatos;
+    }
 
-public Boolean getCompletada() {
-return completada;
-}
+    public Boolean getCompletada() {
+        return completada;
+    }
 
-public void setCompletada(Boolean completada) {
-this.completada = completada;
-}
+    public void setCompletada(Boolean completada) {
+        this.completada = completada;
+    }
 
-public Menor getMenor() {
-return menor;
-}
+    public Menor getMenor() {
+        return menor;
+    }
 
-public void setMenor(Menor menor) {
-this.menor = menor;
-}
+    public void setMenor(Menor menor) {
+        this.menor = menor;
+    }
 
-public Tutor getTutor1() {
-return tutor1;
-}
+    public Tutor getTutor1() {
+        return tutor1;
+    }
 
-public void setTutor1(Tutor tutor1) {
-this.tutor1 = tutor1;
-}
+    public void setTutor1(Tutor tutor1) {
+        this.tutor1 = tutor1;
+    }
 
-public Tutor getTutor2() {
-return tutor2;
-}
+    public Tutor getTutor2() {
+        return tutor2;
+    }
 
-public void setTutor2(Tutor tutor2) {
-this.tutor2 = tutor2;
-}
+    public void setTutor2(Tutor tutor2) {
+        this.tutor2 = tutor2;
+    }
 
-public DomicilioFamiliar getDomicilioFamiliar() {
-return domicilioFamiliar;
-}
+    public DomicilioFamiliar getDomicilioFamiliar() {
+        return domicilioFamiliar;
+    }
 
-public void setDomicilioFamiliar(DomicilioFamiliar domicilioFamiliar) {
-this.domicilioFamiliar = domicilioFamiliar;
-}
+    public void setDomicilioFamiliar(DomicilioFamiliar domicilioFamiliar) {
+        this.domicilioFamiliar = domicilioFamiliar;
+    }
 
-public List<DocumentoAdjunto> getDocumentos() {
-return documentos;
-}
+    public List<DocumentoAdjunto> getDocumentos() {
+        return documentos;
+    }
 
-public void setDocumentos(List<DocumentoAdjunto> documentos) {
-this.documentos = documentos;
-}
+    public void setDocumentos(List<DocumentoAdjunto> documentos) {
+        this.documentos = documentos;
+    }
 
-public Convocatoria getConvocatoria() {
+
+    public Convocatoria getConvocatoria() {
         return convocatoria;
     }
 
-public void setConvocatoria(Convocatoria convocatoria) {
+    public void setConvocatoria(Convocatoria convocatoria) {
         this.convocatoria = convocatoria;
     }
 }
