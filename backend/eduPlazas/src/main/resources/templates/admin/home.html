@@ -341,8 +341,17 @@
                     </a>
 
                     <!-- Enlace a edición solo si la convocatoria está activa -->
-                    <a th:if="${convocatoria.estado == 'ACTIVA'}" th:href="@{/admin/convocatoria}" class="secondary-btn">Editar</a>
-                    <span th:unless="${convocatoria.estado == 'ACTIVA'}" class="secondary-btn" style="opacity: 0.5; cursor: not-allowed;">Editar no disponible</span>
+                    <a th:if="${convocatoria.estado == 'ACTIVA' or convocatoria.estado == 'BORRADOR'}" 
+       th:href="@{/admin/convocatoria/editar/{id}(id=${convocatoria.id})}" 
+       class="secondary-btn">
+       Editar
+    </a>
+
+    <span th:unless="${convocatoria.estado == 'ACTIVA' or convocatoria.estado == 'BORRADOR'}" 
+          class="secondary-btn" 
+          style="opacity: 0.5; cursor: not-allowed;">
+          Editar no disponible
+    </span>
                 </div>
             </div>
         </section>

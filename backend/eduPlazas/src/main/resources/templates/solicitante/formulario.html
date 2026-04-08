@@ -312,7 +312,7 @@ style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; co
 <div class="form-group">
 <label for="sexo">Sexo*</label>
 <select id="sexo" th:field="*{menor.sexo}">
-<option value="" selected disabled>Seleccione...</option>
+<option value="">Seleccione...</option>
 <option value="Masculino">Masculino</option>
 <option value="Femenino">Femenino</option>
 <option value="Otro">Otro</option>
@@ -343,7 +343,7 @@ style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; co
 <div class="form-group">
 <label for="relacionTutor1">Relación con el niño/a*</label>
 <select id="relacionTutor1" th:field="*{tutor1.relacionConMenor}">
-<option value="" selected disabled>Seleccione...</option>
+<option value="">Seleccione...</option>
 <option value="Padre">Padre</option>
 <option value="Madre">Madre</option>
 <option value="Tutor legal">Tutor legal</option>
@@ -363,7 +363,7 @@ style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; co
 <div class="form-group full-width">
 <label for="situacionLaboral1">Situación laboral* (Criterio de baremación)</label>
 <select id="situacionLaboral1" th:field="*{tutor1.situacionLaboral}">
-<option value="" selected disabled>Seleccione...</option>
+<option value="">Seleccione...</option>
 <option value="Trabajando">Trabajando</option>
 <option value="Desempleado">Desempleado</option>
 <option value="Autónomo">Autónomo</option>
@@ -395,7 +395,7 @@ style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; co
 <div class="form-group">
 <label for="relacionTutor2">Relación con el niño/a</label>
 <select id="relacionTutor2" th:field="*{tutor2.relacionConMenor}">
-<option value="" selected disabled>Seleccione...</option>
+<option value="">Seleccione...</option>
 <option value="Padre">Padre</option>
 <option value="Madre">Madre</option>
 <option value="Tutor legal">Tutor legal</option>
@@ -415,7 +415,7 @@ style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; co
 <div class="form-group full-width">
 <label for="situacionLaboral2">Situación laboral <span class="hint-link">(Criterio de baremación)</span></label>
 <select id="situacionLaboral2" th:field="*{tutor2.situacionLaboral}">
-<option value="" selected disabled>Seleccione...</option>
+<option value="">Seleccione...</option>
 <option value="Trabajando">Trabajando</option>
 <option value="Desempleado">Desempleado</option>
 <option value="Autónomo">Autónomo</option>
@@ -460,7 +460,7 @@ style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; co
 <div class="form-group">
     <label for="centroPreferencia">Centro de preferencia*</label>
     <select id="centroPreferencia" th:field="*{centroPreferencia}">
-        <option value="" selected disabled>Seleccione...</option>
+        <option value="">Seleccione...</option>
         <option th:each="centro : ${centros}" th:value="${centro.nombre}" th:text="${centro.nombre}"></option>
     </select>
 </div>
@@ -468,7 +468,7 @@ style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; co
 <div class="form-group">
 <label for="cursoSolicitado">Curso Solicitado*</label>
 <select id="cursoSolicitado" th:field="*{cursoSolicitado}">
-<option value="" selected disabled>Seleccione...</option>
+<option value="">Seleccione...</option>
 <option value="Educación Infantil 1 año">Educación Infantil 1 año</option>
 <option value="Educación Infantil 2 años">Educación Infantil 2 años</option>
 <option value="Educación Infantil 3 años">Educación Infantil 3 años</option>

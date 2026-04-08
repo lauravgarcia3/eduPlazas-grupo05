@@ -1,29 +1,23 @@
 package com.eduPlazas.eduPlazas.controller;
 
 import com.eduPlazas.eduPlazas.model.Convocatoria;
-import com.eduPlazas.eduPlazas.repository.SolicitudRepository;
 import com.eduPlazas.eduPlazas.model.Solicitud;
 import com.eduPlazas.eduPlazas.model.Centro;
+import com.eduPlazas.eduPlazas.repository.SolicitudRepository;
+import com.eduPlazas.eduPlazas.repository.CentroRepository;
 import com.eduPlazas.eduPlazas.service.ConvocatoriaService;
 import com.eduPlazas.eduPlazas.service.SolicitudService;
-import com.eduPlazas.eduPlazas.repository.CentroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+
     @Autowired
     private CentroRepository centroRepository;
 
@@ -36,14 +30,13 @@ public class AdminController {
     @Autowired
     private SolicitudRepository solicitudRepository;
 
-    // Mostrar el listado en el Home
+    // 1. Mostrar el listado de todas las convocatorias en el Home
     @GetMapping("/home")
-   public String home(Model model) {
-        // 1. Obtenemos todas las convocatorias y las pasamos a la vista
+    public String home(Model model) {
         List<Convocatoria> todasLasConvocatorias = convocatoriaService.obtenerTodas();
         model.addAttribute("convocatorias", todasLasConvocatorias);
 
-        // 2. Creamos un mapa para guardar el conteo de cada convocatoria (ID -> Nº de solicitudes)
+        // Mapa para el conteo de solicitudes por convocatoria
         Map<Long, Long> solicitudesPorConvocatoria = new HashMap<>();
         List<Solicitud> todasLasSolicitudes = solicitudService.obtenerTodas();
 
@@ -54,45 +47,63 @@ public class AdminController {
             solicitudesPorConvocatoria.put(conv.getId(), count);
         }
 
-        // 3. Pasamos el mapa al HTML
         model.addAttribute("solicitudesPorConvocatoria", solicitudesPorConvocatoria);
-
         return "admin/home";
     }
-    // Mostrar el formulario vacío
+
+    // 2. Mostrar el formulario para crear una convocatoria nueva
     @GetMapping("/convocatoria")
-    public String convocatoria(Model model) {
+    public String nuevaConvocatoria(Model model) {
         model.addAttribute("nuevaConvocatoria", new Convocatoria());
         
-        // Obtenemos los centros y los ordenamos alfabéticamente
         List<Centro> centros = centroRepository.findAll();
         centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
-        
         model.addAttribute("centros", centros);
         
         return "admin/convocatoria";
     }
 
-    // Recibir los datos del formulario y guardar
+    // 3. Cargar datos de una convocatoria existente para editarla
+    @GetMapping("/convocatoria/editar/{id}")
+    public String editarConvocatoria(@PathVariable Long id, Model model) {
+        Optional<Convocatoria> convocatoriaOpt = convocatoriaService.obtenerPorId(id);
+        
+        if (convocatoriaOpt.isPresent()) {
+            Convocatoria conv = convocatoriaOpt.get();
+            // Solo permitimos editar si es Borrador o Activa
+            if ("BORRADOR".equals(conv.getEstado()) || "ACTIVA".equals(conv.getEstado())) {
+                model.addAttribute("nuevaConvocatoria", conv);
+                
+                List<Centro> centros = centroRepository.findAll();
+                centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
+                model.addAttribute("centros", centros);
+                
+                return "admin/convocatoria";
+            }
+        }
+        return "redirect:/admin/home";
+    }
+
+    // 4. Recibir datos del formulario (Crear o Actualizar)
     @PostMapping("/convocatoria/guardar")
     public String guardarConvocatoria(
             @ModelAttribute("nuevaConvocatoria") Convocatoria convocatoria,
             @RequestParam(value = "nombresCentrosArray", required = false) String nombresCentros,
             @RequestParam(value = "plazasCentrosArray", required = false) String plazasCentros) {
         
-        // 1. Guardamos la convocatoria general 
+        // Primero guardamos la convocatoria
         convocatoriaService.guardarConvocatoria(convocatoria);
 
-        // Si se crea como ACTIVA, reseteamos primero TODOS los colegios a 0 plazas.
+        // Lógica de reseteo: Si la convocatoria pasa a estar ACTIVA, reseteamos centros
         if ("ACTIVA".equals(convocatoria.getEstado())) {
             List<Centro> todosLosCentros = centroRepository.findAll();
             for (Centro c : todosLosCentros) {
-                c.setNumPlazas(0);
+                c.setNumPlazas(0); // Ponemos a cero para evitar datos residuales
                 centroRepository.save(c);
             }
         }
 
-        // 2. Emparejamos y actualizamos las plazas de cada Centro
+        // Procesamos los arrays de centros y plazas enviados desde el formulario dinámico
         if (nombresCentros != null && !nombresCentros.isEmpty() && plazasCentros != null) {
             String[] nombres = nombresCentros.split(",");
             String[] plazas = plazasCentros.split(",");
@@ -101,7 +112,6 @@ public class AdminController {
                 String nombreCentro = nombres[i].trim();
                 int plazasDelCentro = Integer.parseInt(plazas[i].trim());
 
-                // Buscamos el centro por su nombre y le inyectamos las plazas que escribió el Admin
                 Optional<Centro> centroOpt = centroRepository.findAll().stream()
                         .filter(c -> c.getNombre().equals(nombreCentro))
                         .findFirst();
@@ -109,7 +119,7 @@ public class AdminController {
                 if (centroOpt.isPresent()) {
                     Centro centro = centroOpt.get();
                     centro.setNumPlazas(plazasDelCentro);
-                    centroRepository.save(centro); // Actualizamos la BBDD
+                    centroRepository.save(centro);
                 }
             }
         }
@@ -117,6 +127,7 @@ public class AdminController {
         return "redirect:/admin/home"; 
     }
 
+    // 5. Ver detalle básico de una convocatoria
     @GetMapping("/convocatoria/{id}")
     public String verDetalleConvocatoria(@PathVariable Long id, Model model) {
         Optional<Convocatoria> convocatoriaOpt = convocatoriaService.obtenerPorId(id);
@@ -134,6 +145,7 @@ public class AdminController {
         return "admin/convocatoria-detalle";
     }
 
+    // 6. Vista de publicaciones: Estadísticas detalladas y ocupación por centro
     @GetMapping("/convocatoria/{id}/solicitudes")
     public String verSolicitudesPorConvocatoria(@PathVariable Long id, Model model) {
         Optional<Convocatoria> convocatoriaOpt = convocatoriaService.obtenerPorId(id);
@@ -143,31 +155,34 @@ public class AdminController {
         }
 
         Convocatoria convocatoria = convocatoriaOpt.get();
-
         List<Solicitud> solicitudes = solicitudRepository.findByConvocatoria(convocatoria);
+
+        // Estadísticas generales
         long totalSolicitudes = solicitudes.size();
         long totalCompletadas = solicitudRepository.countByConvocatoriaAndCompletadaTrue(convocatoria);
         long totalAdmitidas = solicitudRepository.countByConvocatoriaAndEstado(convocatoria, "ADMITIDA");
         long totalListaEspera = solicitudRepository.countByConvocatoriaAndEstado(convocatoria, "LISTA_ESPERA");
         long totalNoAdmitidas = solicitudRepository.countByConvocatoriaAndEstado(convocatoria, "NO_ADMITIDA");
 
+        // Cálculo de ocupación por centro educativo
         List<Centro> centros = centroRepository.findAll();
         centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
 
-        List<Map<String, Object>> centrosData = new java.util.ArrayList<>();
+        List<Map<String, Object>> centrosData = new ArrayList<>();
         for (Centro centro : centros) {
             Map<String, Object> centroData = new HashMap<>();
             centroData.put("centro", centro);
+
+            // Contamos solicitudes asignadas a este centro (Admitidas o Enviadas/Pendientes)
             long asignadas = solicitudes.stream()
                     .filter(s -> ("ADMITIDA".equals(s.getEstado()) || "Enviada".equals(s.getEstado())) 
                               && centro.getNombre().equals(s.getCentroPreferencia()))
                     .count();
+
             int plazasTotales = centro.getNumPlazas() != null ? centro.getNumPlazas() : 0;
-            int disponibles = plazasTotales - (int) asignadas;
-            if (disponibles < 0) {
-                disponibles = 0;
-            }
+            int disponibles = Math.max(0, plazasTotales - (int) asignadas);
             double ocupacion = plazasTotales > 0 ? (asignadas * 100.0) / plazasTotales : 0.0;
+
             centroData.put("plazasTotales", plazasTotales);
             centroData.put("asignadas", asignadas);
             centroData.put("disponibles", disponibles);

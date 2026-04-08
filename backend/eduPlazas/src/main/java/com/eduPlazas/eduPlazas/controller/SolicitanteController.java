@@ -192,7 +192,7 @@ public class SolicitanteController {
         }
 
         // 2. SI ES COMPLETAR Y HAY ERRORES, VOLVEMOS AL FORMULARIO.
-        // SI ES BORRADOR, IGNORAMOS LOS ERRORES (es normal que un borrador esté a medias)
+        // SI ES BORRADOR, IGNORAMOS LOS ERRORES 
         if ("completar".equals(accion) && result.hasErrors()) {
             Optional<Convocatoria> activa = convocatoriaService.obtenerConvocatoriaActiva();
             if (activa.isPresent()) {
@@ -204,6 +204,10 @@ public class SolicitanteController {
                     model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
                 }
             }
+            List<Centro> centros = centroRepository.findAll();
+            centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
+            model.addAttribute("centros", centros);
+            
             return "solicitante/formulario";
         }
 

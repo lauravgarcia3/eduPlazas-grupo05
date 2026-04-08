@@ -619,6 +619,15 @@
         document.getElementById('nombresCentrosArray').value = nombresCentros.join(",");
         document.getElementById('plazasCentrosArray').value = plazasIndividuales.join(",");
         
+        // --- BLOQUEO DE SEGURIDAD (ANTIDUPLICADOS) ---
+        // Buscamos el botón de enviar (el que es de tipo submit)
+        const btn = document.querySelector('button[type="submit"]');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerText = "Guardando...";
+            btn.style.opacity = "0.6";
+            btn.style.cursor = "not-allowed";
+        }
         return true;
     }
 </script>
