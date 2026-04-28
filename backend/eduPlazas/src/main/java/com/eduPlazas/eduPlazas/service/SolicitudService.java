@@ -45,15 +45,30 @@ public class SolicitudService {
 
         Solicitud guardada = solicitudRepository.save(solicitud);
 
+        double puntosHermanos = Boolean.TRUE.equals(guardada.getTieneHermanosEnCentro()) ? 15.0 : 0.0;
+        double puntosProximidad = Boolean.TRUE.equals(guardada.getDomicilioEnZonaCentro()) ? 12.0 : 0.0;
+        double puntosFamiliaNumerosa = Boolean.TRUE.equals(guardada.getFamiliaNumerosa()) ? 10.0 : 0.0;
+        double puntosFamiliaMonoparental = Boolean.TRUE.equals(guardada.getFamiliaMonoparental()) ? 10.0 : 0.0;
+        double puntosDiscapacidad = Boolean.TRUE.equals(guardada.getDiscapacidadAlumnoOTutores()) ? 7.0 : 0.0;
+        double puntosRenta = Boolean.TRUE.equals(guardada.getRentaMinimaInsercion()) ? 12.0 : 0.0;
+
+        double puntosTrabajoCentro = 0.0;
+        if (guardada.getTutor1() != null &&
+                guardada.getTutor1().getSituacionLaboral() != null &&
+                (guardada.getTutor1().getSituacionLaboral().equalsIgnoreCase("Trabajando")
+                        || guardada.getTutor1().getSituacionLaboral().equalsIgnoreCase("Autónomo"))) {
+            puntosTrabajoCentro = 5.0;
+        }
+
         puntuacionService.calcularYGuardar(
                 guardada,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0,
-                0.0
+                puntosHermanos,
+                puntosProximidad,
+                puntosTrabajoCentro,
+                puntosFamiliaNumerosa,
+                puntosFamiliaMonoparental,
+                puntosDiscapacidad,
+                puntosRenta
         );
 
         return guardada;
@@ -62,6 +77,7 @@ public class SolicitudService {
     public Optional<Solicitud> buscarPorId(Long id) {
         return solicitudRepository.findById(id);
     }
+
     public Optional<Solicitud> obtenerPorId(Long id) {
         return solicitudRepository.findById(id);
     }

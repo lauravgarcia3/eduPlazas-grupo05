@@ -14,82 +14,101 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.Valid;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Solicitud {
 
-@Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-@NotBlank(message = "Debe seleccionar el campo «Centro de preferencia».")
-private String centroPreferencia;
+    @NotBlank(message = "Debe seleccionar el campo «Centro de preferencia».")
+    private String centroPreferencia;
 
-@NotBlank(message = "Debe seleccionar el campo «Curso solicitado».")
-private String cursoSolicitado;
+    @NotBlank(message = "Debe seleccionar el campo «Curso solicitado».")
+    private String cursoSolicitado;
 
-@AssertTrue(message = "Debes aceptar la declaración de veracidad")
-private Boolean declaracionVeracidad;
+    @AssertTrue(message = "Debes aceptar la declaración de veracidad")
+    private Boolean declaracionVeracidad;
 
-@AssertTrue(message = "Debes aceptar la protección de datos")
-private Boolean autorizacionProteccionDatos;
+    @AssertTrue(message = "Debes aceptar la protección de datos")
+    private Boolean autorizacionProteccionDatos;
 
-private String nombreSolicitante;
-private String estado;
+    // ---- NUEVOS CRITERIOS DE BAREMACIÓN ----
+    @Column(nullable = false)
+    private Boolean tieneHermanosEnCentro = false;
 
-private Boolean completada = false;
+    @Column(nullable = false)
+    private Boolean domicilioEnZonaCentro = false;
 
-@OneToOne(cascade = CascadeType.ALL)
-@JoinColumn(name = "menor_id")
-@Valid
-private Menor menor = new Menor();
+    @Column(nullable = false)
+    private Boolean familiaNumerosa = false;
 
-@OneToOne(cascade = CascadeType.ALL)
-@JoinColumn(name = "tutor1_id")
-@Valid
-private Tutor tutor1 = new Tutor();
+    @Column(nullable = false)
+    private Boolean discapacidadAlumnoOTutores = false;
 
-@OneToOne(cascade = CascadeType.ALL)
-@JoinColumn(name = "tutor2_id")
-private Tutor tutor2;
+    @Column(nullable = false)
+    private Boolean familiaMonoparental = false;
 
-@OneToOne(cascade = CascadeType.ALL)
-@JoinColumn(name = "domicilio_id")
-@Valid
-private DomicilioFamiliar domicilioFamiliar = new DomicilioFamiliar();
+    @Column(nullable = false)
+    private Boolean rentaMinimaInsercion = false;
 
-@OneToMany(mappedBy = "solicitud", cascade = CascadeType.ALL)
-private List<DocumentoAdjunto> documentos = new ArrayList<>();
+    private String nombreSolicitante;
+    private String estado;
 
-@ManyToOne
-@JoinColumn(name = "usuario_id", nullable = false)
-private Usuario usuario;
+    private Boolean completada = false;
 
-@ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "menor_id")
+    @Valid
+    private Menor menor = new Menor();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tutor1_id")
+    @Valid
+    private Tutor tutor1 = new Tutor();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tutor2_id")
+    private Tutor tutor2;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "domicilio_id")
+    @Valid
+    private DomicilioFamiliar domicilioFamiliar = new DomicilioFamiliar();
+
+    @OneToMany(mappedBy = "solicitud", cascade = CascadeType.ALL)
+    private List<DocumentoAdjunto> documentos = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+
+    @ManyToOne
     @JoinColumn(name = "convocatoria_id")
     private Convocatoria convocatoria;
-public Solicitud() {
-}
 
-public Solicitud(Long id, String nombreSolicitante, String estado, Usuario usuario) {
-this.id = id;
-this.nombreSolicitante = nombreSolicitante;
-this.estado = estado;
-this.usuario = usuario;
-}
+    public Solicitud() {
+    }
 
-public Solicitud(Long id, String nombreSolicitante, String estado, Usuario usuario, Menor menor) {
-    this.id = id;
-    this.nombreSolicitante = nombreSolicitante;
-    this.estado = estado;
-    this.usuario = usuario;
-    this.menor = menor;
-}
+    public Solicitud(Long id, String nombreSolicitante, String estado, Usuario usuario) {
+        this.id = id;
+        this.nombreSolicitante = nombreSolicitante;
+        this.estado = estado;
+        this.usuario = usuario;
+    }
 
-public Solicitud(Long id, String nombreSolicitante, String estado, Usuario usuario,
+    public Solicitud(Long id, String nombreSolicitante, String estado, Usuario usuario, Menor menor) {
+        this.id = id;
+        this.nombreSolicitante = nombreSolicitante;
+        this.estado = estado;
+        this.usuario = usuario;
+        this.menor = menor;
+    }
+
+    public Solicitud(Long id, String nombreSolicitante, String estado, Usuario usuario,
                      Menor menor, Tutor tutor1, Tutor tutor2,
                      DomicilioFamiliar domicilioFamiliar,
                      String centroPreferencia, String cursoSolicitado,
@@ -172,6 +191,54 @@ public Solicitud(Long id, String nombreSolicitante, String estado, Usuario usuar
         this.autorizacionProteccionDatos = autorizacionProteccionDatos;
     }
 
+    public Boolean getTieneHermanosEnCentro() {
+        return tieneHermanosEnCentro;
+    }
+
+    public void setTieneHermanosEnCentro(Boolean tieneHermanosEnCentro) {
+        this.tieneHermanosEnCentro = tieneHermanosEnCentro;
+    }
+
+    public Boolean getDomicilioEnZonaCentro() {
+        return domicilioEnZonaCentro;
+    }
+
+    public void setDomicilioEnZonaCentro(Boolean domicilioEnZonaCentro) {
+        this.domicilioEnZonaCentro = domicilioEnZonaCentro;
+    }
+
+    public Boolean getFamiliaNumerosa() {
+        return familiaNumerosa;
+    }
+
+    public void setFamiliaNumerosa(Boolean familiaNumerosa) {
+        this.familiaNumerosa = familiaNumerosa;
+    }
+
+    public Boolean getDiscapacidadAlumnoOTutores() {
+        return discapacidadAlumnoOTutores;
+    }
+
+    public void setDiscapacidadAlumnoOTutores(Boolean discapacidadAlumnoOTutores) {
+        this.discapacidadAlumnoOTutores = discapacidadAlumnoOTutores;
+    }
+
+    public Boolean getFamiliaMonoparental() {
+        return familiaMonoparental;
+    }
+
+    public void setFamiliaMonoparental(Boolean familiaMonoparental) {
+        this.familiaMonoparental = familiaMonoparental;
+    }
+
+    public Boolean getRentaMinimaInsercion() {
+        return rentaMinimaInsercion;
+    }
+
+    public void setRentaMinimaInsercion(Boolean rentaMinimaInsercion) {
+        this.rentaMinimaInsercion = rentaMinimaInsercion;
+    }
+
     public Boolean getCompletada() {
         return completada;
     }
@@ -219,7 +286,6 @@ public Solicitud(Long id, String nombreSolicitante, String estado, Usuario usuar
     public void setDocumentos(List<DocumentoAdjunto> documentos) {
         this.documentos = documentos;
     }
-
 
     public Convocatoria getConvocatoria() {
         return convocatoria;

@@ -265,17 +265,17 @@ Complete todos los campos obligatorios marcados con (*). La información proporc
 </div>
 
 <div class="form-container">
-            <form id="form-solicitud"
-                  th:action="@{/solicitante/solicitud/guardar}"
-                  th:object="${nuevaSolicitud}"
-                  method="post"
-                  enctype="multipart/form-data">
+<form id="form-solicitud"
+      th:action="@{/solicitante/solicitud/guardar}"
+      th:object="${nuevaSolicitud}"
+      method="post"
+      enctype="multipart/form-data">
 
-                <input type="hidden" th:field="*{id}" />
-                <input type="hidden" th:field="*{menor.id}" />
-                <input type="hidden" th:field="*{tutor1.id}" />
-                <input type="hidden" th:field="*{tutor2.id}" />
-                <input type="hidden" th:field="*{domicilioFamiliar.id}" />
+<input type="hidden" th:field="*{id}" />
+<input type="hidden" th:field="*{menor.id}" />
+<input type="hidden" th:field="*{tutor1.id}" />
+<input type="hidden" th:field="*{tutor2.id}" />
+<input type="hidden" th:field="*{domicilioFamiliar.id}" />
 
 <div th:if="${#fields.hasErrors('*')}"
 style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; color: #842029; padding: 16px 20px; border-radius: 10px; border: 1px solid #f5c2c7;">
@@ -478,7 +478,63 @@ style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; co
 </section>
 
 <section class="form-section">
-<h2 class="section-title">6. Documentación a Presentar</h2>
+<h2 class="section-title">6. Criterios de Baremación</h2>
+
+<div class="documents-box" style="margin-bottom: 16px;">
+Marque únicamente aquellos criterios que pueda acreditar documentalmente.
+</div>
+
+<div class="checkbox-group">
+<input type="checkbox" id="tieneHermanosEnCentro" th:field="*{tieneHermanosEnCentro}">
+<label for="tieneHermanosEnCentro" class="checkbox-text">
+<strong>Hermanos matriculados en el centro</strong>
+El alumno/a tiene hermanos escolarizados en el centro solicitado.
+</label>
+</div>
+
+<div class="checkbox-group">
+<input type="checkbox" id="domicilioEnZonaCentro" th:field="*{domicilioEnZonaCentro}">
+<label for="domicilioEnZonaCentro" class="checkbox-text">
+<strong>Domicilio familiar en la zona del centro</strong>
+El domicilio familiar se encuentra en el área de influencia del centro solicitado.
+</label>
+</div>
+
+<div class="checkbox-group">
+<input type="checkbox" id="familiaNumerosa" th:field="*{familiaNumerosa}">
+<label for="familiaNumerosa" class="checkbox-text">
+<strong>Familia numerosa</strong>
+La unidad familiar dispone de título oficial de familia numerosa.
+</label>
+</div>
+
+<div class="checkbox-group">
+<input type="checkbox" id="familiaMonoparental" th:field="*{familiaMonoparental}">
+<label for="familiaMonoparental" class="checkbox-text">
+<strong>Familia monoparental</strong>
+La unidad familiar está formada por un único progenitor o tutor legal.
+</label>
+</div>
+
+<div class="checkbox-group">
+<input type="checkbox" id="discapacidadAlumnoOTutores" th:field="*{discapacidadAlumnoOTutores}">
+<label for="discapacidadAlumnoOTutores" class="checkbox-text">
+<strong>Discapacidad del alumno/a o tutores</strong>
+Existe una discapacidad reconocida en el alumno/a o en alguno de los tutores.
+</label>
+</div>
+
+<div class="checkbox-group">
+<input type="checkbox" id="rentaMinimaInsercion" th:field="*{rentaMinimaInsercion}">
+<label for="rentaMinimaInsercion" class="checkbox-text">
+<strong>Perceptor de renta mínima de inserción</strong>
+La unidad familiar acredita ser beneficiaria de renta mínima de inserción.
+</label>
+</div>
+</section>
+
+<section class="form-section">
+<h2 class="section-title">7. Documentación a Presentar</h2>
 
 <div class="documents-box">
 Documentación obligatoria: Deberá presentar los siguientes documentos en formato original o copia compulsada antes de finalizar el plazo de la convocatoria:
@@ -500,7 +556,7 @@ Adjuntar Documentación
 </section>
 
 <section class="form-section">
-<h2 class="section-title">7. Declaraciones y Autorizaciones</h2>
+<h2 class="section-title">8. Declaraciones y Autorizaciones</h2>
 
 <div class="checkbox-group">
 <input type="checkbox" id="veracidad" th:field="*{declaracionVeracidad}">
