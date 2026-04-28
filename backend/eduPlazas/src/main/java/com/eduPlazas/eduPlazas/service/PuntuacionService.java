@@ -41,12 +41,12 @@ public class PuntuacionService {
         p.setPuntosRenta(puntosRenta);
 
         double total = puntosHermanos
-                     + puntosProximidad
-                     + puntosTrabajoCentro
-                     + puntosFamiliaNumerosa
-                     + puntosFamiliaMonoparental
-                     + puntosDiscapacidad
-                     + puntosRenta;
+                + puntosProximidad
+                + puntosTrabajoCentro
+                + puntosFamiliaNumerosa
+                + puntosFamiliaMonoparental
+                + puntosDiscapacidad
+                + puntosRenta;
 
         p.setTotalPuntos(total);
         p.setFechaCalculo(LocalDateTime.now());
