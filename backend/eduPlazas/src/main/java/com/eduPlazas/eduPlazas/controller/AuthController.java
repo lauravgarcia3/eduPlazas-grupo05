@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 
 @Controller
 public class AuthController {
@@ -31,7 +33,10 @@ public class AuthController {
 
     // Recibir los datos cuando el usuario pulsa "Registrarse"
     @PostMapping("/register")
-    public String processRegistration(@ModelAttribute("usuario") Usuario usuario) {
+    public String processRegistration(@Valid @ModelAttribute("usuario") Usuario usuario, BindingResult result) {
+        if (result.hasErrors()) {
+            return "register";
+        }
         usuarioService.registrarUsuario(usuario);
         // Si todo va bien, lo mandamos al login con un mensajito de éxito
         return "redirect:/login?registrado=true";

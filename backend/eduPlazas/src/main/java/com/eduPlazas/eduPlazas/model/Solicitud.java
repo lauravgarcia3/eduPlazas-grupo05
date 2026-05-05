@@ -24,7 +24,7 @@ public class Solicitud {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Debe seleccionar el campo «Centro de preferencia».")
+    @NotBlank(message = "Debe seleccionar el campo «Centro de preferencia», payaso.")
     private String centroPreferencia;
 
     @NotBlank(message = "Debe seleccionar el campo «Curso solicitado».")
@@ -109,10 +109,10 @@ public class Solicitud {
     }
 
     public Solicitud(Long id, String nombreSolicitante, String estado, Usuario usuario,
-                     Menor menor, Tutor tutor1, Tutor tutor2,
-                     DomicilioFamiliar domicilioFamiliar,
-                     String centroPreferencia, String cursoSolicitado,
-                     Boolean declaracionVeracidad, Boolean autorizacionProteccionDatos) {
+            Menor menor, Tutor tutor1, Tutor tutor2,
+            DomicilioFamiliar domicilioFamiliar,
+            String centroPreferencia, String cursoSolicitado,
+            Boolean declaracionVeracidad, Boolean autorizacionProteccionDatos) {
         this.id = id;
         this.nombreSolicitante = nombreSolicitante;
         this.estado = estado;

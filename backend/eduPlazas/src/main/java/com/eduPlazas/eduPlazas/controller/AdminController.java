@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 
 import java.util.*;
 
@@ -87,10 +89,28 @@ public class AdminController {
     // 4. Recibir datos del formulario (Crear o Actualizar)
     @PostMapping("/convocatoria/guardar")
     public String guardarConvocatoria(
-            @ModelAttribute("nuevaConvocatoria") Convocatoria convocatoria,
+            @Valid @ModelAttribute("nuevaConvocatoria") Convocatoria convocatoria,
+            BindingResult result,
             @RequestParam(value = "nombresCentrosArray", required = false) String nombresCentros,
-            @RequestParam(value = "plazasCentrosArray", required = false) String plazasCentros) {
+            @RequestParam(value = "plazasCentrosArray", required = false) String plazasCentros,
+            Model model) {
         
+        // 1. Verificación de seguridad de estado (IDOR de estado)
+        if (convocatoria.getId() != null) {
+            Optional<Convocatoria> existenteOpt = convocatoriaService.obtenerPorId(convocatoria.getId());
+            if (existenteOpt.isPresent() && "CERRADA".equals(existenteOpt.get().getEstado())) {
+                return "redirect:/admin/home"; // No se puede editar una convocatoria cerrada
+            }
+        }
+
+        // 2. Validación de backend
+        if (result.hasErrors()) {
+            List<Centro> centros = centroRepository.findAll();
+            centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
+            model.addAttribute("centros", centros);
+            return "admin/convocatoria";
+        }
+
         // Primero guardamos la convocatoria
         convocatoriaService.guardarConvocatoria(convocatoria);
 
@@ -110,7 +130,14 @@ public class AdminController {
 
             for (int i = 0; i < nombres.length; i++) {
                 String nombreCentro = nombres[i].trim();
-                int plazasDelCentro = Integer.parseInt(plazas[i].trim());
+                
+                int plazasDelCentro = 0;
+                try {
+                    plazasDelCentro = Integer.parseInt(plazas[i].trim());
+                } catch (NumberFormatException e) {
+                    // Ignoramos el error y dejamos 0 plazas, o manejamos el error de coherencia
+                    plazasDelCentro = 0;
+                }
 
                 Optional<Centro> centroOpt = centroRepository.findAll().stream()
                         .filter(c -> c.getNombre().equals(nombreCentro))

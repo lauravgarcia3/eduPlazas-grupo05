@@ -1,6 +1,8 @@
 package com.eduPlazas.eduPlazas.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
@@ -11,12 +13,15 @@ public class Convocatoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El nombre de la convocatoria es obligatorio")
     @Column(nullable = false)
     private String nombre;
 
+    @NotNull(message = "La fecha de inicio es obligatoria")
     @Column(nullable = false)
     private LocalDate fechaInicio;
 
+    @NotNull(message = "La fecha de fin es obligatoria")
     @Column(nullable = false)
     private LocalDate fechaFin;
 
@@ -24,8 +29,13 @@ public class Convocatoria {
     private String descripcion;
 
     private String tipo;          // Ej: Educación Infantil
+    
+    @NotBlank(message = "El estado de la convocatoria es obligatorio")
     private String estado;        // Ej: ACTIVA, CERRADA, BORRADOR
+    
+    @NotBlank(message = "El año académico es obligatorio")
     private String anioAcademico; // Ej: 2026-2027
+    
     private String modalidad;     // Ej: Presencial
 
     // --- CONSTRUCTORES ---

@@ -33,6 +33,9 @@ import java.util.Optional;
 
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
+import jakarta.validation.Validator;
+import jakarta.validation.ConstraintViolation;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/solicitante")
@@ -49,6 +52,9 @@ public class SolicitanteController {
 
     @Autowired
     private ConvocatoriaService convocatoriaService;
+
+    @Autowired
+    private Validator validator;
 
     @GetMapping("/home")
     public String home(Authentication authentication, Model model) {
@@ -105,13 +111,20 @@ public class SolicitanteController {
     }
 
     @GetMapping("/solicitud")
-    public String formulario(@RequestParam(value = "id", required = false) Long id, Model model) {
+    public String formulario(@RequestParam(value = "id", required = false) Long id, Model model, Authentication authentication) {
         Solicitud solicitudAMostrar;
 
         if (id != null) {
             Optional<Solicitud> existente = solicitudService.obtenerPorId(id);
             if (existente.isPresent()) {
                 solicitudAMostrar = existente.get();
+                // Verificación de IDOR
+                String email = authentication.getName();
+                var usuarioOpt = usuarioRepository.findByEmail(email);
+                if (usuarioOpt.isEmpty() || !solicitudAMostrar.getUsuario().getId().equals(usuarioOpt.get().getId())) {
+                    return "redirect:/solicitante/home";
+                }
+
                 if (solicitudAMostrar.getMenor() == null) solicitudAMostrar.setMenor(new Menor());
                 if (solicitudAMostrar.getTutor1() == null) solicitudAMostrar.setTutor1(new Tutor());
                 if (solicitudAMostrar.getTutor2() == null) solicitudAMostrar.setTutor2(new Tutor());
@@ -149,7 +162,7 @@ public class SolicitanteController {
     }
 
    @GetMapping("/estado")
-    public String estado(@RequestParam(value = "id", required = false) Long id, Model model) {
+    public String estado(@RequestParam(value = "id", required = false) Long id, Model model, Authentication authentication) {
         
         // 1. Si entran sin pasar un ID (por error o modificando la URL), los mandamos al home
         if (id == null) {
@@ -160,6 +173,12 @@ public class SolicitanteController {
         
         if (solicitudOpt.isPresent()) {
             Solicitud solicitud = solicitudOpt.get();
+            // Verificación de IDOR
+            String email = authentication.getName();
+            var usuarioOpt = usuarioRepository.findByEmail(email);
+            if (usuarioOpt.isEmpty() || !solicitud.getUsuario().getId().equals(usuarioOpt.get().getId())) {
+                return "redirect:/solicitante/home";
+            }
             model.addAttribute("solicitud", solicitud);
             
             // Buscamos el centro basándonos en el nombre que se eligió en la solicitud
@@ -188,7 +207,43 @@ public class SolicitanteController {
 
         // 1. FORZAMOS EL ID PARA QUE HIBERNATE ACTUALICE EN LUGAR DE DUPLICAR
         if (id != null) {
+            Optional<Solicitud> existenteOpt = solicitudService.obtenerPorId(id);
+            if (existenteOpt.isPresent()) {
+                Solicitud existente = existenteOpt.get();
+                String email = authentication.getName();
+                var usuarioOpt = usuarioRepository.findByEmail(email);
+                if (usuarioOpt.isEmpty() || !existente.getUsuario().getId().equals(usuarioOpt.get().getId())) {
+                    return "redirect:/solicitante/home"; // IDOR attempt
+                }
+            } else {
+                return "redirect:/solicitante/home";
+            }
             solicitud.setId(id);
+        }
+
+        // 1.5. REVISIÓN INTELIGENTE DEL TUTOR 2 (Antes de comprobar errores)
+        if (solicitud.getTutor2() != null) {
+            Tutor tutor2 = solicitud.getTutor2();
+
+            boolean tutor2Vacio =
+                    (tutor2.getNombre() == null || tutor2.getNombre().isBlank()) &&
+                    (tutor2.getApellidos() == null || tutor2.getApellidos().isBlank()) &&
+                    (tutor2.getDniNie() == null || tutor2.getDniNie().isBlank()) &&
+                    (tutor2.getRelacionConMenor() == null || tutor2.getRelacionConMenor().isBlank()) &&
+                    (tutor2.getTelefono() == null || tutor2.getTelefono().isBlank()) &&
+                    (tutor2.getEmail() == null || tutor2.getEmail().isBlank()) &&
+                    (tutor2.getSituacionLaboral() == null || tutor2.getSituacionLaboral().isBlank());
+
+            if (tutor2Vacio) {
+                solicitud.setTutor2(null);
+            } else if ("completar".equals(accion)) {
+                // Si no está vacío, validamos manualmente
+                Set<ConstraintViolation<Tutor>> violaciones = validator.validate(tutor2);
+                for (ConstraintViolation<Tutor> violacion : violaciones) {
+                    String mensajeCorregido = violacion.getMessage().replace("tutor 1", "tutor 2");
+                    result.rejectValue("tutor2." + violacion.getPropertyPath().toString(), "error.tutor2", mensajeCorregido);
+                }
+            }
         }
 
         // 2. SI ES COMPLETAR Y HAY ERRORES, VOLVEMOS AL FORMULARIO.
@@ -228,50 +283,7 @@ public class SolicitanteController {
             solicitud.setEstado("Enviada");
         }
 
-        // 5. REVISIÓN INTELIGENTE DEL TUTOR 2
-        if (solicitud.getTutor2() != null) {
-            Tutor tutor2 = solicitud.getTutor2();
-
-            boolean tutor2Vacio =
-                    (tutor2.getNombre() == null || tutor2.getNombre().isBlank()) &&
-                    (tutor2.getApellidos() == null || tutor2.getApellidos().isBlank()) &&
-                    (tutor2.getDniNie() == null || tutor2.getDniNie().isBlank()) &&
-                    (tutor2.getRelacionConMenor() == null || tutor2.getRelacionConMenor().isBlank()) &&
-                    (tutor2.getTelefono() == null || tutor2.getTelefono().isBlank()) &&
-                    (tutor2.getEmail() == null || tutor2.getEmail().isBlank()) &&
-                    (tutor2.getSituacionLaboral() == null || tutor2.getSituacionLaboral().isBlank());
-
-            if (tutor2Vacio) {
-                solicitud.setTutor2(null);
-            } else {
-                boolean tutor2Incompleto =
-                        tutor2.getNombre() == null || tutor2.getNombre().isBlank() ||
-                        tutor2.getApellidos() == null || tutor2.getApellidos().isBlank() ||
-                        tutor2.getDniNie() == null || tutor2.getDniNie().isBlank() ||
-                        tutor2.getRelacionConMenor() == null || tutor2.getRelacionConMenor().isBlank() ||
-                        tutor2.getTelefono() == null || tutor2.getTelefono().isBlank() ||
-                        tutor2.getEmail() == null || tutor2.getEmail().isBlank() ||
-                        tutor2.getSituacionLaboral() == null || tutor2.getSituacionLaboral().isBlank();
-
-                // ¡Sólo damos error del Tutor 2 si van a enviar la solicitud final!
-                if ("completar".equals(accion) && tutor2Incompleto) {
-                    result.rejectValue("tutor2.nombre", "error.tutor2",
-                            "Si cumplimenta los datos del segundo tutor, deberá completar todos sus campos.");
-
-                    if (activa.isPresent()) {
-                        Convocatoria conv = activa.get();
-                        model.addAttribute("convocatoriaActiva", conv);
-                        if (conv.getFechaInicio() != null && conv.getFechaFin() != null) {
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
-                                    "d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
-                            model.addAttribute("fechaInicioFormat", conv.getFechaInicio().format(formatter));
-                            model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
-                        }
-                    }
-                    return "solicitante/formulario";
-                }
-            }
-        }
+        // (Revisión de tutor2 movida a paso 1.5)
 
         // 6. GUARDADO DE DOCUMENTOS
         if (documentos != null) {

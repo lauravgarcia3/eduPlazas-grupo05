@@ -104,6 +104,12 @@
             </div>
 
 <form th:action="@{/register}" th:object="${usuario}" method="post" class="register-form">
+                <div th:if="${#fields.hasErrors('*')}" style="background-color: #f8d7da; color: #842029; padding: 12px; border-radius: 8px; border: 1px solid #f5c2c7; margin-bottom: 16px;">
+                    <strong>Se han detectado errores:</strong>
+                    <ul style="margin: 6px 0 0 16px; padding: 0;">
+                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                    </ul>
+                </div>
                 <div class="form-group">
                     <label for="email">Introduzca su correo electrónico</label>
                     <input type="email" id="email" th:field="*{email}" placeholder="Correo electrónico" required>

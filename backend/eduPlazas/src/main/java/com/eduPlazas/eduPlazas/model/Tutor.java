@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 public class Tutor {
@@ -21,15 +22,18 @@ private String nombre;
 private String apellidos;
 
 @NotBlank(message = "Debe cumplimentar el campo «DNI/NIE del padre/madre/tutor 1».")
+@Pattern(regexp = "^[0-9]{8}[TRWAGMYFPDXBNJZSQVHLCKE]$", message = "Formato de DNI/NIE inválido")
 private String dniNie;
 
 @NotBlank(message = "Debe cumplimentar el campo «Relación con el niño/a».")
 private String relacionConMenor;
 
 @NotBlank(message = "Debe cumplimentar el campo «Teléfono del padre/madre/tutor 1».")
+@Pattern(regexp = "^[0-9]{9}$", message = "Formato de teléfono inválido")
 private String telefono;
 
 @NotBlank(message = "Debe cumplimentar el campo «Correo electrónico del padre/madre/tutor 1».")
+@Email(message = "Formato de email inválido")
 private String email;
 
 @NotBlank(message = "Debe cumplimentar el campo «Situación laboral».")

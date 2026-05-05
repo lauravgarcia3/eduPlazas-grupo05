@@ -399,6 +399,13 @@
                 <section class="form-card">
                     <h2 class="form-title">Información Básica de la Convocatoria</h2>
 
+                    <div th:if="${#fields.hasErrors('*')}" style="background-color: #ffe6e6; color: #cc0000; padding: 20px; border-radius: 14px; margin-bottom: 24px;">
+                        <strong>Se han detectado incidencias en los datos:</strong>
+                        <ul style="margin-top: 10px; margin-bottom: 0;">
+                            <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                        </ul>
+                    </div>
+
                     <div class="form-group">
                         <label for="nombreConvocatoria">Nombre de la convocatoria *</label>
                         <input type="text" id="nombreConvocatoria" th:field="*{nombre}" placeholder="Ej: Educación Infantil 2026-2027" required>
@@ -537,6 +544,24 @@
 
 <script>
     function showStep2() {
+        // Validar campos obligatorios del paso 1 antes de avanzar
+        const nombre = document.getElementById('nombreConvocatoria');
+        const fechaInicio = document.getElementById('fechaInicio');
+        const fechaFin = document.getElementById('fechaFin');
+
+        if (!nombre.checkValidity()) {
+            nombre.reportValidity();
+            return;
+        }
+        if (!fechaInicio.checkValidity()) {
+            fechaInicio.reportValidity();
+            return;
+        }
+        if (!fechaFin.checkValidity()) {
+            fechaFin.reportValidity();
+            return;
+        }
+
         document.getElementById('step-1').style.display = 'none';
         document.getElementById('step-2').style.display = 'block';
     }

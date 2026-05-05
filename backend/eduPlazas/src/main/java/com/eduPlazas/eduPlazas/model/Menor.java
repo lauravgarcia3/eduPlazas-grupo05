@@ -2,6 +2,7 @@ package com.eduPlazas.eduPlazas.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 public class Menor {
@@ -17,6 +18,7 @@ private String nombre;
 private String apellidos;
 
 @NotBlank(message = "Debe cumplimentar el campo «Fecha de nacimiento».")
+@Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "Formato de fecha inválido")
 private String fechaNacimiento;
 
 @NotBlank(message = "Debe cumplimentar el campo «Lugar de nacimiento».")
