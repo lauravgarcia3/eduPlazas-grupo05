@@ -1,17 +1,27 @@
 package com.eduPlazas.eduPlazas.config;
 
-import com.eduPlazas.eduPlazas.model.*;
-import com.eduPlazas.eduPlazas.repository.*;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.eduPlazas.eduPlazas.model.Centro;
+import com.eduPlazas.eduPlazas.model.Convocatoria;
+import com.eduPlazas.eduPlazas.model.DomicilioFamiliar;
+import com.eduPlazas.eduPlazas.model.Menor;
+import com.eduPlazas.eduPlazas.model.Solicitud;
+import com.eduPlazas.eduPlazas.model.Tutor;
+import com.eduPlazas.eduPlazas.model.Usuario;
+import com.eduPlazas.eduPlazas.repository.CentroRepository;
+import com.eduPlazas.eduPlazas.repository.ConvocatoriaRepository;
+import com.eduPlazas.eduPlazas.repository.SolicitudRepository;
+import com.eduPlazas.eduPlazas.repository.UsuarioRepository;
 
 @Configuration
 public class DataInitializer {
@@ -41,21 +51,21 @@ public class DataInitializer {
 
             Usuario admin = new Usuario();
             admin.setEmail("admin@eduplazas.com");
-            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setPassword(passwordEncoder.encode("Admin123!"));
             admin.setNombreCompleto("Administrador Principal");
             admin.setRol("ROLE_ADMIN");
             usuarios.add(admin);
 
             Usuario solicitante = new Usuario();
             solicitante.setEmail("solicitante@eduplazas.com");
-            solicitante.setPassword(passwordEncoder.encode("solicitante123"));
+            solicitante.setPassword(passwordEncoder.encode("Solicitante123!"));
             solicitante.setNombreCompleto("Familia Ejemplo");
             solicitante.setRol("ROLE_SOLICITANTE");
             usuarios.add(solicitante);
 
             Usuario centroUser = new Usuario();
             centroUser.setEmail("info@ceipsanfrancisco.edu.es");
-            centroUser.setPassword(passwordEncoder.encode("centro123"));
+            centroUser.setPassword(passwordEncoder.encode("Centro123!"));
             centroUser.setNombreCompleto("CEIP San Francisco de Asís");
             centroUser.setRol("ROLE_CENTRO");
             usuarios.add(centroUser);
@@ -64,7 +74,7 @@ public class DataInitializer {
             for (int i = 2; i <= 100; i++) {
                 Usuario dummy = new Usuario();
                 dummy.setEmail("familia" + i + "@eduplazas.com");
-                dummy.setPassword(passwordEncoder.encode("123456"));
+                dummy.setPassword(passwordEncoder.encode("Familia123!"));
                 dummy.setNombreCompleto("Familia Fantasma " + i);
                 dummy.setRol("ROLE_SOLICITANTE");
                 usuarios.add(dummy);
@@ -200,9 +210,8 @@ public class DataInitializer {
             // 119 Enviadas esparcidas por los coles
             for (int i = 0; i < 119; i++) {
                 Usuario u = otrasFamilias.isEmpty() ? usuarioPrincipal : otrasFamilias.get(random.nextInt(otrasFamilias.size()));
-                String centroDestino = centros[i % centros.length]; // Mantenemos el reparto equitativo por centros
+                String centroDestino = centros[i % centros.length];
 
-                // Ahora sí, 100% random
                 String nombreMenor = nombresMenores[random.nextInt(nombresMenores.length)];
                 String nombreTutor = nombresTutores[random.nextInt(nombresTutores.length)];
                 String apellido = apellidos[random.nextInt(apellidos.length)];

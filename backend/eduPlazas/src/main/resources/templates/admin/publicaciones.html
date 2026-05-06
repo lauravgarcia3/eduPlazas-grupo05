@@ -8,74 +8,178 @@
 
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <style>
-        .topbar-right {
-            gap: 10px;
+        :root {
+            --admin-blue: #064a8f;
+            --admin-blue-dark: #03386e;
+            --admin-blue-soft: #e8f2fb;
+            --admin-orange: #f06f00;
+            --admin-orange-dark: #c85c00;
+            --admin-orange-soft: #fff2e6;
+            --admin-bg: #f6f8fb;
+            --admin-card: #ffffff;
+            --admin-border: #e2e8f0;
+            --admin-text: #172033;
+            --admin-muted: #64748b;
+            --admin-green: #16834a;
+            --admin-green-soft: #e7f7ec;
+            --admin-red: #b42318;
+            --admin-red-soft: #fdecec;
+            --admin-shadow: 0 14px 34px rgba(15, 35, 60, 0.10);
         }
 
         .page-wrapper {
-            padding: 30px 0 50px 0;
+            padding: 34px 0 58px 0;
+            min-height: calc(100vh - 72px);
+            background:
+                radial-gradient(circle at 8% 8%, rgba(240, 111, 0, 0.08) 0, rgba(240, 111, 0, 0.08) 190px, transparent 191px),
+                radial-gradient(circle at 92% 18%, rgba(6, 74, 143, 0.07) 0, rgba(6, 74, 143, 0.07) 230px, transparent 231px),
+                var(--admin-bg);
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .header-text {
+            max-width: 820px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--admin-blue-soft);
+            color: var(--admin-blue);
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 900;
+            margin-bottom: 14px;
         }
 
         .page-title {
-            font-size: 38px;
-            margin: 0 0 30px 0;
+            font-size: 42px;
+            margin: 0 0 10px 0;
+            color: var(--admin-text);
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1.08;
+        }
+
+        .page-subtitle {
+            margin: 0;
+            color: var(--admin-muted);
+            font-size: 17px;
+            font-weight: 600;
+            line-height: 1.45;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            min-height: 46px;
+            padding: 0 22px;
+            border-radius: 14px;
+            font-weight: 900;
+            font-size: 15px;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            white-space: nowrap;
+            font-family: inherit;
+        }
+
+        .primary-btn {
+            background-color: var(--admin-orange);
+            color: #ffffff;
+            box-shadow: 0 8px 18px rgba(240, 111, 0, 0.22);
+        }
+
+        .primary-btn:hover {
+            background-color: var(--admin-orange-dark);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .secondary-btn {
+            background-color: #ffffff;
+            color: var(--admin-blue);
+            border: 1px solid var(--admin-border);
+            box-shadow: 0 8px 18px rgba(15, 35, 60, 0.08);
+        }
+
+        .secondary-btn:hover {
+            background-color: var(--admin-blue-soft);
+            color: var(--admin-blue-dark);
+            transform: translateY(-1px);
         }
 
         .selector-btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 170px;
-            height: 44px;
-            padding: 0 22px;
-            background-color: #e58d00;
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 15px;
-            font-weight: 700;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);
-            margin-bottom: 28px;
+            min-height: 42px;
+            padding: 0 18px;
+            background-color: var(--admin-orange-soft);
+            border: 1px solid #ffd6b3;
+            border-radius: 999px;
+            color: var(--admin-orange-dark);
+            font-size: 14px;
+            font-weight: 900;
+            margin-bottom: 24px;
         }
 
         .admin-panel {
             width: 100%;
-            max-width: 1320px;
-            margin: 0 auto;
-            background-color: #f7f7f7;
-            border-radius: 34px;
-            padding: 34px 34px 40px 34px;
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+            background-color: var(--admin-card);
+            border-radius: 30px;
+            padding: 34px 36px 38px 36px;
+            box-shadow: var(--admin-shadow);
+            border: 1px solid var(--admin-border);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+            margin-bottom: 26px;
         }
 
         .section-title {
             font-size: 28px;
-            font-weight: 800;
-            margin: 0 0 18px 0;
-            color: #111;
-        }
-
-        .section-subtitle {
-            font-size: 22px;
-            font-weight: 800;
-            color: #111;
-            margin: 0 0 22px 0;
+            font-weight: 900;
+            margin: 0 0 10px 0;
+            color: var(--admin-text);
+            letter-spacing: -0.2px;
         }
 
         .status-line {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 22px;
             font-size: 14px;
-            color: #666;
+            color: var(--admin-muted);
+            font-weight: 800;
+            background-color: #f8fafc;
+            border: 1px solid var(--admin-border);
+            border-radius: 999px;
+            padding: 10px 14px;
         }
 
         .status-dot {
             width: 11px;
             height: 11px;
             border-radius: 50%;
-            background-color: #49b35a;
+            background-color: var(--admin-green);
             flex-shrink: 0;
         }
 
@@ -83,80 +187,129 @@
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 16px;
-            margin-bottom: 28px;
+            margin-bottom: 30px;
         }
 
         .summary-box {
-            background-color: #efefef;
-            border-radius: 14px;
-            padding: 16px 16px 18px 16px;
+            background-color: #f8fafc;
+            border: 1px solid var(--admin-border);
+            border-radius: 18px;
+            padding: 18px 18px 20px 18px;
+        }
+
+        .summary-box.orange {
+            border-left: 5px solid var(--admin-orange);
+        }
+
+        .summary-box.blue {
+            border-left: 5px solid var(--admin-blue);
+        }
+
+        .summary-box.green {
+            border-left: 5px solid var(--admin-green);
+        }
+
+        .summary-box.gray {
+            border-left: 5px solid #94a3b8;
         }
 
         .summary-label {
-            font-size: 13px;
-            color: #777;
-            margin-bottom: 10px;
+            font-size: 12px;
+            color: var(--admin-muted);
+            margin-bottom: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.35px;
         }
 
         .summary-value {
-            font-size: 22px;
-            font-weight: 800;
-            color: #111;
+            font-size: 26px;
+            font-weight: 900;
+            color: var(--admin-text);
+            line-height: 1;
         }
 
         .divider {
             border: none;
-            border-top: 1px solid #e3e3e3;
-            margin: 0 0 28px 0;
+            border-top: 1px solid var(--admin-border);
+            margin: 0 0 30px 0;
+        }
+
+        .section-subtitle {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--admin-text);
+            margin: 0 0 18px 0;
         }
 
         .publication-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 22px;
-            margin-bottom: 42px;
+            margin-bottom: 34px;
         }
 
         .publication-card {
-            background-color: #fafafa;
-            border: 2px solid #dddddd;
-            border-radius: 18px;
-            padding: 22px 24px;
+            background-color: #ffffff;
+            border: 1px solid var(--admin-border);
+            border-radius: 22px;
+            padding: 24px 24px 26px 24px;
+            box-shadow: 0 10px 24px rgba(15, 35, 60, 0.06);
+        }
+
+        .publication-card.ready {
+            border-top: 6px solid var(--admin-green);
+        }
+
+        .publication-card.pending {
+            border-top: 6px solid #94a3b8;
         }
 
         .publication-header {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
-            margin-bottom: 18px;
+            gap: 18px;
+            margin-bottom: 20px;
         }
 
         .publication-title {
             font-size: 20px;
-            font-weight: 800;
-            color: #111;
+            font-weight: 900;
+            color: var(--admin-text);
+            line-height: 1.2;
         }
 
         .status-pill {
-            background-color: #e6e6e6;
-            color: #777;
+            background-color: #eef2f6;
+            color: var(--admin-muted);
             font-size: 13px;
-            font-weight: 700;
-            border-radius: 20px;
-            padding: 8px 16px;
+            font-weight: 900;
+            border-radius: 999px;
+            padding: 9px 14px;
+            white-space: nowrap;
+        }
+
+        .status-pill.ready {
+            background-color: var(--admin-green-soft);
+            color: var(--admin-green);
         }
 
         .publication-label {
-            font-size: 14px;
-            color: #777;
+            font-size: 13px;
+            color: var(--admin-muted);
             margin-bottom: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
         .check-list {
-            background-color: #f3f3f3;
-            border-radius: 10px;
-            padding: 12px 12px 8px 12px;
-            margin-bottom: 18px;
+            background-color: #f8fafc;
+            border: 1px solid var(--admin-border);
+            border-radius: 16px;
+            padding: 14px 14px 10px 14px;
+            margin-bottom: 20px;
         }
 
         .check-item {
@@ -165,8 +318,9 @@
             gap: 10px;
             margin-bottom: 10px;
             font-size: 14px;
-            color: #222;
-            font-weight: 600;
+            color: var(--admin-text);
+            font-weight: 700;
+            line-height: 1.35;
         }
 
         .check-item:last-child {
@@ -174,25 +328,25 @@
         }
 
         .check-circle {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             flex-shrink: 0;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             font-size: 12px;
-            font-weight: 800;
+            font-weight: 900;
             line-height: 1;
         }
 
         .check-circle.green {
-            background-color: #49b35a;
+            background-color: var(--admin-green);
             color: white;
         }
 
         .check-circle.gray {
-            background-color: #d4d4d4;
+            background-color: #cbd5e1;
         }
 
         .action-row {
@@ -200,42 +354,19 @@
             gap: 12px;
         }
 
-        .primary-btn {
+        .action-row .primary-btn,
+        .action-row .secondary-btn {
             flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 42px;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 800;
-            background-color: #e58d00;
-            color: white;
-            border: none;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);
-            text-decoration: none;
-        }
-
-        .secondary-btn {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 42px;
-            border-radius: 10px;
-            font-size: 15px;
-            font-weight: 800;
-            background-color: #b8b8b8;
-            color: white;
-            border: none;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-            text-decoration: none;
+            min-height: 44px;
+            box-shadow: none;
+            font-size: 14px;
         }
 
         .assignment-card {
-            background-color: #f1f1f1;
-            border-radius: 18px;
-            padding: 22px 22px 24px 22px;
+            background-color: #f8fafc;
+            border: 1px solid var(--admin-border);
+            border-radius: 24px;
+            padding: 24px;
         }
 
         .assignment-top-grid {
@@ -246,114 +377,131 @@
         }
 
         .assignment-stat {
-            background-color: #fafafa;
-            border-radius: 14px;
-            padding: 16px 18px;
-            min-height: 110px;
+            background-color: #ffffff;
+            border: 1px solid var(--admin-border);
+            border-radius: 18px;
+            padding: 18px;
+            min-height: 112px;
         }
 
         .assignment-stat.green {
-            border-left: 4px solid #49b35a;
+            border-left: 5px solid var(--admin-green);
         }
 
         .assignment-stat.orange {
-            border-left: 4px solid #f39a06;
+            border-left: 5px solid var(--admin-orange);
         }
 
         .assignment-stat.red {
-            border-left: 4px solid #ef4b43;
+            border-left: 5px solid var(--admin-red);
         }
 
         .assignment-label {
-            font-size: 13px;
-            color: #777;
-            margin-bottom: 14px;
+            font-size: 12px;
+            color: var(--admin-muted);
+            margin-bottom: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
         .assignment-value {
-            font-size: 18px;
-            font-weight: 800;
+            font-size: 24px;
+            font-weight: 900;
             margin-bottom: 6px;
+            line-height: 1;
         }
 
         .assignment-value.green {
-            color: #49b35a;
+            color: var(--admin-green);
         }
 
         .assignment-value.orange {
-            color: #f39a06;
+            color: var(--admin-orange);
         }
 
         .assignment-value.red {
-            color: #ef4b43;
+            color: var(--admin-red);
         }
 
         .assignment-percent {
-            font-size: 12px;
-            color: #777;
+            font-size: 13px;
+            color: var(--admin-muted);
+            font-weight: 700;
         }
 
         .table-card {
-            background-color: #fafafa;
-            border-radius: 14px;
-            padding: 18px 18px 12px 18px;
+            background-color: #ffffff;
+            border: 1px solid var(--admin-border);
+            border-radius: 20px;
+            padding: 22px;
+            overflow-x: auto;
         }
 
         .table-title {
-            font-size: 15px;
-            font-weight: 800;
-            color: #111;
-            margin: 0 0 4px 0;
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--admin-text);
+            margin: 0 0 6px 0;
         }
 
         .table-subtitle {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
-            color: #777;
-            margin: 0 0 16px 0;
+            color: var(--admin-muted);
+            margin: 0 0 18px 0;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 760px;
         }
 
         th {
             text-align: left;
-            font-size: 13px;
-            color: #777;
-            font-weight: 700;
-            padding: 10px 8px;
-            border-bottom: 1px solid #dddddd;
+            font-size: 12px;
+            color: var(--admin-muted);
+            font-weight: 900;
+            padding: 12px 10px;
+            border-bottom: 1px solid var(--admin-border);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
         td {
             font-size: 14px;
-            color: #222;
-            padding: 12px 8px;
-            border-bottom: 1px solid #eeeeee;
+            color: var(--admin-text);
+            padding: 14px 10px;
+            border-bottom: 1px solid #eef2f6;
+            font-weight: 700;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
         }
 
         .value-green {
-            color: #49b35a;
-            font-weight: 700;
+            color: var(--admin-green);
+            font-weight: 900;
         }
 
         .value-orange {
-            color: #f39a06;
-            font-weight: 700;
+            color: var(--admin-orange);
+            font-weight: 900;
         }
 
         .progress-cell {
             display: flex;
             align-items: center;
             gap: 10px;
+            min-width: 140px;
         }
 
         .progress-bar {
-            width: 70px;
-            height: 6px;
-            background-color: #e5e5e5;
+            width: 84px;
+            height: 8px;
+            background-color: #e5e7eb;
             border-radius: 999px;
             overflow: hidden;
         }
@@ -364,68 +512,132 @@
         }
 
         .progress-fill.green {
-            background-color: #49b35a;
+            background-color: var(--admin-green);
         }
 
         .progress-fill.orange {
-            background-color: #f39a06;
+            background-color: var(--admin-orange);
+        }
+
+        .progress-fill.red {
+            background-color: var(--admin-red);
+        }
+
+        @media (max-width: 1100px) {
+            .summary-grid,
+            .publication-grid,
+            .assignment-top-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .panel-header {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 800px) {
+            .page-wrapper {
+                padding: 24px 0 42px 0;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .page-title {
+                font-size: 32px;
+            }
+
+            .page-subtitle {
+                font-size: 15px;
+            }
+
+            .admin-panel {
+                padding: 24px 20px;
+                border-radius: 24px;
+            }
+
+            .publication-header {
+                flex-direction: column;
+            }
+
+            .action-row {
+                flex-direction: column;
+            }
+
+            .primary-btn,
+            .secondary-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
 
 <header class="topbar">
-    <div class="logo">EduPlazas</div>
+    <div class="logo">
+        <span class="logo-edu">Edu</span><span class="logo-plazas">Plazas</span>
+    </div>
 
     <div class="topbar-right">
-        <a th:href="@{/admin/home}" class="primary-btn">Volver</a>
+        <a th:href="@{/admin/home}" class="secondary-btn">Volver</a>
     </div>
 </header>
 
 <main class="page-wrapper">
     <div class="page-content">
-        <h1 class="page-title">Gestión de Publicaciones</h1>
-
-        <!-- Botón con el nombre de la convocatoria seleccionada -->
-        <button type="button" class="selector-btn"
-                th:text="${convocatoria.nombre}">
-            Educación Infantil
-        </button>
-
-        <section class="admin-panel">
-            <!-- Título dinámico de la convocatoria -->
-            <h2 class="section-title"
-                th:text="${convocatoria.nombre + ' ' + (convocatoria.fechaInicio != null ? '(' + #temporals.year(convocatoria.fechaInicio) + ')' : '')}">
-                Educación Infantil 2026-2027
-            </h2>
-
-            <div class="status-line">
-                <span class="status-dot"></span>
-                <span th:text="${convocatoria.estado == 'CERRADA' ? 'Proceso de asignación completado' :
-                                (convocatoria.estado == 'ACTIVA' ? 'Proceso de inscripción en curso' :
-                                 'Convocatoria en borrador')}">
-                    Proceso de asignación completado
-                </span>
+        <div class="page-header">
+            <div class="header-text">
+                <div class="eyebrow">Panel de administración</div>
+                <h1 class="page-title">Gestión de publicaciones</h1>
+                <p class="page-subtitle">
+                    Revisa el estado de los listados, publica resultados y consulta el resumen de asignaciones por centro.
+                </p>
             </div>
 
-            <!-- RESUMEN SUPERIOR: ya dinámico -->
+            <button type="button" class="selector-btn"
+                    th:text="${convocatoria.nombre}">
+                Educación Infantil
+            </button>
+        </div>
+
+        <section class="admin-panel">
+            <div class="panel-header">
+                <div>
+                    <h2 class="section-title"
+                        th:text="${convocatoria.nombre + ' ' + (convocatoria.fechaInicio != null ? '(' + #temporals.year(convocatoria.fechaInicio) + ')' : '')}">
+                        Educación Infantil 2026-2027
+                    </h2>
+
+                    <div class="status-line">
+                        <span class="status-dot"></span>
+                        <span th:text="${convocatoria.estado == 'CERRADA' ? 'Proceso de asignación completado' :
+                                        (convocatoria.estado == 'ACTIVA' ? 'Proceso de inscripción en curso' :
+                                         'Convocatoria en borrador')}">
+                            Proceso de asignación completado
+                        </span>
+                    </div>
+                </div>
+            </div>
+
             <div class="summary-grid">
-                <div class="summary-box">
-                    <div class="summary-label">Total Solicitudes</div>
+                <div class="summary-box orange">
+                    <div class="summary-label">Total solicitudes</div>
                     <div class="summary-value" th:text="${totalSolicitudes}">247</div>
                 </div>
 
-                <div class="summary-box">
-                    <div class="summary-label">Plazas Disponibles</div>
+                <div class="summary-box blue">
+                    <div class="summary-label">Plazas disponibles</div>
                     <div class="summary-value" th:text="${convocatoria.numeroPlazas}">350</div>
                 </div>
 
-                <div class="summary-box">
+                <div class="summary-box green">
                     <div class="summary-label">Procesadas</div>
                     <div class="summary-value" th:text="${totalCompletadas}">247</div>
                 </div>
 
-                <div class="summary-box">
+                <div class="summary-box gray">
                     <div class="summary-label">Reclamaciones</div>
                     <div class="summary-value">0</div>
                 </div>
@@ -433,16 +645,16 @@
 
             <hr class="divider">
 
-            <h3 class="section-subtitle">Estado de Publicaciones</h3>
+            <h3 class="section-subtitle">Estado de publicaciones</h3>
 
             <div class="publication-grid">
-                <div class="publication-card">
+                <div class="publication-card ready">
                     <div class="publication-header">
-                        <div class="publication-title">Listado Provisional</div>
-                        <div class="status-pill">No Publicado</div>
+                        <div class="publication-title">Listado provisional</div>
+                        <div class="status-pill ready">Listo para publicar</div>
                     </div>
 
-                    <div class="publication-label">Estado del proceso:</div>
+                    <div class="publication-label">Estado del proceso</div>
 
                     <div class="check-list">
                         <div class="check-item">
@@ -462,18 +674,18 @@
                     </div>
 
                     <div class="action-row">
-                        <a href="#" class="primary-btn">Publicar Listado</a>
+                        <a href="#" class="primary-btn">Publicar listado</a>
                         <a href="#" class="secondary-btn">Descargar PDF</a>
                     </div>
                 </div>
 
-                <div class="publication-card">
+                <div class="publication-card pending">
                     <div class="publication-header">
-                        <div class="publication-title">Listado Definitivo</div>
-                        <div class="status-pill">No Publicado</div>
+                        <div class="publication-title">Listado definitivo</div>
+                        <div class="status-pill">Pendiente</div>
                     </div>
 
-                    <div class="publication-label">Estado del proceso:</div>
+                    <div class="publication-label">Estado del proceso</div>
 
                     <div class="check-list">
                         <div class="check-item">
@@ -483,7 +695,7 @@
 
                         <div class="check-item">
                             <span class="check-circle gray"></span>
-                            <span>Periodo de reclamaciones</span>
+                            <span>Periodo de reclamaciones finalizado</span>
                         </div>
 
                         <div class="check-item">
@@ -493,18 +705,18 @@
                     </div>
 
                     <div class="action-row">
-                        <a href="#" class="secondary-btn">Publicar Listado</a>
+                        <a href="#" class="secondary-btn">Publicar listado</a>
                         <a href="#" class="secondary-btn">Descargar PDF</a>
                     </div>
                 </div>
             </div>
 
-            <h3 class="section-subtitle">Resumen de Asignaciones</h3>
+            <h3 class="section-subtitle">Resumen de asignaciones</h3>
 
             <div class="assignment-card">
                 <div class="assignment-top-grid">
                     <div class="assignment-stat green">
-                        <div class="assignment-label">Solicitudes Admitidas</div>
+                        <div class="assignment-label">Solicitudes admitidas</div>
                         <div class="assignment-value green" th:text="${totalAdmitidas}">209</div>
                         <div class="assignment-percent"
                              th:text="${totalSolicitudes > 0} ? ${#numbers.formatDecimal((totalAdmitidas * 100.0) / totalSolicitudes, 1, 1)} + '%' : '0%'">
@@ -513,7 +725,7 @@
                     </div>
 
                     <div class="assignment-stat orange">
-                        <div class="assignment-label">En Lista de Espera</div>
+                        <div class="assignment-label">En lista de espera</div>
                         <div class="assignment-value orange" th:text="${totalListaEspera}">0</div>
                         <div class="assignment-percent"
                              th:text="${totalSolicitudes > 0} ? ${#numbers.formatDecimal((totalListaEspera * 100.0) / totalSolicitudes, 1, 1)} + '%' : '0%'">
@@ -522,7 +734,7 @@
                     </div>
 
                     <div class="assignment-stat red">
-                        <div class="assignment-label">No Admitidas</div>
+                        <div class="assignment-label">No admitidas</div>
                         <div class="assignment-value red" th:text="${totalNoAdmitidas}">0</div>
                         <div class="assignment-percent"
                              th:text="${totalSolicitudes > 0} ? ${#numbers.formatDecimal((totalNoAdmitidas * 100.0) / totalSolicitudes, 1, 1)} + '%' : '0%'">
@@ -532,22 +744,20 @@
                 </div>
 
                 <div class="table-card">
-                    <div class="table-title">
-                        Distribución por<br>Centros
-                    </div>
-                    <div class="table-subtitle">Centro Educativo</div>
+                    <div class="table-title">Distribución por centros</div>
+                    <div class="table-subtitle">Ocupación y disponibilidad por centro educativo</div>
 
-                    <!-- TODO: hacer dinámica esta tabla cuando Centro esté relacionado con Solicitud/Convocatoria -->
                     <table>
                         <thead>
                         <tr>
-                            <th>Centro Educativo</th>
-                            <th>Plazas Totales</th>
+                            <th>Centro educativo</th>
+                            <th>Plazas totales</th>
                             <th>Asignadas</th>
                             <th>Disponibles</th>
                             <th>Ocupación</th>
                         </tr>
                         </thead>
+
                         <tbody>
                         <tr th:each="centroData : ${centrosData}">
                             <td th:text="${centroData.centro.nombre}">Centro Nombre</td>
@@ -561,6 +771,7 @@
                                              th:style="'width: ' + ${centroData.ocupacion} + '%;'">
                                         </div>
                                     </div>
+
                                     <span th:text="${centroData.ocupacion} + '%'">0%</span>
                                 </div>
                             </td>

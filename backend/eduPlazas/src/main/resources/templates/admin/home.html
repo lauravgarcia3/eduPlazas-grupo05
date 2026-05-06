@@ -6,144 +6,268 @@
 
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <style>
+        :root {
+            --admin-blue: #064a8f;
+            --admin-blue-soft: #e8f2fb;
+            --admin-blue-dark: #03386e;
+            --admin-orange: #f06f00;
+            --admin-orange-dark: #c85c00;
+            --admin-orange-soft: #fff2e6;
+            --admin-bg: #f6f8fb;
+            --admin-card: #ffffff;
+            --admin-border: #e2e8f0;
+            --admin-text: #172033;
+            --admin-muted: #64748b;
+            --admin-green: #16834a;
+            --admin-red: #b42318;
+            --admin-shadow: 0 14px 34px rgba(15, 35, 60, 0.10);
+        }
+
         .page-wrapper {
-            padding: 30px 0 50px 0;
+            padding: 34px 0 58px 0;
+            background:
+                radial-gradient(circle at 8% 8%, rgba(240, 111, 0, 0.08) 0, rgba(240, 111, 0, 0.08) 190px, transparent 191px),
+                radial-gradient(circle at 92% 18%, rgba(6, 74, 143, 0.07) 0, rgba(6, 74, 143, 0.07) 230px, transparent 231px),
+                var(--admin-bg);
+            min-height: calc(100vh - 95px);
         }
 
         .page-header {
             display: flex;
             justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .header-text {
+            max-width: 760px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
             align-items: center;
-            margin-bottom: 34px;
+            gap: 8px;
+            background-color: var(--admin-blue-soft);
+            color: var(--admin-blue);
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 900;
+            margin-bottom: 14px;
         }
 
         .page-title {
-            font-size: 38px;
+            font-size: 42px;
+            margin: 0 0 10px 0;
+            color: var(--admin-text);
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+
+        .page-subtitle {
             margin: 0;
+            color: var(--admin-muted);
+            font-size: 17px;
+            font-weight: 600;
+            line-height: 1.45;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            min-height: 46px;
+            padding: 0 24px;
+            border-radius: 14px;
+            font-weight: 900;
+            font-size: 15px;
+            border: none;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 8px 18px rgba(15, 35, 60, 0.12);
+            cursor: pointer;
+            transition: all 0.18s ease;
+            white-space: nowrap;
         }
 
         .primary-btn {
-            height: 46px;
-            padding: 0 28px;
-            border-radius: 10px;
-            background-color: #e58d00;
-            color: white;
-            font-weight: 800;
-            font-size: 15px;
-            border: none;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);
+            background-color: var(--admin-orange);
+            color: #ffffff;
         }
 
         .primary-btn:hover {
-            background-color: #c77400;
+            background-color: var(--admin-orange-dark);
+            color: #ffffff;
+            transform: translateY(-1px);
         }
 
         .secondary-btn {
-            height: 46px;
-            padding: 0 28px;
-            border-radius: 10px;
-            background-color: #67a8cf;
-            color: white;
-            font-weight: 800;
-            font-size: 15px;
-            border: none;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            background-color: var(--admin-blue);
+            color: #ffffff;
         }
 
         .secondary-btn:hover {
-            background-color: #5799bf;
+            background-color: var(--admin-blue-dark);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .disabled-btn {
+            background-color: #cbd5e1;
+            color: #ffffff;
+            opacity: 0.8;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .summary-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 28px;
+        }
+
+        .summary-card {
+            background-color: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            border-radius: 24px;
+            padding: 22px 24px;
+            box-shadow: 0 10px 24px rgba(15, 35, 60, 0.07);
+        }
+
+        .summary-label {
+            color: var(--admin-muted);
+            font-size: 13px;
+            font-weight: 900;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .summary-value {
+            color: var(--admin-text);
+            font-size: 28px;
+            font-weight: 900;
+        }
+
+        .summary-card.orange {
+            border-left: 6px solid var(--admin-orange);
+        }
+
+        .summary-card.blue {
+            border-left: 6px solid var(--admin-blue);
+        }
+
+        .summary-card.green {
+            border-left: 6px solid var(--admin-green);
         }
 
         .convocatoria-card {
-            display: flex;
-            background-color: #f7f7f7;
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            background-color: var(--admin-card);
             border-radius: 30px;
             overflow: hidden;
-            margin-bottom: 36px;
-            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.10);
+            margin-bottom: 28px;
+            box-shadow: var(--admin-shadow);
+            border: 1px solid var(--admin-border);
         }
 
         .convocatoria-left {
-            width: 360px;
-            background-color: #ddb36a;
-            padding: 38px 32px;
-            color: white;
+            background:
+                radial-gradient(circle at 80% 12%, rgba(255, 255, 255, 0.22) 0, rgba(255, 255, 255, 0.22) 80px, transparent 81px),
+                linear-gradient(135deg, #ffb14a 0%, var(--admin-orange) 100%);
+            padding: 32px 30px;
+            color: #ffffff;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            min-height: 280px;
         }
 
         .convocatoria-title {
             font-size: 26px;
-            font-weight: 800;
-            line-height: 1.35;
-            margin-bottom: 26px;
+            font-weight: 900;
+            line-height: 1.18;
+            margin-bottom: 24px;
+            letter-spacing: -0.2px;
         }
 
         .convocatoria-dates {
             font-size: 14px;
-            margin-bottom: 28px;
+            font-weight: 700;
+            line-height: 1.45;
         }
 
         .convocatoria-dates p {
-            margin: 12px 0;
+            margin: 10px 0;
         }
 
         .convocatoria-box {
-            background-color: rgba(255, 255, 255, 0.28);
-            border-radius: 18px;
-            padding: 16px 22px;
+            background-color: rgba(255, 255, 255, 0.20);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            padding: 18px 20px;
+            backdrop-filter: blur(6px);
         }
 
         .convocatoria-box-label {
             font-size: 13px;
-            color: white;
-            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.92);
+            margin-bottom: 8px;
+            font-weight: 800;
         }
 
         .convocatoria-box-value {
-            font-size: 30px;
-            font-weight: 800;
-            color: white;
+            font-size: 34px;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1;
         }
 
         .convocatoria-right {
-            flex: 1;
-            padding: 38px 40px;
+            padding: 32px 34px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 24px;
         }
 
         .convocatoria-status-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 28px;
+            align-items: flex-start;
+            gap: 24px;
         }
 
         .status-title {
-            font-size: 18px;
-            font-weight: 800;
-            color: #111;
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--admin-text);
             margin-bottom: 12px;
         }
 
         .status-pill {
-            background-color: #dfe8ee;
-            padding: 10px 22px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 14px;
-            min-width: 130px;
+            background-color: var(--admin-blue-soft);
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-weight: 900;
+            font-size: 13px;
+            min-width: 120px;
             text-align: center;
-            color: #2d6d95;
-            display: inline-block;
+            color: var(--admin-blue);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .status-indicator {
@@ -151,61 +275,105 @@
             align-items: center;
             gap: 10px;
             font-size: 14px;
-            color: #666;
+            color: var(--admin-muted);
+            font-weight: 800;
+            background-color: #f8fafc;
+            border: 1px solid var(--admin-border);
+            border-radius: 999px;
+            padding: 10px 14px;
         }
 
         .status-dot {
-            width: 12px;
-            height: 12px;
+            width: 11px;
+            height: 11px;
             border-radius: 50%;
             flex-shrink: 0;
         }
 
         .status-dot.green {
-            background-color: #49b35a;
+            background-color: var(--admin-green);
         }
 
         .status-dot.red {
-            background-color: #ef4b43;
+            background-color: var(--admin-red);
         }
 
         .info-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-            margin-bottom: 22px;
+            gap: 16px;
         }
 
         .info-box {
-            background-color: #efefef;
-            border-radius: 14px;
-            padding: 20px 20px 22px 20px;
+            background-color: #f8fafc;
+            border: 1px solid var(--admin-border);
+            border-radius: 18px;
+            padding: 18px 18px 20px 18px;
         }
 
         .info-label {
-            font-size: 13px;
-            color: #777;
-            margin-bottom: 10px;
+            font-size: 12px;
+            color: var(--admin-muted);
+            margin-bottom: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.35px;
         }
 
         .info-value {
             font-size: 18px;
-            font-weight: 800;
-            color: #111;
+            font-weight: 900;
+            color: var(--admin-text);
+            line-height: 1.25;
         }
 
         .action-row {
             display: flex;
-            gap: 14px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .action-row .primary-btn,
+        .action-row .secondary-btn {
+            flex: 1;
+            min-width: 150px;
+            box-shadow: none;
+        }
+
+        .empty-state {
+            background-color: var(--admin-card);
+            border: 1px solid var(--admin-border);
+            border-radius: 28px;
+            padding: 38px 32px;
+            box-shadow: var(--admin-shadow);
+            text-align: center;
+            color: var(--admin-text);
+        }
+
+        .empty-state h2 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            color: var(--admin-blue);
+        }
+
+        .empty-state p {
+            margin: 0 0 22px 0;
+            color: var(--admin-muted);
+            font-weight: 600;
         }
 
         @media (max-width: 1100px) {
+            .summary-strip {
+                grid-template-columns: 1fr;
+            }
+
             .convocatoria-card {
-                flex-direction: column;
+                grid-template-columns: 1fr;
             }
 
             .convocatoria-left {
-                width: 100%;
+                min-height: auto;
+                gap: 28px;
             }
 
             .info-grid {
@@ -215,17 +383,25 @@
 
         @media (max-width: 800px) {
             .page-wrapper {
-                padding: 24px 0 40px 0;
+                padding: 24px 0 42px 0;
             }
 
             .page-header {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 16px;
+                align-items: stretch;
+            }
+
+            .top-actions {
+                flex-direction: column;
+                align-items: stretch;
             }
 
             .page-title {
-                font-size: 30px;
+                font-size: 32px;
+            }
+
+            .page-subtitle {
+                font-size: 15px;
             }
 
             .convocatoria-right {
@@ -239,6 +415,11 @@
             .convocatoria-status-row {
                 flex-direction: column;
                 gap: 16px;
+            }
+
+            .status-indicator {
+                width: 100%;
+                justify-content: center;
             }
 
             .action-row {
@@ -255,7 +436,9 @@
 <body>
 
 <header class="topbar">
-    <div class="logo">EduPlazas</div>
+    <div class="logo">
+        <span class="logo-edu">Edu</span><span class="logo-plazas">Plazas</span>
+    </div>
 
     <div class="topbar-right">
         <a th:href="@{/login}" class="primary-btn">Logout</a>
@@ -266,16 +449,53 @@
     <div class="page-content">
 
         <div class="page-header">
-            <h1 class="page-title">Convocatorias</h1>
-            <a th:href="@{/admin/convocatoria}" class="primary-btn">+ Nueva Convocatoria</a>
-            
+            <div class="header-text">
+                <div class="eyebrow">Panel de administración</div>
+                <h1 class="page-title">Convocatorias</h1>
+                <p class="page-subtitle">
+                    Gestiona las convocatorias activas, revisa solicitudes recibidas y accede rápidamente al detalle de cada proceso.
+                </p>
+            </div>
+
+            <div class="top-actions">
+                <a th:href="@{/admin/convocatoria}" class="primary-btn">+ Nueva Convocatoria</a>
+            </div>
         </div>
+
+        <section class="summary-strip" th:if="${not #lists.isEmpty(convocatorias)}">
+            <div class="summary-card orange">
+                <div class="summary-label">Convocatorias</div>
+                <div class="summary-value" th:text="${#lists.size(convocatorias)}">0</div>
+            </div>
+
+            <div class="summary-card blue">
+                <div class="summary-label">Activas</div>
+                <div class="summary-value"
+                     th:text="${#lists.size(convocatorias.?[estado == 'ACTIVA'])}">
+                    0
+                </div>
+            </div>
+
+            <div class="summary-card green">
+                <div class="summary-label">Cerradas</div>
+                <div class="summary-value"
+                     th:text="${#lists.size(convocatorias.?[estado == 'CERRADA'])}">
+                    0
+                </div>
+            </div>
+        </section>
+
+        <section th:if="${#lists.isEmpty(convocatorias)}" class="empty-state">
+            <h2>No hay convocatorias creadas</h2>
+            <p>Crea una nueva convocatoria para empezar a gestionar solicitudes.</p>
+            <a th:href="@{/admin/convocatoria}" class="primary-btn">+ Nueva Convocatoria</a>
+        </section>
 
         <section th:each="convocatoria : ${convocatorias}" class="convocatoria-card">
             <div class="convocatoria-left">
                 <div>
                     <div class="convocatoria-title" th:text="${convocatoria.nombre}">
-                        Educación Infantil<br>2026-2027
+                        Educación Infantil 2026-2027
                     </div>
 
                     <div class="convocatoria-dates">
@@ -294,7 +514,7 @@
                 <div class="convocatoria-status-row">
                     <div>
                         <div class="status-title">Estado de la convocatoria</div>
-                        <div class="status-pill" th:text="${convocatoria.estado}">Activa</div>
+                        <div class="status-pill" th:text="${convocatoria.estado}">ACTIVA</div>
                     </div>
 
                     <div class="status-indicator">
@@ -306,52 +526,48 @@
                 </div>
 
                 <div class="info-grid">
-    <div class="info-box">
-        <div class="info-label">Fase actual</div>
-        <div class="info-value" th:text="${convocatoria.estado == 'ACTIVA' ? 'Inscripción Abierta' : (convocatoria.estado == 'CERRADA' ? 'Proceso Finalizado' : 'Preparación')}">
-            Registro
-        </div>
-    </div>
+                    <div class="info-box">
+                        <div class="info-label">Fase actual</div>
+                        <div class="info-value"
+                             th:text="${convocatoria.estado == 'ACTIVA' ? 'Inscripción abierta' : (convocatoria.estado == 'CERRADA' ? 'Proceso finalizado' : 'Preparación')}">
+                            Inscripción abierta
+                        </div>
+                    </div>
 
-    <div class="info-box">
-        <div class="info-label">Tipo / Nivel</div>
-        <div class="info-value" th:text="${convocatoria.tipo}">
-            Educación Infantil
-        </div>
-    </div>
+                    <div class="info-box">
+                        <div class="info-label">Tipo / Nivel</div>
+                        <div class="info-value" th:text="${convocatoria.tipo}">
+                            Educación Infantil
+                        </div>
+                    </div>
 
-    <div class="info-box">
-        <div class="info-label">Plazas ofertadas</div>
-        <div class="info-value" th:text="${convocatoria.numeroPlazas}">
-            0
-        </div>
-    </div>
-</div>
-
+                    <div class="info-box">
+                        <div class="info-label">Plazas ofertadas</div>
+                        <div class="info-value" th:text="${convocatoria.numeroPlazas}">
+                            0
+                        </div>
+                    </div>
+                </div>
 
                 <div class="action-row">
-                    <!-- Enlace al detalle de la convocatoria -->
                     <a th:href="@{/admin/convocatoria/{id}(id=${convocatoria.id})}" class="primary-btn">
                         Ver detalle
                     </a>
 
-                    <!-- Enlace a solicitudes de ESTA convocatoria -->
                     <a th:href="@{/admin/convocatoria/{id}/solicitudes(id=${convocatoria.id})}" class="secondary-btn">
-                        Ver Solicitudes
+                        Ver solicitudes
                     </a>
 
-                    <!-- Enlace a edición solo si la convocatoria está activa -->
-                    <a th:if="${convocatoria.estado == 'ACTIVA' or convocatoria.estado == 'BORRADOR'}" 
-       th:href="@{/admin/convocatoria/editar/{id}(id=${convocatoria.id})}" 
-       class="secondary-btn">
-       Editar
-    </a>
+                    <a th:if="${convocatoria.estado == 'ACTIVA' or convocatoria.estado == 'BORRADOR'}"
+                       th:href="@{/admin/convocatoria/editar/{id}(id=${convocatoria.id})}"
+                       class="secondary-btn">
+                        Editar
+                    </a>
 
-    <span th:unless="${convocatoria.estado == 'ACTIVA' or convocatoria.estado == 'BORRADOR'}" 
-          class="secondary-btn" 
-          style="opacity: 0.5; cursor: not-allowed;">
-          Editar no disponible
-    </span>
+                    <span th:unless="${convocatoria.estado == 'ACTIVA' or convocatoria.estado == 'BORRADOR'}"
+                          class="secondary-btn disabled-btn">
+                        Editar no disponible
+                    </span>
                 </div>
             </div>
         </section>

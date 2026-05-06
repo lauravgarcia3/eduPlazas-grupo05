@@ -64,25 +64,17 @@ body {
 .logo {
     font-size: 30px;
     font-weight: 900;
-    color: #ffffff;
     letter-spacing: 0.2px;
+    color: #ffffff;
+    text-shadow: none;
 }
 
-.logo::first-letter {
+.logo-edu {
     color: #ffffff;
 }
 
-.logo {
-    position: relative;
-}
-
-.logo::after {
-    content: "";
-}
-
-/* Para que EduPlazas se vea como en el mockup si el HTML solo contiene texto plano */
-.logo {
-    text-shadow: none;
+.logo-plazas {
+    color: var(--color-primary-orange);
 }
 
 .topbar-right {
