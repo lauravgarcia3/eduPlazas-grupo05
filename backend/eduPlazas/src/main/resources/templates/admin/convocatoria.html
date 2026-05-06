@@ -116,6 +116,7 @@
             font-size: 14px;
             color: #111;
             outline: none;
+            box-sizing: border-box;
         }
 
         .form-group input,
@@ -127,6 +128,54 @@
             min-height: 160px;
             resize: vertical;
             padding: 14px 16px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus,
+        .center-column select:focus,
+        .places-column input:focus {
+            border-color: #d88a00;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(216, 138, 0, 0.14);
+        }
+
+        .form-group input:invalid:not(:placeholder-shown),
+        .form-group textarea:invalid:not(:placeholder-shown),
+        .form-group select:invalid,
+        .center-column select:invalid,
+        .places-column input:invalid:not(:placeholder-shown) {
+            border-color: #b90707;
+            background-color: #fff7f7;
+        }
+
+        .form-group input:valid:not(:placeholder-shown),
+        .form-group textarea:valid:not(:placeholder-shown),
+        .form-group select:valid,
+        .center-column select:valid,
+        .places-column input:valid:not(:placeholder-shown) {
+            border-color: #3f8f5f;
+            background-color: #f8fff9;
+        }
+
+        .form-help {
+            display: block;
+            margin-top: 6px;
+            font-size: 12px;
+            color: #666;
+            line-height: 1.3;
+        }
+
+        .form-error {
+            display: none;
+            margin-top: 8px;
+            font-size: 13px;
+            color: #b90707;
+            font-weight: 700;
+        }
+
+        .form-error.visible {
+            display: block;
         }
 
         .form-grid {
@@ -191,6 +240,7 @@
             font-size: 18px;
             color: #111;
             outline: none;
+            box-sizing: border-box;
         }
 
         .places-column input {
@@ -219,15 +269,14 @@
             color: white;
         }
 
-        /* Oculta la 'X' en la primera fila para que siempre haya al menos una visible */
         .fila-centro:first-child .remove-column {
             display: none;
         }
 
-        /* Ajuste de la primera fila al no tener la X para que cuadre bien */
         .fila-centro:first-child .center-grid {
             grid-template-columns: 1fr 260px;
         }
+
         .add-center-btn {
             width: 100%;
             height: 76px;
@@ -294,9 +343,17 @@
             color: white;
         }
 
+        .primary-btn:hover {
+            background-color: #c77400;
+        }
+
         .secondary-btn {
             background-color: #bdbdbd;
             color: white;
+        }
+
+        .secondary-btn:hover {
+            background-color: #a8a8a8;
         }
 
         .step-1-actions {
@@ -401,24 +458,52 @@
 
                     <div class="form-group">
                         <label for="nombreConvocatoria">Nombre de la convocatoria *</label>
-                        <input type="text" id="nombreConvocatoria" th:field="*{nombre}" placeholder="Ej: Educación Infantil 2026-2027" required>
+                        <input
+                            type="text"
+                            id="nombreConvocatoria"
+                            th:field="*{nombre}"
+                            placeholder="Ej: Educación Infantil 2026-2027"
+                            minlength="5"
+                            maxlength="100"
+                            required
+                            title="El nombre debe tener entre 5 y 100 caracteres.">
+                        <small class="form-help">Obligatorio. Entre 5 y 100 caracteres.</small>
                     </div>
 
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="fechaInicio">Fecha de inicio *</label>
-                            <input type="date" id="fechaInicio" th:field="*{fechaInicio}" required>
+                            <input
+                                type="date"
+                                id="fechaInicio"
+                                th:field="*{fechaInicio}"
+                                required
+                                title="Selecciona la fecha de inicio de la convocatoria.">
+                            <small class="form-help">Fecha en la que se abre el plazo de presentación.</small>
                         </div>
 
                         <div class="form-group">
                             <label for="fechaFin">Fecha de fin *</label>
-                            <input type="date" id="fechaFin" th:field="*{fechaFin}" required>
+                            <input
+                                type="date"
+                                id="fechaFin"
+                                th:field="*{fechaFin}"
+                                required
+                                title="Selecciona la fecha de fin de la convocatoria.">
+                            <small class="form-help">Debe ser posterior o igual a la fecha de inicio.</small>
+                            <span id="fecha-error" class="form-error">La fecha de fin no puede ser anterior a la fecha de inicio.</span>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="descripcionConvocatoria">Descripción de la convocatoria</label>
-                        <textarea id="descripcionConvocatoria" th:field="*{descripcion}"></textarea>
+                        <textarea
+                            id="descripcionConvocatoria"
+                            th:field="*{descripcion}"
+                            placeholder="Descripción breve de la convocatoria"
+                            maxlength="500"
+                            title="La descripción no puede superar los 500 caracteres."></textarea>
+                        <small class="form-help">Opcional. Máximo 500 caracteres.</small>
                     </div>
 
                     <div class="config-box">
@@ -426,35 +511,47 @@
 
                         <div class="form-grid">
                             <div class="form-group">
-                                <label for="tipoConvocatoria">Tipo de convocatoria</label>
-                                <select id="tipoConvocatoria" th:field="*{tipo}">
+                                <label for="tipoConvocatoria">Tipo de convocatoria *</label>
+                                <select id="tipoConvocatoria" th:field="*{tipo}" required title="Selecciona el tipo de convocatoria.">
                                     <option value="Educación Infantil">Educación Infantil</option>
                                     <option value="Educación Primaria">Educación Primaria</option>
                                     <option value="Educación Secundaria">Educación Secundaria</option>
                                 </select>
+                                <small class="form-help">Campo obligatorio.</small>
                             </div>
 
                             <div class="form-group">
-                                <label for="estadoInicial">Estado inicial</label>
-                                <select id="estadoInicial" th:field="*{estado}">
+                                <label for="estadoInicial">Estado inicial *</label>
+                                <select id="estadoInicial" th:field="*{estado}" required title="Selecciona el estado inicial.">
                                     <option value="BORRADOR">Borrador</option>
                                     <option value="ACTIVA">Publicar como Activa</option>
                                     <option value="CERRADA">Cerrada</option>
                                 </select>
+                                <small class="form-help">Campo obligatorio.</small>
                             </div>
 
                             <div class="form-group">
-                                <label for="anioAcademico">Año académico</label>
-                                <input type="text" id="anioAcademico" th:field="*{anioAcademico}" placeholder="2026-2027">
+                                <label for="anioAcademico">Año académico *</label>
+                                <input
+                                    type="text"
+                                    id="anioAcademico"
+                                    th:field="*{anioAcademico}"
+                                    placeholder="2026-2027"
+                                    pattern="[0-9]{4}-[0-9]{4}"
+                                    maxlength="9"
+                                    required
+                                    title="Introduce el año académico con formato YYYY-YYYY. Ejemplo: 2026-2027.">
+                                <small class="form-help">Formato obligatorio: 2026-2027.</small>
                             </div>
 
                             <div class="form-group">
-                                <label for="modalidad">Modalidad</label>
-                                <select id="modalidad" th:field="*{modalidad}">
+                                <label for="modalidad">Modalidad *</label>
+                                <select id="modalidad" th:field="*{modalidad}" required title="Selecciona una modalidad.">
                                     <option value="Presencial">Presencial</option>
                                     <option value="Online">Online</option>
                                     <option value="Mixta">Mixta</option>
                                 </select>
+                                <small class="form-help">Campo obligatorio.</small>
                             </div>
                         </div>
                     </div>
@@ -465,7 +562,7 @@
                 </section>
             </section>
 
-<section id="step-2" style="display: none;">
+            <section id="step-2" style="display: none;">
                 <section class="form-card">
                     <div class="stepper">
                         <div class="step">
@@ -480,7 +577,7 @@
                     </div>
 
                     <p class="step-description">
-                        Seleccione los centros educativos participantes y asigne el número de plazas disponibles para cada uno
+                        Seleccione los centros educativos participantes y asigne el número de plazas disponibles para cada uno.
                     </p>
 
                     <input type="hidden" id="nombreCentroReal" th:field="*{nombreCentro}">
@@ -489,21 +586,34 @@
                     <input type="hidden" id="nombresCentrosArray" name="nombresCentrosArray">
                     <input type="hidden" id="plazasCentrosArray" name="plazasCentrosArray">
 
+                    <div id="centros-error" class="form-error">Debe seleccionar al menos un centro y asignar plazas válidas.</div>
+
                     <div id="contenedor-centros">
                         <div class="center-card fila-centro">
                             <div class="center-grid">
                                 <div class="center-column">
-                                    <label class="center-label">Centro Educativo</label>
-                                    <select class="centro-select" required onchange="actualizarDesplegables()">
+                                    <label class="center-label">Centro Educativo *</label>
+                                    <select class="centro-select" required onchange="actualizarDesplegables()" title="Selecciona un centro educativo.">
                                         <option value="" selected disabled>Seleccione un centro...</option>
                                         <option th:each="centro : ${centros}" th:value="${centro.nombre}" th:text="${centro.nombre}"></option>
                                     </select>
+                                    <small class="form-help">No se puede seleccionar el mismo centro dos veces.</small>
                                 </div>
 
                                 <div class="places-column">
-                                    <label class="center-label">Plazas Disponibles</label>
-                                    <input type="number" class="plazas-input" placeholder="Ej: 50" required min="1">
+                                    <label class="center-label">Plazas Disponibles *</label>
+                                    <input
+                                        type="number"
+                                        class="plazas-input"
+                                        placeholder="Ej: 50"
+                                        required
+                                        min="1"
+                                        max="1000"
+                                        step="1"
+                                        title="Introduce un número entero de plazas mayor que 0.">
+                                    <small class="form-help">Número entero positivo. Máximo 1000 por centro.</small>
                                 </div>
+
                                 <div class="remove-column">
                                     <button type="button" class="remove-center-btn" onclick="eliminarCentro(this)" title="Quitar centro">✕</button>
                                 </div>
@@ -532,11 +642,50 @@
             </section>
 
         </form>
-        </div>
+    </div>
 </main>
 
 <script>
+    function validarFechas() {
+        const fechaInicio = document.getElementById('fechaInicio');
+        const fechaFin = document.getElementById('fechaFin');
+        const fechaError = document.getElementById('fecha-error');
+
+        fechaFin.setCustomValidity('');
+        fechaError.classList.remove('visible');
+
+        if (fechaInicio.value && fechaFin.value && fechaFin.value < fechaInicio.value) {
+            fechaFin.setCustomValidity('La fecha de fin no puede ser anterior a la fecha de inicio.');
+            fechaError.classList.add('visible');
+            return false;
+        }
+
+        return true;
+    }
+
+    function validarPaso1() {
+        const camposPaso1 = document.querySelectorAll('#step-1 input, #step-1 select, #step-1 textarea');
+
+        for (const campo of camposPaso1) {
+            if (!campo.checkValidity()) {
+                campo.reportValidity();
+                return false;
+            }
+        }
+
+        if (!validarFechas()) {
+            document.getElementById('fechaFin').reportValidity();
+            return false;
+        }
+
+        return true;
+    }
+
     function showStep2() {
+        if (!validarPaso1()) {
+            return;
+        }
+
         document.getElementById('step-1').style.display = 'none';
         document.getElementById('step-2').style.display = 'block';
     }
@@ -546,45 +695,46 @@
         document.getElementById('step-1').style.display = 'block';
     }
 
-    // CLONA LA TARJETA DEL CENTRO
     function agregarCentro() {
         const contenedor = document.getElementById('contenedor-centros');
         const filas = contenedor.getElementsByClassName('fila-centro');
-        
-        // Clonamos la primera fila
+
         const nuevaFila = filas[0].cloneNode(true);
-        
-        // Vaciamos los valores del clon
+
         nuevaFila.querySelector('.centro-select').value = "";
         nuevaFila.querySelector('.plazas-input').value = "";
-        
+
         contenedor.appendChild(nuevaFila);
         actualizarDesplegables();
     }
-    // ELIMINA LA FILA DEL CENTRO CORRESPONDIENTE
+
     function eliminarCentro(btn) {
+        const contenedor = document.getElementById('contenedor-centros');
+        const filas = contenedor.getElementsByClassName('fila-centro');
+
+        if (filas.length <= 1) {
+            return;
+        }
+
         const fila = btn.closest('.fila-centro');
         fila.remove();
-        
-        // Actualizamos los desplegables para que el centro borrado vuelva a estar disponible
+
         actualizarDesplegables();
     }
-    // DESACTIVA LOS CENTROS YA SELECCIONADOS EN OTROS DESPLEGABLES
+
     function actualizarDesplegables() {
         const selects = document.querySelectorAll('.centro-select');
-        
-        // Obtenemos todos los centros que ya están elegidos
+
         const valoresSeleccionados = Array.from(selects)
             .map(s => s.value)
             .filter(val => val !== "");
 
-        // Recorremos cada desplegable para bloquear los usados
         selects.forEach(select => {
             const valorActual = select.value;
-            
+
             Array.from(select.options).forEach(option => {
-                if (option.value === "") return; // Ignoramos el placeholder
-                
+                if (option.value === "") return;
+
                 if (valoresSeleccionados.includes(option.value) && option.value !== valorActual) {
                     option.disabled = true;
                     option.style.display = 'none';
@@ -596,31 +746,93 @@
         });
     }
 
-    // SUMA LAS PLAZAS Y RECOPILA NOMBRES AL ENVIAR
-   function prepararEnvio() {
+    function validarCentrosYPlazas() {
         const selects = document.querySelectorAll('.centro-select');
         const inputs = document.querySelectorAll('.plazas-input');
-        
+        const centrosError = document.getElementById('centros-error');
+
+        centrosError.classList.remove('visible');
+
+        let centrosSeleccionados = [];
+        let hayCentroValido = false;
+
+        for (let i = 0; i < selects.length; i++) {
+            selects[i].setCustomValidity('');
+            inputs[i].setCustomValidity('');
+
+            if (!selects[i].value) {
+                selects[i].setCustomValidity('Debe seleccionar un centro.');
+                selects[i].reportValidity();
+                centrosError.classList.add('visible');
+                return false;
+            }
+
+            if (!inputs[i].value || parseInt(inputs[i].value) < 1) {
+                inputs[i].setCustomValidity('Debe introducir un número de plazas mayor que 0.');
+                inputs[i].reportValidity();
+                centrosError.classList.add('visible');
+                return false;
+            }
+
+            if (parseInt(inputs[i].value) > 1000) {
+                inputs[i].setCustomValidity('El número de plazas no puede superar 1000 por centro.');
+                inputs[i].reportValidity();
+                centrosError.classList.add('visible');
+                return false;
+            }
+
+            if (centrosSeleccionados.includes(selects[i].value)) {
+                selects[i].setCustomValidity('No puede seleccionar el mismo centro dos veces.');
+                selects[i].reportValidity();
+                centrosError.textContent = 'No puede seleccionar el mismo centro dos veces.';
+                centrosError.classList.add('visible');
+                return false;
+            }
+
+            centrosSeleccionados.push(selects[i].value);
+            hayCentroValido = true;
+        }
+
+        if (!hayCentroValido) {
+            centrosError.textContent = 'Debe seleccionar al menos un centro y asignar plazas válidas.';
+            centrosError.classList.add('visible');
+            return false;
+        }
+
+        return true;
+    }
+
+    function prepararEnvio() {
+        if (!validarPaso1()) {
+            showStep1();
+            return false;
+        }
+
+        if (!validarCentrosYPlazas()) {
+            return false;
+        }
+
+        const selects = document.querySelectorAll('.centro-select');
+        const inputs = document.querySelectorAll('.plazas-input');
+
         let nombresCentros = [];
         let plazasIndividuales = [];
         let totalPlazas = 0;
-        
-        for(let i = 0; i < selects.length; i++) {
-            if(selects[i].value && inputs[i].value) {
+
+        for (let i = 0; i < selects.length; i++) {
+            if (selects[i].value && inputs[i].value) {
                 nombresCentros.push(selects[i].value);
                 plazasIndividuales.push(inputs[i].value);
                 totalPlazas += parseInt(inputs[i].value);
             }
         }
-        
+
         document.getElementById('nombreCentroReal').value = nombresCentros.join(", ");
         document.getElementById('numeroPlazasReal').value = totalPlazas;
-        
+
         document.getElementById('nombresCentrosArray').value = nombresCentros.join(",");
         document.getElementById('plazasCentrosArray').value = plazasIndividuales.join(",");
-        
-        // --- BLOQUEO DE SEGURIDAD (ANTIDUPLICADOS) ---
-        // Buscamos el botón de enviar (el que es de tipo submit)
+
         const btn = document.querySelector('button[type="submit"]');
         if (btn) {
             btn.disabled = true;
@@ -628,8 +840,12 @@
             btn.style.opacity = "0.6";
             btn.style.cursor = "not-allowed";
         }
+
         return true;
     }
+
+    document.getElementById('fechaInicio').addEventListener('change', validarFechas);
+    document.getElementById('fechaFin').addEventListener('change', validarFechas);
 </script>
 
 </body>
