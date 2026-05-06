@@ -6,90 +6,182 @@
 
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <style>
+        body {
+            background-color: #f6f8fb;
+        }
+
+        .logo span {
+            color: #ffffff;
+        }
+
+        .logo strong {
+            color: #f06f00;
+        }
+
+        .topbar {
+            min-height: 72px;
+            padding: 0 56px;
+            background-color: #064a8f;
+        }
+
+        .logout-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 38px;
+            padding: 0 22px;
+            border-radius: 10px;
+            background-color: #f06f00;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 900;
+            box-shadow: 0 5px 12px rgba(240, 111, 0, 0.24);
+        }
+
+        .logout-btn:hover {
+            background-color: #c85c00;
+            color: #ffffff;
+        }
+
         .page-content {
-            padding: 20px;
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 28px 28px 52px 28px;
         }
 
         .hero-card {
-            display: flex;
-            background-color: #e1b76f;
-            border-radius: 34px;
+            display: grid;
+            grid-template-columns: 1fr 1.15fr;
+            background-color: #ffffff;
+            border-radius: 24px;
             overflow: hidden;
             margin-bottom: 28px;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 10px 28px rgba(15, 35, 60, 0.10);
+            border: 1px solid #e3e8ef;
+            min-height: 300px;
         }
 
         .hero-left {
-            width: 50%;
-            padding: 18px 22px 18px 22px;
+            padding: 42px 38px;
             position: relative;
-            color: white;
+            background:
+                radial-gradient(circle at 88% 36%, rgba(240, 111, 0, 0.08) 0, rgba(240, 111, 0, 0.08) 190px, transparent 191px),
+                linear-gradient(135deg, #fff9f2 0%, #ffffff 76%);
+            color: #172033;
+            display: flex;
+            align-items: center;
         }
 
-        .hero-circle {
-            position: absolute;
-            top: 18px;
-            right: 18px;
-            width: 54px;
-            height: 54px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.35);
+        .hero-content {
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 18px;
+            padding: 9px 14px;
+            border-radius: 999px;
+            background-color: #fff2e6;
+            color: #c85c00;
+            font-size: 14px;
+            font-weight: 900;
+        }
+
+        .hero-badge-icon {
+            font-size: 17px;
         }
 
         .hero-left h1 {
-            font-size: 30px;
-            line-height: 1.15;
-            margin: 0 0 10px 0;
-            font-weight: 800;
+            font-size: 40px;
+            line-height: 1.14;
+            margin: 0 0 18px 0;
+            font-weight: 900;
+            color: #172033;
+            letter-spacing: -0.4px;
         }
 
         .hero-left p {
-            font-size: 15px;
-            margin: 0 0 12px 0;
-            color: #fff;
+            font-size: 16px;
+            margin: 0 0 24px 0;
+            color: #526173;
+            font-weight: 700;
         }
 
         .primary-btn {
-            display: inline-block;
-            background-color: #e58d00;
-            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: #f06f00;
+            color: #ffffff;
             text-decoration: none;
-            font-size: 16px;
-            font-weight: 700;
-            padding: 10px 20px;
-            border-radius: 14px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+            font-size: 15px;
+            font-weight: 900;
+            padding: 13px 24px;
+            border-radius: 11px;
+            box-shadow: 0 8px 18px rgba(240, 111, 0, 0.24);
+            border: none;
+            cursor: pointer;
         }
 
         .primary-btn:hover {
-            background-color: #c77400;
+            background-color: #c85c00;
+            color: #ffffff;
+            transform: translateY(-1px);
         }
 
         .hero-right {
-            width: 50%;
-            background-color: white;
+            background-color: #ffffff;
+            min-height: 300px;
         }
 
         .hero-right img {
             width: 100%;
             height: 100%;
+            min-height: 300px;
             object-fit: cover;
             object-position: center;
             display: block;
         }
 
-        .solicitudes-card {
-            background-color: #ddb36a;
-            border-radius: 34px;
-            padding: 22px 26px 16px 26px;
-            margin-bottom: 28px;
+        .panel-card {
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 26px 30px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 24px rgba(15, 35, 60, 0.08);
+            border: 1px solid #e3e8ef;
         }
 
-        .solicitudes-card h2 {
-            margin: 0 0 22px 0;
-            font-size: 36px;
-            color: #e58d00;
-            font-weight: 800;
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .section-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff2e6;
+            color: #f06f00;
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            font-size: 25px;
+            color: #f06f00;
+            font-weight: 900;
         }
 
         .solicitudes-header,
@@ -101,264 +193,357 @@
         }
 
         .solicitudes-header {
-            font-size: 22px;
-            color: white;
-            font-weight: 700;
-            margin-bottom: 16px;
+            padding: 0 18px 12px 18px;
+            font-size: 14px;
+            color: #172033;
+            font-weight: 900;
         }
 
         .solicitud-row {
-            font-size: 18px;
-            color: white;
-            padding: 6px 0;
+            font-size: 15px;
+            color: #172033;
+            padding: 14px 18px;
+            border: 1px solid #dbe7f2;
+            background-color: #f9fbfd;
+            border-radius: 10px;
+            margin-bottom: 10px;
         }
 
         .nombre-menor {
-            color: white;
+            color: #172033;
+            font-weight: 800;
         }
 
         .estado-pill {
-            display: inline-block;
-            background-color: rgba(255,255,255,0.35);
-            color: white;
-            padding: 7px 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: fit-content;
+            background-color: #eaf3ff;
+            color: #064a8f;
+            padding: 8px 13px;
             border-radius: 999px;
-            font-size: 16px;
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .estado-borrador {
+            background-color: #fff5dc;
+            color: #c87900;
+        }
+
+        .estado-enviada {
+            background-color: #eaf3ff;
+            color: #064a8f;
         }
 
         .puntuacion {
             text-align: center;
-            font-weight: bold;
+            font-weight: 900;
+            color: #172033;
         }
 
         .action-btn {
-            display: inline-block;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
             width: 100%;
             box-sizing: border-box;
             text-align: center;
-            background-color: #e58d00;
-            color: white;
+            background-color: #064a8f;
+            color: #ffffff;
             text-decoration: none;
-            font-size: 16px;
-            font-weight: 700;
-            padding: 8px 14px;
-            border-radius: 12px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.10);
+            font-size: 14px;
+            font-weight: 900;
+            padding: 9px 14px;
+            border-radius: 10px;
         }
 
         .action-btn:hover {
-            background-color: #c77400;
+            background-color: #03386e;
+            color: #ffffff;
+        }
+
+        .sin-solicitudes {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #064a8f;
+            font-size: 15px;
+            font-weight: 800;
+            padding: 14px 18px;
+            border: 1px solid #d4e7ff;
+            background-color: #f5faff;
+            border-radius: 10px;
+        }
+
+        .sin-solicitudes::before {
+            content: "ⓘ";
+            font-size: 18px;
+            color: #1b75cf;
         }
 
         .fechas-card {
-            background-color: #67a8cf;
-            border-radius: 34px;
-            padding: 20px 24px;
+            background-color: #f5faff;
+            border-radius: 20px;
+            padding: 26px 30px;
+            box-shadow: 0 8px 24px rgba(15, 35, 60, 0.08);
+            border: 1px solid #dbeaf8;
         }
 
-        .fechas-card h2 {
-            margin: 0 0 22px 0;
-            font-size: 34px;
-            color: white;
-            font-weight: 800;
+        .fechas-card .section-heading h2 {
+            color: #064a8f;
+        }
+
+        .fechas-card .section-icon {
+            background-color: #eaf3ff;
+            color: #064a8f;
         }
 
         .fechas-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
+            gap: 16px;
         }
 
         .fecha-item {
-            background-color: rgba(255,255,255,0.28);
-            border-radius: 999px;
-            text-align: center;
-            padding: 10px 8px;
-            color: white;
+            display: grid;
+            grid-template-columns: 42px 1fr;
+            gap: 12px;
+            align-items: center;
+            background-color: #ffffff;
+            border: 1px solid #e3e8ef;
+            border-radius: 13px;
+            padding: 14px 16px;
+            color: #172033;
+            box-shadow: 0 5px 14px rgba(15, 35, 60, 0.06);
+        }
+
+        .fecha-item::before {
+            content: "▣";
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #096bc1;
+            color: #ffffff;
+            font-size: 17px;
+            font-weight: 900;
         }
 
         .fecha-titulo {
-            font-size: 16px;
-            font-weight: 500;
-            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 900;
+            margin-bottom: 4px;
+            color: #172033;
         }
 
         .fecha-texto {
             font-size: 13px;
-            color: #184f72;
-            font-weight: 500;
+            color: #526173;
+            font-weight: 700;
         }
 
-        .estado-borrador {
-            background-color: rgba(255,255,255,0.35);
-        }
-
-        .estado-enviada {
-            background-color: rgba(255,255,255,0.5);
-        }
-
-        .sin-solicitudes {
-            color: white;
-            font-size: 18px;
-            padding: 10px 0;
-        }
-
-        @media (max-width: 1200px) {
+        @media (max-width: 1100px) {
             .hero-card {
-                flex-direction: column;
+                grid-template-columns: 1fr;
             }
 
-            .hero-left,
-            .hero-right {
-                width: 100%;
-            }
-
-            /* Mantener la estructura en pantallas medianas */
-            .solicitudes-header,
-            .solicitud-row {
-                grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
+            .hero-right img {
+                max-height: 320px;
             }
 
             .fechas-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .solicitudes-header,
+            .solicitud-row {
+                grid-template-columns: 1.5fr 1fr 1fr 1.4fr;
             }
         }
 
         @media (max-width: 768px) {
+            .topbar {
+                padding: 18px 20px;
+            }
+
+            .page-content {
+                padding: 20px 16px 40px 16px;
+            }
+
+            .hero-left {
+                padding: 30px 22px;
+            }
+
             .hero-left h1 {
-                font-size: 34px;
+                font-size: 31px;
             }
 
-            .solicitudes-card h2,
-            .fechas-card h2 {
-                font-size: 34px;
+            .panel-card,
+            .fechas-card {
+                padding: 22px 18px;
             }
 
-            .fechas-grid {
-                grid-template-columns: 1fr;
-            }
-
-            /* FIX RESPONSIVE: Convertir en tarjetas para móviles */
             .solicitudes-header {
-                display: none; 
+                display: none;
             }
 
             .solicitud-row {
                 grid-template-columns: 1fr;
-                background-color: rgba(255,255,255,0.15); 
-                padding: 16px;
-                border-radius: 16px;
-                margin-bottom: 12px;
-                text-align: center;
                 row-gap: 12px;
             }
-            
+
+            .puntuacion {
+                text-align: left;
+            }
+
             .puntuacion::before {
                 content: "Puntuación: ";
-                font-weight: normal;
+                font-weight: 700;
+                color: #526173;
+            }
+
+            .fechas-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <header class="topbar">
-        <div class="logo">EduPlazas</div>
-        <a th:href="@{/login}" class="primary-btn">Logout</a>
-    </header>
+<header class="topbar">
+    <div class="logo"><span>Edu</span><strong>Plazas</strong></div>
+    <a th:href="@{/login}" class="logout-btn">Cerrar sesión</a>
+</header>
 
-    <main class="page-content">
+<main class="page-content">
 
-        <section class="hero-card">
-            <div class="hero-left">
-                <div class="hero-circle"></div>
-                
+    <section class="hero-card">
+        <div class="hero-left">
+            <div class="hero-content">
                 <div th:if="${convocatoriaActiva != null}">
-                    <h1>Convocatoria Abierta:<br>
+                    <div class="hero-badge">
+                        <span class="hero-badge-icon">📣</span>
+                        <span>Convocatoria abierta</span>
+                    </div>
+
+                    <h1>
                         <span th:text="${convocatoriaActiva.nombre}">Educación Infantil 2026-2027</span>
                     </h1>
-                    <p>Periodo de inscripción: 
-                        <span th:text="${fechaInicioFormat} + ' - ' + ${fechaFinFormat}">2 de marzo - 29 de mayo de 2026</span>
+
+                    <p>
+                        Periodo de inscripción:
+                        <span th:text="${fechaInicioFormat} + ' - ' + ${fechaFinFormat}">
+                            1 de marzo - 31 de mayo
+                        </span>
                     </p>
-                    <a th:href="@{/solicitante/solicitud}" class="primary-btn">Registrar nueva solicitud de plaza</a>
+
+                    <a th:href="@{/solicitante/solicitud}" class="primary-btn">
+                        Registrar nueva solicitud de plaza <span>›</span>
+                    </a>
                 </div>
 
                 <div th:unless="${convocatoriaActiva != null}">
-                    <h1>No hay convocatorias<br>abiertas actualmente</h1>
+                    <div class="hero-badge">
+                        <span class="hero-badge-icon">ℹ</span>
+                        <span>Sin convocatoria activa</span>
+                    </div>
+
+                    <h1>No hay convocatorias abiertas actualmente</h1>
                     <p>Por favor, consulte las fechas clave más abajo para el próximo proceso.</p>
                 </div>
             </div>
+        </div>
 
-            <div class="hero-right">
-                <img th:src="@{/images/home-solicitante.png}" alt="Imagen convocatoria solicitante">
-            </div>
-        </section>
+        <div class="hero-right">
+            <img th:src="@{/images/home-solicitante.png}" alt="Imagen convocatoria solicitante">
+        </div>
+    </section>
 
-        <section class="solicitudes-card">
+    <section class="panel-card">
+        <div class="section-heading">
+            <span class="section-icon">▤</span>
             <h2>Mis solicitudes</h2>
+        </div>
 
-            <div class="solicitudes-header">
-                <div>Nombre del Menor</div>
-                <div>Estado</div>
-                <div class="puntuacion">Puntuación</div>
-                <div>Acciones</div>
-            </div>
-            
-            <div th:if="${#lists.isEmpty(solicitudesIncompletas) and #lists.isEmpty(solicitudesCompletas)}" class="sin-solicitudes">
-                No tienes solicitudes registradas todavía.
-            </div>
+        <div class="solicitudes-header">
+            <div>Nombre del Menor</div>
+            <div>Estado</div>
+            <div class="puntuacion">Puntuación</div>
+            <div>Acciones</div>
+        </div>
 
-            <div class="solicitud-row" th:each="solicitud : ${solicitudesIncompletas}">
-                <div class="nombre-menor" th:text="${solicitud.menor != null ? solicitud.menor.nombre + ' ' + solicitud.menor.apellidos : 'Sin nombre'}"></div>
-                <div><span class="estado-pill estado-borrador">Borrador</span></div>
-                <div class="puntuacion" th:text="${puntosPorSolicitud[solicitud.id] != null ? puntosPorSolicitud[solicitud.id] : '-'}">-</div>
+        <div th:if="${#lists.isEmpty(solicitudesIncompletas) and #lists.isEmpty(solicitudesCompletas)}" class="sin-solicitudes">
+            No tienes solicitudes registradas todavía.
+        </div>
+
+        <div class="solicitud-row" th:each="solicitud : ${solicitudesIncompletas}">
+            <div class="nombre-menor" th:text="${solicitud.menor != null ? solicitud.menor.nombre + ' ' + solicitud.menor.apellidos : 'Sin nombre'}"></div>
+            <div><span class="estado-pill estado-borrador">Borrador</span></div>
+            <div class="puntuacion" th:text="${puntosPorSolicitud[solicitud.id] != null ? puntosPorSolicitud[solicitud.id] : '-'}">-</div>
+            <div>
+                <a th:href="@{/solicitante/solicitud(id=${solicitud.id})}" class="action-btn">Continuar</a>
+            </div>
+        </div>
+
+        <div class="solicitud-row" th:each="solicitud : ${solicitudesCompletas}">
+            <div class="nombre-menor" th:text="${solicitud.menor != null ? solicitud.menor.nombre + ' ' + solicitud.menor.apellidos : 'Sin nombre'}"></div>
+            <div><span class="estado-pill estado-enviada">Enviada</span></div>
+            <div class="puntuacion" th:text="${puntosPorSolicitud[solicitud.id] != null ? puntosPorSolicitud[solicitud.id] : '-'}">-</div>
+            <div>
+                <a th:href="@{/solicitante/estado(id=${solicitud.id})}" class="action-btn">Ver detalle</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="fechas-card">
+        <div class="section-heading">
+            <span class="section-icon">▣</span>
+            <h2>Fechas clave del proceso</h2>
+        </div>
+
+        <div class="fechas-grid" th:if="${convocatoriaActiva != null}">
+            <div class="fecha-item">
                 <div>
-                    <a th:href="@{/solicitante/solicitud(id=${solicitud.id})}" class="action-btn">Continuar</a>
-                </div>
-            </div>
-
-            <div class="solicitud-row" th:each="solicitud : ${solicitudesCompletas}">
-                <div class="nombre-menor" th:text="${solicitud.menor != null ? solicitud.menor.nombre + ' ' + solicitud.menor.apellidos : 'Sin nombre'}"></div>
-                <div><span class="estado-pill estado-enviada">Enviada</span></div>
-                <div class="puntuacion" th:text="${puntosPorSolicitud[solicitud.id] != null ? puntosPorSolicitud[solicitud.id] : '-'}">-</div>
-                <div>
-                    <a th:href="@{/solicitante/estado(id=${solicitud.id})}" class="action-btn">Ver Detalle</a>
-                </div>
-            </div>
-        </section>
-
-        <section class="fechas-card">
-            <h2>Fechas Clave del Proceso:</h2>
-
-            <div class="fechas-grid" th:if="${convocatoriaActiva != null}">
-                <div class="fecha-item">
                     <div class="fecha-titulo">Registro de solicitudes</div>
                     <div class="fecha-texto" th:text="${fechaInicioFormat} + ' - ' + ${fechaFinFormat}"></div>
                 </div>
+            </div>
 
-                <div class="fecha-item">
+            <div class="fecha-item">
+                <div>
                     <div class="fecha-titulo">Listados provisionales</div>
                     <div class="fecha-texto" th:text="${fechaProvisionales}"></div>
                 </div>
+            </div>
 
-                <div class="fecha-item">
+            <div class="fecha-item">
+                <div>
                     <div class="fecha-titulo">Reclamaciones</div>
                     <div class="fecha-texto" th:text="${fechaReclamaciones}"></div>
                 </div>
+            </div>
 
-                <div class="fecha-item">
+            <div class="fecha-item">
+                <div>
                     <div class="fecha-titulo">Listados definitivos</div>
                     <div class="fecha-texto" th:text="${fechaDefinitivos}"></div>
                 </div>
             </div>
+        </div>
 
-            <div class="fechas-grid" th:unless="${convocatoriaActiva != null}">
-                <div class="fecha-item">
+        <div class="fechas-grid" th:unless="${convocatoriaActiva != null}">
+            <div class="fecha-item">
+                <div>
                     <div class="fecha-titulo">Aviso</div>
                     <div class="fecha-texto">Fechas pendientes de publicación</div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-    </main>
+</main>
 </body>
 </html>
