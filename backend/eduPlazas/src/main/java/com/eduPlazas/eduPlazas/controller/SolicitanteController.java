@@ -248,7 +248,7 @@ public class SolicitanteController {
             }
         }
 
-        if (documentos != null) {
+        if (documentos != null && documentos.length > 0) {
             for (MultipartFile archivo : documentos) {
                 if (archivo != null && !archivo.isEmpty()) {
                     DocumentoAdjunto doc = new DocumentoAdjunto();

@@ -1,35 +1,178 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Nueva convocatoria</title>
+    <title>Nueva convocatoria - EduPlazas</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 40px;
+            color: #222;
+        }
+
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 32px;
+            border-radius: 18px;
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 24px;
+            color: #d88a00;
+            font-size: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #111;
+        }
+
+        input {
+            width: 100%;
+            height: 44px;
+            padding: 10px 12px;
+            border: 1.5px solid #bdbdbd;
+            border-radius: 10px;
+            font-size: 15px;
+            background-color: #f9f9f9;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #e58d00;
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(229, 141, 0, 0.15);
+        }
+
+        input:invalid:not(:placeholder-shown) {
+            border-color: #b90707;
+            background-color: #fff7f7;
+        }
+
+        input:valid:not(:placeholder-shown) {
+            border-color: #3f8f5f;
+            background-color: #f8fff9;
+        }
+
+        .form-help {
+            display: block;
+            margin-top: 6px;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.3;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-top: 24px;
+        }
+
+        .btn {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 10px;
+            background-color: #e58d00;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #c77400;
+        }
+
+        .btn-secondary {
+            background-color: #eeeeee;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background-color: #dddddd;
+        }
+    </style>
 </head>
+
 <body>
-<h1>Nueva convocatoria</h1>
+<div class="container">
+    <h1>Nueva convocatoria</h1>
 
-<form th:action="@{/admin/convocatoria}" th:object="${convocatoria}" method="post">
-    <p>
-        Nombre:
-        <input type="text" th:field="*{nombre}">
-    </p>
-    <p>
-        Fecha inicio (YYYY-MM-DD):
-        <input type="text" th:field="*{fechaInicio}">
-    </p>
-    <p>
-        Fecha fin (YYYY-MM-DD):
-        <input type="text" th:field="*{fechaFin}">
-    </p>
-    <p>
-        Plazas totales:
-        <input type="number" th:field="*{plazasTotales}">
-    </p>
-    <p>
-        <button type="submit">Guardar</button>
-    </p>
-</form>
+    <form th:action="@{/admin/convocatoria}" th:object="${convocatoria}" method="post">
+        <div class="form-group">
+            <label for="nombre">Nombre de la convocatoria</label>
+            <input
+                type="text"
+                id="nombre"
+                th:field="*{nombre}"
+                placeholder="Ej. Convocatoria curso 2026/2027"
+                minlength="5"
+                maxlength="100"
+                required
+                title="El nombre de la convocatoria debe tener entre 5 y 100 caracteres.">
+            <small class="form-help">Introduce un nombre claro. Entre 5 y 100 caracteres.</small>
+        </div>
 
-<p><a th:href="@{/admin/convocatoria}">Volver al listado</a></p>
+        <div class="form-group">
+            <label for="fechaInicio">Fecha de inicio</label>
+            <input
+                type="date"
+                id="fechaInicio"
+                th:field="*{fechaInicio}"
+                required
+                title="Selecciona la fecha de inicio de la convocatoria.">
+            <small class="form-help">Fecha en la que comienza el periodo de solicitud.</small>
+        </div>
 
+        <div class="form-group">
+            <label for="fechaFin">Fecha de fin</label>
+            <input
+                type="date"
+                id="fechaFin"
+                th:field="*{fechaFin}"
+                required
+                title="Selecciona la fecha de fin de la convocatoria.">
+            <small class="form-help">Fecha límite para presentar solicitudes.</small>
+        </div>
+
+        <div class="form-group">
+            <label for="plazasTotales">Plazas totales</label>
+            <input
+                type="number"
+                id="plazasTotales"
+                th:field="*{plazasTotales}"
+                placeholder="Ej. 100"
+                min="1"
+                max="10000"
+                step="1"
+                required
+                title="Introduce un número entero de plazas mayor que 0.">
+            <small class="form-help">Debe ser un número entero positivo.</small>
+        </div>
+
+        <div class="actions">
+            <button type="submit" class="btn">Guardar convocatoria</button>
+            <a th:href="@{/admin/convocatoria}" class="btn btn-secondary">Volver al listado</a>
+        </div>
+    </form>
+</div>
 </body>
 </html>

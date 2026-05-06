@@ -99,7 +99,7 @@ grid-column: 1 / -1;
 font-size: 11px;
 color: #444;
 margin-bottom: 5px;
-font-weight: 500;
+font-weight: 600;
 }
 
 .form-group input,
@@ -112,6 +112,7 @@ background-color: #f5f5f5;
 padding: 6px 10px;
 font-size: 12px;
 color: #222;
+box-sizing: border-box;
 }
 
 .form-group input:focus,
@@ -119,6 +120,27 @@ color: #222;
 outline: none;
 border-color: #d88a00;
 background-color: white;
+box-shadow: 0 0 0 3px rgba(216, 138, 0, 0.14);
+}
+
+.form-group input:invalid:not(:placeholder-shown),
+.form-group select:invalid {
+border-color: #b90707;
+background-color: #fff7f7;
+}
+
+.form-group input:valid:not(:placeholder-shown),
+.form-group select:valid {
+border-color: #3f8f5f;
+background-color: #f8fff9;
+}
+
+.form-help {
+display: block;
+margin-top: 4px;
+font-size: 11px;
+color: #666;
+line-height: 1.25;
 }
 
 .hint-link {
@@ -178,6 +200,14 @@ width: 15px;
 height: 15px;
 }
 
+.checkbox-group input[type="checkbox"]:required:invalid {
+outline: 2px solid #b90707;
+}
+
+.checkbox-group input[type="checkbox"]:required:valid {
+outline: 2px solid #3f8f5f;
+}
+
 .checkbox-text {
 font-size: 12px;
 color: #222;
@@ -216,6 +246,13 @@ margin: 8px 0 0 18px;
 padding: 0;
 }
 
+.file-error {
+margin-top: 10px;
+font-size: 13px;
+color: #b90707;
+font-weight: 700;
+}
+
 @media (max-width: 900px) {
 .page-wrapper {
 padding: 20px 16px 40px 16px;
@@ -242,7 +279,7 @@ font-size: 14px;
 <div class="logo">EduPlazas</div>
 
 <div class="topbar-right">
-<button type="submit" form="form-solicitud" name="accion" value="borrador"
+<button type="submit" form="form-solicitud" name="accion" value="borrador" formnovalidate
 style="background: transparent; border: none; font-weight: 800; font-size: 15px; cursor: pointer; color: #111;">
 Terminar más tarde
 </button>
@@ -266,10 +303,16 @@ Complete todos los campos obligatorios marcados con (*). La información proporc
 
 <div class="form-container">
 <form id="form-solicitud"
-th:action="@{/solicitante/solicitud/guardar}"
-th:object="${nuevaSolicitud}"
-method="post"
-enctype="multipart/form-data">
+      th:action="@{/solicitante/solicitud/guardar}"
+      th:object="${nuevaSolicitud}"
+      method="post"
+      enctype="multipart/form-data">
+
+<input type="hidden" th:field="*{id}" />
+<input type="hidden" th:field="*{menor.id}" />
+<input type="hidden" th:field="*{tutor1.id}" />
+<input type="hidden" th:field="*{tutor2.id}" />
+<input type="hidden" th:field="*{domicilioFamiliar.id}" />
 
 <div th:if="${#fields.hasErrors('*')}"
 style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; color: #842029; padding: 16px 20px; border-radius: 10px; border: 1px solid #f5c2c7;">
@@ -285,32 +328,44 @@ style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; co
 <div class="form-grid">
 <div class="form-group">
 <label for="nombreMenor">Nombre del Niño/a*</label>
-<input type="text" id="nombreMenor" th:field="*{menor.nombre}" placeholder="Maria">
+<input type="text" id="nombreMenor" th:field="*{menor.nombre}" placeholder="María"
+       minlength="2" maxlength="50" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s'-]{2,50}" required
+       title="Introduce un nombre válido. Solo letras y espacios, entre 2 y 50 caracteres.">
+<small class="form-help">Obligatorio. Solo letras y espacios.</small>
 </div>
 
 <div class="form-group">
 <label for="apellidosMenor">Apellidos del Niño/a*</label>
-<input type="text" id="apellidosMenor" th:field="*{menor.apellidos}" placeholder="López García">
+<input type="text" id="apellidosMenor" th:field="*{menor.apellidos}" placeholder="López García"
+       minlength="2" maxlength="80" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s'-]{2,80}" required
+       title="Introduce apellidos válidos. Solo letras y espacios, entre 2 y 80 caracteres.">
+<small class="form-help">Obligatorio. Solo letras y espacios.</small>
 </div>
 
 <div class="form-group">
 <label for="fechaNacimiento">Fecha de nacimiento*</label>
-<input type="date" id="fechaNacimiento" th:field="*{menor.fechaNacimiento}">
+<input type="date" id="fechaNacimiento" th:field="*{menor.fechaNacimiento}" required
+       title="Selecciona una fecha de nacimiento válida.">
+<small class="form-help">No puede ser una fecha futura.</small>
 </div>
 
 <div class="form-group">
 <label for="lugarNacimiento">Lugar de Nacimiento*</label>
-<input type="text" id="lugarNacimiento" th:field="*{menor.lugarNacimiento}" placeholder="Madrid">
+<input type="text" id="lugarNacimiento" th:field="*{menor.lugarNacimiento}" placeholder="Madrid"
+       minlength="2" maxlength="60" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s'-]{2,60}" required
+       title="Introduce un lugar de nacimiento válido. Solo letras y espacios.">
+<small class="form-help">Obligatorio. Solo letras y espacios.</small>
 </div>
 
 <div class="form-group">
 <label for="sexo">Sexo*</label>
-<select id="sexo" th:field="*{menor.sexo}">
-<option value="" selected disabled>Seleccione...</option>
+<select id="sexo" th:field="*{menor.sexo}" required title="Selecciona una opción.">
+<option value="">Seleccione...</option>
 <option value="Masculino">Masculino</option>
 <option value="Femenino">Femenino</option>
 <option value="Otro">Otro</option>
 </select>
+<small class="form-help">Campo obligatorio.</small>
 </div>
 </div>
 </section>
@@ -321,48 +376,64 @@ style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; co
 <div class="form-grid">
 <div class="form-group">
 <label for="nombreTutor1">Nombre*</label>
-<input type="text" id="nombreTutor1" th:field="*{tutor1.nombre}" placeholder="Juan">
+<input type="text" id="nombreTutor1" th:field="*{tutor1.nombre}" placeholder="Juan"
+       minlength="2" maxlength="50" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s'-]{2,50}" required
+       title="Introduce un nombre válido. Solo letras y espacios.">
+<small class="form-help">Obligatorio. Solo letras y espacios.</small>
 </div>
 
 <div class="form-group">
 <label for="apellidosTutor1">Apellidos*</label>
-<input type="text" id="apellidosTutor1" th:field="*{tutor1.apellidos}" placeholder="López García">
+<input type="text" id="apellidosTutor1" th:field="*{tutor1.apellidos}" placeholder="López García"
+       minlength="2" maxlength="80" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s'-]{2,80}" required
+       title="Introduce apellidos válidos. Solo letras y espacios.">
+<small class="form-help">Obligatorio. Solo letras y espacios.</small>
 </div>
 
 <div class="form-group">
 <label for="dniTutor1">DNI/NIE*</label>
-<input type="text" id="dniTutor1" th:field="*{tutor1.dniNie}" placeholder="12345678A">
+<input type="text" id="dniTutor1" th:field="*{tutor1.dniNie}" placeholder="12345678A"
+       minlength="9" maxlength="9" pattern="([0-9]{8}[A-Za-z]|[XYZxyz][0-9]{7}[A-Za-z])" required
+       title="Introduce un DNI/NIE válido. Ejemplo: 12345678A o X1234567L.">
+<small class="form-help">Formato: 12345678A o X1234567L.</small>
 </div>
 
 <div class="form-group">
 <label for="relacionTutor1">Relación con el niño/a*</label>
-<select id="relacionTutor1" th:field="*{tutor1.relacionConMenor}">
-<option value="" selected disabled>Seleccione...</option>
+<select id="relacionTutor1" th:field="*{tutor1.relacionConMenor}" required title="Selecciona la relación con el menor.">
+<option value="">Seleccione...</option>
 <option value="Padre">Padre</option>
 <option value="Madre">Madre</option>
 <option value="Tutor legal">Tutor legal</option>
 </select>
+<small class="form-help">Campo obligatorio.</small>
 </div>
 
 <div class="form-group">
 <label for="telefonoTutor1">Teléfono*</label>
-<input type="text" id="telefonoTutor1" th:field="*{tutor1.telefono}" placeholder="123 456 789">
+<input type="tel" id="telefonoTutor1" th:field="*{tutor1.telefono}" placeholder="612345678"
+       pattern="[0-9]{9}" maxlength="9" required
+       title="Introduce un teléfono de 9 dígitos. Ejemplo: 612345678.">
+<small class="form-help">Debe contener 9 dígitos.</small>
 </div>
 
 <div class="form-group">
 <label for="emailTutor1">Email*</label>
-<input type="email" id="emailTutor1" th:field="*{tutor1.email}" placeholder="juan@ejemplo.com">
+<input type="email" id="emailTutor1" th:field="*{tutor1.email}" placeholder="juan@ejemplo.com"
+       maxlength="100" required title="Introduce un correo electrónico válido.">
+<small class="form-help">Formato esperado: usuario@dominio.com.</small>
 </div>
 
 <div class="form-group full-width">
 <label for="situacionLaboral1">Situación laboral* (Criterio de baremación)</label>
-<select id="situacionLaboral1" th:field="*{tutor1.situacionLaboral}">
-<option value="" selected disabled>Seleccione...</option>
+<select id="situacionLaboral1" th:field="*{tutor1.situacionLaboral}" required title="Selecciona una situación laboral.">
+<option value="">Seleccione...</option>
 <option value="Trabajando">Trabajando</option>
 <option value="Desempleado">Desempleado</option>
 <option value="Autónomo">Autónomo</option>
 <option value="Otro">Otro</option>
 </select>
+<small class="form-help">Campo obligatorio para la baremación.</small>
 </div>
 </div>
 </section>
@@ -373,48 +444,64 @@ style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; co
 <div class="form-grid">
 <div class="form-group">
 <label for="nombreTutor2">Nombre</label>
-<input type="text" id="nombreTutor2" th:field="*{tutor2.nombre}" placeholder="Ana">
+<input type="text" id="nombreTutor2" th:field="*{tutor2.nombre}" placeholder="Ana"
+       minlength="2" maxlength="50" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s'-]{2,50}"
+       title="Si se completa, solo puede contener letras y espacios.">
+<small class="form-help">Opcional. Solo letras y espacios.</small>
 </div>
 
 <div class="form-group">
 <label for="apellidosTutor2">Apellidos</label>
-<input type="text" id="apellidosTutor2" th:field="*{tutor2.apellidos}" placeholder="López García">
+<input type="text" id="apellidosTutor2" th:field="*{tutor2.apellidos}" placeholder="López García"
+       minlength="2" maxlength="80" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s'-]{2,80}"
+       title="Si se completa, solo puede contener letras y espacios.">
+<small class="form-help">Opcional. Solo letras y espacios.</small>
 </div>
 
 <div class="form-group">
 <label for="dniTutor2">DNI/NIE</label>
-<input type="text" id="dniTutor2" th:field="*{tutor2.dniNie}" placeholder="12345678A">
+<input type="text" id="dniTutor2" th:field="*{tutor2.dniNie}" placeholder="12345678A"
+       minlength="9" maxlength="9" pattern="([0-9]{8}[A-Za-z]|[XYZxyz][0-9]{7}[A-Za-z])"
+       title="Introduce un DNI/NIE válido. Ejemplo: 12345678A o X1234567L.">
+<small class="form-help">Opcional. Formato: 12345678A o X1234567L.</small>
 </div>
 
 <div class="form-group">
 <label for="relacionTutor2">Relación con el niño/a</label>
 <select id="relacionTutor2" th:field="*{tutor2.relacionConMenor}">
-<option value="" selected disabled>Seleccione...</option>
+<option value="">Seleccione...</option>
 <option value="Padre">Padre</option>
 <option value="Madre">Madre</option>
 <option value="Tutor legal">Tutor legal</option>
 </select>
+<small class="form-help">Opcional.</small>
 </div>
 
 <div class="form-group">
 <label for="telefonoTutor2">Teléfono</label>
-<input type="text" id="telefonoTutor2" th:field="*{tutor2.telefono}" placeholder="123 456 789">
+<input type="tel" id="telefonoTutor2" th:field="*{tutor2.telefono}" placeholder="612345678"
+       pattern="[0-9]{9}" maxlength="9"
+       title="Si se completa, debe contener 9 dígitos.">
+<small class="form-help">Opcional. Debe contener 9 dígitos.</small>
 </div>
 
 <div class="form-group">
 <label for="emailTutor2">Email</label>
-<input type="email" id="emailTutor2" th:field="*{tutor2.email}" placeholder="ana@ejemplo.com">
+<input type="email" id="emailTutor2" th:field="*{tutor2.email}" placeholder="ana@ejemplo.com"
+       maxlength="100" title="Introduce un correo electrónico válido.">
+<small class="form-help">Opcional. Formato esperado: usuario@dominio.com.</small>
 </div>
 
 <div class="form-group full-width">
 <label for="situacionLaboral2">Situación laboral <span class="hint-link">(Criterio de baremación)</span></label>
 <select id="situacionLaboral2" th:field="*{tutor2.situacionLaboral}">
-<option value="" selected disabled>Seleccione...</option>
+<option value="">Seleccione...</option>
 <option value="Trabajando">Trabajando</option>
 <option value="Desempleado">Desempleado</option>
 <option value="Autónomo">Autónomo</option>
 <option value="Otro">Otro</option>
 </select>
+<small class="form-help">Opcional.</small>
 </div>
 </div>
 </section>
@@ -425,24 +512,36 @@ style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; co
 <div class="form-grid">
 <div class="form-group full-width">
 <label for="direccion">Dirección Completa*</label>
-<input type="text" id="direccion" th:field="*{domicilioFamiliar.direccionCompleta}" placeholder="Calle Principal, 123 2ºA">
+<input type="text" id="direccion" th:field="*{domicilioFamiliar.direccionCompleta}" placeholder="Calle Principal, 123 2ºA"
+       minlength="5" maxlength="120" required
+       title="Introduce una dirección completa, entre 5 y 120 caracteres.">
+<small class="form-help">Obligatorio. Incluye calle, número, piso o puerta si aplica.</small>
 </div>
 </div>
 
 <div class="form-grid-3" style="margin-top: 16px;">
 <div class="form-group">
 <label for="ciudad">Ciudad*</label>
-<input type="text" id="ciudad" th:field="*{domicilioFamiliar.ciudad}" placeholder="Madrid">
+<input type="text" id="ciudad" th:field="*{domicilioFamiliar.ciudad}" placeholder="Madrid"
+       minlength="2" maxlength="60" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s'-]{2,60}" required
+       title="Introduce una ciudad válida. Solo letras y espacios.">
+<small class="form-help">Obligatorio.</small>
 </div>
 
 <div class="form-group">
 <label for="codigoPostal">Código Postal*</label>
-<input type="text" id="codigoPostal" th:field="*{domicilioFamiliar.codigoPostal}" placeholder="00000">
+<input type="text" id="codigoPostal" th:field="*{domicilioFamiliar.codigoPostal}" placeholder="28001"
+       pattern="[0-9]{5}" maxlength="5" required
+       title="Introduce un código postal de 5 dígitos.">
+<small class="form-help">Debe contener 5 dígitos.</small>
 </div>
 
 <div class="form-group">
 <label for="provincia">Provincia*</label>
-<input type="text" id="provincia" th:field="*{domicilioFamiliar.provincia}" placeholder="Madrid">
+<input type="text" id="provincia" th:field="*{domicilioFamiliar.provincia}" placeholder="Madrid"
+       minlength="2" maxlength="60" pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s'-]{2,60}" required
+       title="Introduce una provincia válida. Solo letras y espacios.">
+<small class="form-help">Obligatorio.</small>
 </div>
 </div>
 </section>
@@ -452,54 +551,114 @@ style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; co
 
 <div class="form-grid">
 <div class="form-group">
-<label for="centroPreferencia">Centro de preferencia*</label>
-<select id="centroPreferencia" th:field="*{centroPreferencia}">
-<option value="" selected disabled>Seleccione...</option>
-<option value="CEIP San Francisco de Asís">CEIP San Francisco de Asís</option>
-<option value="EEI El Bosque">EEI El Bosque</option>
-<option value="CEIP Los Almendros">CEIP Los Almendros</option>
-</select>
+    <label for="centroPreferencia">Centro de preferencia*</label>
+    <select id="centroPreferencia" th:field="*{centroPreferencia}" required title="Selecciona un centro de preferencia.">
+        <option value="">Seleccione...</option>
+        <option th:each="centro : ${centros}" th:value="${centro.nombre}" th:text="${centro.nombre}"></option>
+    </select>
+    <small class="form-help">Campo obligatorio.</small>
 </div>
 
 <div class="form-group">
 <label for="cursoSolicitado">Curso Solicitado*</label>
-<select id="cursoSolicitado" th:field="*{cursoSolicitado}">
-<option value="" selected disabled>Seleccione...</option>
+<select id="cursoSolicitado" th:field="*{cursoSolicitado}" required title="Selecciona el curso solicitado.">
+<option value="">Seleccione...</option>
 <option value="Educación Infantil 1 año">Educación Infantil 1 año</option>
 <option value="Educación Infantil 2 años">Educación Infantil 2 años</option>
 <option value="Educación Infantil 3 años">Educación Infantil 3 años</option>
 </select>
+<small class="form-help">Campo obligatorio.</small>
 </div>
 </div>
 </section>
 
 <section class="form-section">
-<h2 class="section-title">6. Documentación a Presentar</h2>
+<h2 class="section-title">6. Criterios de Baremación</h2>
+
+<div class="documents-box" style="margin-bottom: 16px;">
+Marque únicamente aquellos criterios que pueda acreditar documentalmente.
+</div>
+
+<div class="checkbox-group">
+<input type="checkbox" id="tieneHermanosEnCentro" th:field="*{tieneHermanosEnCentro}">
+<label for="tieneHermanosEnCentro" class="checkbox-text">
+<strong>Hermanos matriculados en el centro</strong>
+El alumno/a tiene hermanos escolarizados en el centro solicitado.
+</label>
+</div>
+
+<div class="checkbox-group">
+<input type="checkbox" id="domicilioEnZonaCentro" th:field="*{domicilioEnZonaCentro}">
+<label for="domicilioEnZonaCentro" class="checkbox-text">
+<strong>Domicilio familiar en la zona del centro</strong>
+El domicilio familiar se encuentra en el área de influencia del centro solicitado.
+</label>
+</div>
+
+<div class="checkbox-group">
+<input type="checkbox" id="familiaNumerosa" th:field="*{familiaNumerosa}">
+<label for="familiaNumerosa" class="checkbox-text">
+<strong>Familia numerosa</strong>
+La unidad familiar dispone de título oficial de familia numerosa.
+</label>
+</div>
+
+<div class="checkbox-group">
+<input type="checkbox" id="familiaMonoparental" th:field="*{familiaMonoparental}">
+<label for="familiaMonoparental" class="checkbox-text">
+<strong>Familia monoparental</strong>
+La unidad familiar está formada por un único progenitor o tutor legal.
+</label>
+</div>
+
+<div class="checkbox-group">
+<input type="checkbox" id="discapacidadAlumnoOTutores" th:field="*{discapacidadAlumnoOTutores}">
+<label for="discapacidadAlumnoOTutores" class="checkbox-text">
+<strong>Discapacidad del alumno/a o tutores</strong>
+Existe una discapacidad reconocida en el alumno/a o en alguno de los tutores.
+</label>
+</div>
+
+<div class="checkbox-group">
+<input type="checkbox" id="rentaMinimaInsercion" th:field="*{rentaMinimaInsercion}">
+<label for="rentaMinimaInsercion" class="checkbox-text">
+<strong>Perceptor de renta mínima de inserción</strong>
+La unidad familiar acredita ser beneficiaria de renta mínima de inserción.
+</label>
+</div>
+</section>
+
+<section class="form-section">
+<h2 class="section-title">7. Documentación a Presentar</h2>
 
 <div class="documents-box">
 Documentación obligatoria: Deberá presentar los siguientes documentos en formato original o copia compulsada antes de finalizar el plazo de la convocatoria:
 <ul>
 <li>DNI/NIE de los padres/tutores</li>
 <li>Libro de familia o documento acreditativo de filiación</li>
-<li>Certificado de empadronamiento (actualizado)</li>
+<li>Certificado de empadronamiento actualizado</li>
 <li>Documentación acreditativa válida que aplique a los criterios de baremación</li>
 </ul>
 </div>
 
-<input type="file" id="documentos" name="archivos" class="hidden-file-input" multiple>
+<input type="file" id="documentos" name="archivos" class="hidden-file-input" multiple
+       accept=".pdf,.jpg,.jpeg,.png">
 
 <button type="button" class="upload-btn" onclick="document.getElementById('documentos').click();">
 Adjuntar Documentación
 </button>
 
 <div id="selected-files" class="selected-files"></div>
+<div id="file-error" class="file-error"></div>
+<small class="form-help">Formatos permitidos: PDF, JPG, JPEG o PNG. Tamaño máximo recomendado: 5 MB por archivo.</small>
 </section>
 
 <section class="form-section">
-<h2 class="section-title">7. Declaraciones y Autorizaciones</h2>
+<h2 class="section-title">8. Declaraciones y Autorizaciones</h2>
 
 <div class="checkbox-group">
-<input type="checkbox" id="veracidad" th:field="*{declaracionVeracidad}">
+<input type="checkbox" id="veracidad" th:field="*{declaracionVeracidad}" required
+       title="Debe aceptar la declaración de veracidad para enviar la solicitud.">
 <label for="veracidad" class="checkbox-text">
 <strong>Declaración de Veracidad*</strong>
 Declaro bajo mi responsabilidad que los datos consignados en esta solicitud son ciertos y que cumplo con los requisitos establecidos en la convocatoria. Soy consciente de que la falsedad en los datos podrá dar lugar a la exclusión del proceso o a la pérdida de la plaza adjudicada.
@@ -512,7 +671,8 @@ style="color:red; font-size:12px; margin-top:4px;">
 </div>
 
 <div class="checkbox-group">
-<input type="checkbox" id="proteccionDatos" th:field="*{autorizacionProteccionDatos}">
+<input type="checkbox" id="proteccionDatos" th:field="*{autorizacionProteccionDatos}" required
+       title="Debe autorizar el tratamiento de datos personales para enviar la solicitud.">
 <label for="proteccionDatos" class="checkbox-text">
 <strong>Protección de Datos Personales *</strong>
 Autorizo el tratamiento de los datos personales facilitados en este formulario de acuerdo con el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 de Protección de Datos. Los datos serán utilizados exclusivamente para la gestión del proceso de admisión.
@@ -536,9 +696,20 @@ Registrar Solicitud en la Convocatoria
 <script>
 const inputDocumentos = document.getElementById('documentos');
 const selectedFilesDiv = document.getElementById('selected-files');
+const fileErrorDiv = document.getElementById('file-error');
+const fechaNacimientoInput = document.getElementById('fechaNacimiento');
+
+const hoy = new Date().toISOString().split('T')[0];
+fechaNacimientoInput.setAttribute('max', hoy);
 
 inputDocumentos.addEventListener('change', function () {
 selectedFilesDiv.innerHTML = '';
+fileErrorDiv.textContent = '';
+this.setCustomValidity('');
+
+const extensionesPermitidas = ['pdf', 'jpg', 'jpeg', 'png'];
+const maxTamanoBytes = 5 * 1024 * 1024;
+let hayError = false;
 
 if (this.files.length > 0) {
 const titulo = document.createElement('strong');
@@ -548,12 +719,31 @@ selectedFilesDiv.appendChild(titulo);
 const lista = document.createElement('ul');
 
 for (let i = 0; i < this.files.length; i++) {
+const archivo = this.files[i];
+const extension = archivo.name.split('.').pop().toLowerCase();
+
 const item = document.createElement('li');
-item.textContent = this.files[i].name;
+item.textContent = archivo.name;
 lista.appendChild(item);
+
+if (!extensionesPermitidas.includes(extension)) {
+hayError = true;
+fileErrorDiv.textContent = 'Solo se permiten archivos PDF, JPG, JPEG o PNG.';
+}
+
+if (archivo.size > maxTamanoBytes) {
+hayError = true;
+fileErrorDiv.textContent = 'Cada archivo debe tener un tamaño máximo de 5 MB.';
+}
 }
 
 selectedFilesDiv.appendChild(lista);
+}
+
+if (hayError) {
+this.setCustomValidity('Revise los documentos adjuntos.');
+} else {
+this.setCustomValidity('');
 }
 });
 </script>

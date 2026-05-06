@@ -398,8 +398,8 @@
     <div class="logo">EduPlazas</div>
 
     <div class="topbar-right">
-        <!-- Futuro backend: th:text="'Hola, ' + ${solicitante.nombreCompleto}" -->
-        <div class="user-name">Hola, Familia López García</div>
+                        <a th:href="@{/solicitante/home}" class="primary-btn" style="margin-top: 24px;">Volver a Mis Solicitudes</a>
+
     </div>
 </header>
 
@@ -407,71 +407,7 @@
 
     <div class="status-container">
         <div class="status-panel">
-
-            <!-- ========================= -->
-            <!-- ESTADO: EN PROCESO -->
-            <!-- Activar este bloque para pruebas frontend -->
-            <!-- Futuro backend: <section th:if="${estado == 'EN_PROCESO'}"> -->
-			<!--
-			<section>
-                <div class="status-banner banner-proceso">
-                    <h2>Solicitud en Proceso</h2>
-                    <p>Su solicitud está siendo revisada</p>
-                </div>
-
-                <div class="resolution-box">
-                    <h3>Fecha Estimada de Resolución</h3>
-                    <p class="date">15 de Junio de 2026</p>
-                    <p>Recibirá una notificación cuando se resuelva tu solicitud</p>
-                </div>
-
-                <h2 class="section-subtitle">Información del Menor</h2>
-
-                <div class="minor-card">
-                    <h3>Juan López García</h3>
-                    <p>Fecha de nacimiento: 15/03/2023</p>
-                    <p>Nivel solicitado: Educación Infantil 3 años</p>
-                </div>
-
-				<a th:href="@{/solicitante/home}" class="primary-btn">Volver a Mis Solicitudes</a>
-            </section>
-			-->
-            <!-- Futuro backend: </section> -->
-			
-
-            <!-- ========================= -->
-            <!-- ESTADO: RECHAZADA -->
-            <!-- Activar este bloque para pruebas frontend -->
-            <!-- Futuro backend: <section th:if="${estado == 'RECHAZADA'}"> -->
-			<!--
-			<section>
-                <div class="status-banner banner-rechazada">
-                    <h2>Solicitud rechazada</h2>
-                    <p>
-						Su solicitud ha sido rechazada por algún error en el proceso de matriculación,
-						si el proceso de registro de solicitudes sigue vigente, vuelva a rellenar el formulario siguiendo detalladamente las instrucciones.
-					</p>
-                </div>
-
-                <h2 class="section-subtitle">Información del Menor</h2>
-
-                <div class="minor-card">
-                    <h3>Juan López García</h3>
-                    <p>Fecha de nacimiento: 15/03/2023</p>
-                    <p>Nivel solicitado: Educación Infantil 3 años</p>
-                </div>
-
-				<a th:href="@{/solicitante/home}" class="primary-btn">Volver a Mis Solicitudes</a>
-            </section>
-			-->
-			<!-- Futuro backend: </section> -->
-
-
-            <!-- ========================= -->
-            <!-- ESTADO: ACEPTADA -->
-            <!-- Activar este bloque para pruebas frontend -->
-            <!-- Futuro backend: <section th:if="${estado == 'ACEPTADA'}"> -->
-			<section>
+<section>
                 <div class="status-banner banner-aceptada">
                     <h2>¡Solicitud Aceptada!</h2>
                     <p>El alumno/alumna ha sido admitido en el centro educativo</p>
@@ -551,7 +487,6 @@
                     </div>
                 </div>
                 
-                <a th:href="@{/solicitante/home}" class="primary-btn" style="margin-top: 24px;">Volver a Mis Solicitudes</a>
             </section>
 
         </div>
