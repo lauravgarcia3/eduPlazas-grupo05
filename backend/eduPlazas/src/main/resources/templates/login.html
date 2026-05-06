@@ -7,15 +7,24 @@
     <link rel="stylesheet" th:href="@{/css/auth.css}">
     <style>
         h1 {
-            font-size: 38px;
-            font-weight: 800;
+            font-size: 40px;
+            font-weight: 900;
             margin: 0;
-            color: #d88a00;
             text-align: left;
+            letter-spacing: 0.2px;
+            line-height: 1.05;
+        }
+
+        .brand-edu {
+            color: #064a8f;
+        }
+
+        .brand-plazas {
+            color: #f06f00;
         }
 
         .login-form {
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         .form-group {
@@ -24,115 +33,113 @@
 
         .form-group label {
             display: block;
-            font-size: 20px;
-            font-weight: 500;
-            color: #111;
+            font-size: 16px;
+            font-weight: 800;
+            color: #172033;
             margin-bottom: 10px;
             line-height: 1.3;
         }
 
         .form-group input {
             width: 100%;
-            height: 46px;
-            padding: 10px 12px;
-            border: 1.5px solid #bdbdbd;
-            border-radius: 12px;
-            font-size: 16px;
-            background-color: #f9f9f9;
+            height: 48px;
+            padding: 10px 16px;
+            border: 1.5px solid #d6dde7;
+            border-radius: 10px;
+            font-size: 15px;
+            background-color: #ffffff;
             box-sizing: border-box;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #e58d00;
-            background-color: #fff;
-            box-shadow: 0 0 0 3px rgba(229, 141, 0, 0.15);
+            color: #172033;
         }
 
         .form-group input:invalid:not(:placeholder-shown) {
-            border-color: #b90707;
-            background-color: #fff7f7;
+            border-color: #c93636;
+            background-color: #fffafa;
         }
 
         .form-group input:valid:not(:placeholder-shown) {
-            border-color: #3f8f5f;
-            background-color: #f8fff9;
+            border-color: #d6dde7;
+            background-color: #ffffff;
         }
 
         .form-help {
             display: block;
-            margin-top: 6px;
-            font-size: 13px;
-            color: #666;
+            margin-top: 7px;
+            font-size: 12px;
+            color: #606f80;
             line-height: 1.3;
+            font-weight: 600;
         }
 
         .forgot-link {
             display: block;
             text-align: right;
-            margin-top: 8px;
-            color: #c85c2d;
+            margin-top: 9px;
+            color: #f06f00;
             text-decoration: none;
             font-size: 14px;
+            font-weight: 800;
+        }
+
+        .forgot-link:hover {
+            color: #c85c00;
+            text-decoration: underline;
         }
 
         .btn {
-            display: block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             width: 100%;
-            margin-top: 18px;
-            padding: 11px;
-            background-color: #e58d00;
-            color: white;
+            min-height: 50px;
+            margin-top: 24px;
+            padding: 12px;
+            background-color: #f06f00;
+            color: #ffffff;
             border: none;
             text-decoration: none;
             border-radius: 10px;
             font-size: 17px;
-            font-weight: 600;
+            font-weight: 900;
             text-align: center;
             cursor: pointer;
+            box-shadow: 0 8px 18px rgba(240, 111, 0, 0.24);
+            transition: all 0.18s ease;
         }
 
         .btn:hover {
-            background-color: #c77400;
-        }
-
-        .right {
-            width: 50%;
-            background-color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .right img {
-            width: 150%;
-            max-width: none;
-            height: auto;
-            object-fit: contain;
-            display: block;
+            background-color: #c85c00;
+            transform: translateY(-1px);
         }
 
         .alert {
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            margin-bottom: 18px;
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 800;
         }
 
         .alert-error {
-            background-color: #fceaea;
-            color: #b90707;
-            border: 1px solid #f5c6c6;
+            background-color: #fdecec;
+            color: #9e2525;
+            border: 1px solid #f7caca;
         }
 
         .alert-success {
-            background-color: #eaf6fc;
-            color: #2d6d95;
-            border: 1px solid #c6e3f5;
+            background-color: #e7f7ec;
+            color: #1f6f38;
+            border: 1px solid #c9ebd2;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            .form-group label {
+                font-size: 15px;
+            }
         }
     </style>
 </head>
@@ -144,7 +151,7 @@
             <div class="top-text">
                 <div class="welcome-block">
                     <p class="welcome">Bienvenido a</p>
-                    <h1>EduPlazas</h1>
+                    <h1><span class="brand-edu">Edu</span><span class="brand-plazas">Plazas</span></h1>
                 </div>
 
                 <div class="register-block">
@@ -198,7 +205,7 @@
                     <a href="#" class="forgot-link">He olvidado mi contraseña</a>
                 </div>
 
-                <button type="submit" class="btn">Iniciar Sesión</button>
+                <button type="submit" class="btn">Iniciar sesión</button>
             </form>
         </div>
     </div>

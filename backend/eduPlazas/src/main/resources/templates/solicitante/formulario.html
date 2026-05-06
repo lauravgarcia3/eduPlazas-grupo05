@@ -6,281 +6,360 @@
 
 <link rel="stylesheet" th:href="@{/css/common.css}">
 <style>
-.topbar-right {
-gap: 10px;
+body {
+    background-color: #f6f8fb;
 }
 
-.logout-icon {
-font-size: 22px;
-color: #111;
-line-height: 1;
-cursor: pointer;
-font-weight: 700;
+.logo span {
+    color: #ffffff;
+}
+
+.logo strong {
+    color: #f06f00;
+}
+
+.topbar {
+    min-height: 72px;
+    padding: 0 56px;
+    background-color: #064a8f;
+}
+
+.save-later-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 38px;
+    padding: 0 22px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    color: #064a8f;
+    border: 1px solid rgba(255,255,255,0.4);
+    font-weight: 900;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.save-later-btn:hover {
+    background-color: #eaf3ff;
 }
 
 .deadline-bar {
-background-color: #eee3b9;
-padding: 14px 40px;
-font-size: 18px;
-color: #222;
-border-left: 20px solid #cfcfcf;
+    background-color: #fff2e6;
+    padding: 14px 56px;
+    font-size: 15px;
+    color: #172033;
+    border-bottom: 1px solid #f4d6bd;
 }
 
 .deadline-bar strong {
-font-weight: 800;
+    color: #c85c00;
+    font-weight: 900;
 }
 
 .page-wrapper {
-padding: 26px 0 56px 0;
+    padding: 34px 0 58px 0;
 }
 
 .page-title {
-text-align: center;
-font-size: 36px;
-font-weight: 900;
-margin: 14px 0 22px 0;
-color: #111;
-letter-spacing: 0.3px;
+    text-align: center;
+    font-size: 34px;
+    font-weight: 900;
+    margin: 0 0 16px 0;
+    color: #172033;
+    letter-spacing: -0.2px;
 }
 
 .info-box {
-max-width: 920px;
-margin: 0 auto 36px auto;
-background-color: #e2b362;
-padding: 14px 18px;
-color: #222;
-font-size: 14px;
-line-height: 1.3;
-border-left: 25px solid #cfcfcf;
+    max-width: 1050px;
+    margin: 0 auto 28px auto;
+    background-color: #eaf3ff;
+    border: 1px solid #d4e7ff;
+    border-left: 6px solid #064a8f;
+    border-radius: 14px;
+    padding: 16px 18px;
+    color: #172033;
+    font-size: 14px;
+    line-height: 1.45;
 }
 
 .info-box strong {
-font-weight: 800;
+    color: #064a8f;
+    font-weight: 900;
 }
 
 .form-container {
-max-width: 1050px;
-margin: 0 auto;
+    max-width: 1050px;
+    margin: 0 auto;
 }
 
 .form-section {
-margin-bottom: 28px;
+    background-color: #ffffff;
+    border: 1px solid #e3e8ef;
+    border-radius: 22px;
+    padding: 26px 28px;
+    margin-bottom: 22px;
+    box-shadow: 0 8px 24px rgba(15, 35, 60, 0.07);
 }
 
 .section-title {
-font-size: 22px;
-font-weight: 800;
-margin: 0 0 18px 0;
-color: #222;
+    font-size: 22px;
+    font-weight: 900;
+    margin: 0 0 22px 0;
+    color: #172033;
+}
+
+.section-title::before {
+    content: "";
+    display: inline-block;
+    width: 7px;
+    height: 22px;
+    border-radius: 99px;
+    background-color: #f06f00;
+    margin-right: 10px;
+    vertical-align: -4px;
 }
 
 .form-grid {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 12px 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 22px;
 }
 
 .form-grid-3 {
-display: grid;
-grid-template-columns: 1fr 1fr 1fr;
-gap: 12px 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 18px 18px;
 }
 
 .form-group {
-display: flex;
-flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-group.full-width {
-grid-column: 1 / -1;
+    grid-column: 1 / -1;
 }
 
 .form-group label {
-font-size: 11px;
-color: #444;
-margin-bottom: 5px;
-font-weight: 600;
+    font-size: 13px;
+    color: #172033;
+    margin-bottom: 8px;
+    font-weight: 900;
 }
 
 .form-group input,
 .form-group select {
-width: 100%;
-height: 34px;
-border: 1px solid #d5d5d5;
-border-radius: 5px;
-background-color: #f5f5f5;
-padding: 6px 10px;
-font-size: 12px;
-color: #222;
-box-sizing: border-box;
+    width: 100%;
+    height: 44px;
+    border: 1.5px solid #d6dde7;
+    border-radius: 10px;
+    background-color: #ffffff;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #172033;
+    box-sizing: border-box;
 }
 
 .form-group input:focus,
 .form-group select:focus {
-outline: none;
-border-color: #d88a00;
-background-color: white;
-box-shadow: 0 0 0 3px rgba(216, 138, 0, 0.14);
+    outline: none;
+    border-color: #064a8f;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(6, 74, 143, 0.12);
 }
 
 .form-group input:invalid:not(:placeholder-shown),
 .form-group select:invalid {
-border-color: #b90707;
-background-color: #fff7f7;
+    border-color: #c93636;
+    background-color: #fffafa;
 }
 
 .form-group input:valid:not(:placeholder-shown),
 .form-group select:valid {
-border-color: #3f8f5f;
-background-color: #f8fff9;
+    border-color: #d6dde7;
+    background-color: #ffffff;
 }
 
 .form-help {
-display: block;
-margin-top: 4px;
-font-size: 11px;
-color: #666;
-line-height: 1.25;
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    color: #606f80;
+    line-height: 1.3;
+    font-weight: 600;
 }
 
 .hint-link {
-color: #72a9d4;
-font-size: 12px;
-margin-left: 4px;
+    color: #064a8f;
+    font-size: 12px;
+    margin-left: 4px;
 }
 
 .documents-box {
-background-color: #eee6b7;
-border: 1px solid #7b6d46;
-border-radius: 14px;
-padding: 18px 16px;
-font-size: 13px;
-color: #222;
-line-height: 1.3;
+    background-color: #fff8ef;
+    border: 1px solid #f4d6bd;
+    border-radius: 14px;
+    padding: 18px 18px;
+    font-size: 14px;
+    color: #172033;
+    line-height: 1.45;
 }
 
 .documents-box ul {
-margin: 10px 0 0 18px;
-padding: 0;
+    margin: 10px 0 0 18px;
+    padding: 0;
 }
 
 .upload-btn,
 .submit-btn {
-border: none;
-border-radius: 10px;
-font-size: 16px;
-font-weight: 800;
-color: white;
-cursor: pointer;
-box-shadow: none;
+    border: none;
+    border-radius: 11px;
+    font-size: 15px;
+    font-weight: 900;
+    color: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 7px 16px rgba(6, 74, 143, 0.18);
 }
 
 .upload-btn {
-display: block;
-width: 100%;
-height: 46px;
-margin-top: 16px;
-background-color: #68a9cf;
+    display: block;
+    width: 100%;
+    height: 48px;
+    margin-top: 16px;
+    background-color: #064a8f;
 }
 
 .upload-btn:hover {
-background-color: #5799bf;
+    background-color: #03386e;
 }
 
 .checkbox-group {
-display: flex;
-align-items: flex-start;
-gap: 10px;
-margin-bottom: 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+    background-color: #f9fbfd;
+    border: 1px solid #e3e8ef;
+    border-radius: 14px;
+    padding: 14px 14px;
 }
 
 .checkbox-group input[type="checkbox"] {
-margin-top: 2px;
-width: 15px;
-height: 15px;
+    margin-top: 3px;
+    width: 17px;
+    height: 17px;
+    accent-color: #064a8f;
 }
 
 .checkbox-group input[type="checkbox"]:required:invalid {
-outline: 2px solid #b90707;
+    outline: 2px solid #c93636;
 }
 
 .checkbox-group input[type="checkbox"]:required:valid {
-outline: 2px solid #3f8f5f;
+    outline: 2px solid #1f8f45;
 }
 
 .checkbox-text {
-font-size: 12px;
-color: #222;
-line-height: 1.3;
+    font-size: 13px;
+    color: #172033;
+    line-height: 1.4;
 }
 
 .checkbox-text strong {
-display: block;
-margin-bottom: 3px;
-font-size: 12px;
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
+    color: #172033;
+    font-weight: 900;
 }
 
 .submit-btn {
-width: 100%;
-height: 46px;
-background-color: #68a9cf;
-margin-top: 20px;
+    width: 100%;
+    height: 52px;
+    background-color: #f06f00;
+    margin-top: 12px;
+    box-shadow: 0 8px 18px rgba(240, 111, 0, 0.24);
 }
 
 .submit-btn:hover {
-background-color: #5799bf;
+    background-color: #c85c00;
 }
 
 .hidden-file-input {
-display: none;
+    display: none;
 }
 
 .selected-files {
-margin-top: 12px;
-font-size: 13px;
-color: #333;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #172033;
 }
 
 .selected-files ul {
-margin: 8px 0 0 18px;
-padding: 0;
+    margin: 8px 0 0 18px;
+    padding: 0;
 }
 
 .file-error {
-margin-top: 10px;
-font-size: 13px;
-color: #b90707;
-font-weight: 700;
+    margin-top: 10px;
+    font-size: 13px;
+    color: #c93636;
+    font-weight: 900;
+}
+
+.error-box {
+    max-width: 1050px;
+    margin: 0 auto 24px auto;
+    background-color: #fdecec;
+    color: #9e2525;
+    padding: 16px 20px;
+    border-radius: 14px;
+    border: 1px solid #f7caca;
+    font-size: 14px;
+}
+
+.field-error {
+    color: #c93636;
+    font-size: 12px;
+    margin-top: 5px;
+    font-weight: 800;
 }
 
 @media (max-width: 900px) {
-.page-wrapper {
-padding: 20px 16px 40px 16px;
-}
+    .topbar {
+        padding: 18px 20px;
+    }
 
-.page-title {
-font-size: 28px;
-}
+    .deadline-bar {
+        padding: 14px 20px;
+    }
 
-.form-grid,
-.form-grid-3 {
-grid-template-columns: 1fr;
-}
+    .page-wrapper {
+        padding: 24px 16px 42px 16px;
+    }
 
-.info-box {
-font-size: 14px;
-}
+    .page-title {
+        font-size: 27px;
+    }
+
+    .form-section {
+        padding: 22px 18px;
+    }
+
+    .form-grid,
+    .form-grid-3 {
+        grid-template-columns: 1fr;
+    }
 }
 </style>
 </head>
 <body>
 
 <header class="topbar">
-<div class="logo">EduPlazas</div>
+<div class="logo"><span>Edu</span><strong>Plazas</strong></div>
 
 <div class="topbar-right">
-<button type="submit" form="form-solicitud" name="accion" value="borrador" formnovalidate
-style="background: transparent; border: none; font-weight: 800; font-size: 15px; cursor: pointer; color: #111;">
+<button type="submit" form="form-solicitud" name="accion" value="borrador" formnovalidate class="save-later-btn">
 Terminar más tarde
 </button>
 </div>
@@ -294,7 +373,7 @@ Terminar más tarde
 </div>
 
 <main class="page-wrapper">
-<h1 class="page-title">REGISTRO DE SOLICITUD DE PLAZA</h1>
+<h1 class="page-title">Registro de solicitud de plaza</h1>
 
 <div class="info-box">
 <strong>Importante:</strong>
@@ -314,8 +393,7 @@ Complete todos los campos obligatorios marcados con (*). La información proporc
 <input type="hidden" th:field="*{tutor2.id}" />
 <input type="hidden" th:field="*{domicilioFamiliar.id}" />
 
-<div th:if="${#fields.hasErrors('*')}"
-style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; color: #842029; padding: 16px 20px; border-radius: 10px; border: 1px solid #f5c2c7;">
+<div th:if="${#fields.hasErrors('*')}" class="error-box">
 <strong>Se han detectado incidencias en la solicitud:</strong>
 <ul style="margin: 10px 0 0 18px; padding-left: 18px;">
 <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
@@ -519,7 +597,7 @@ style="max-width: 920px; margin: 0 auto 24px auto; background-color: #f8d7da; co
 </div>
 </div>
 
-<div class="form-grid-3" style="margin-top: 16px;">
+<div class="form-grid-3" style="margin-top: 18px;">
 <div class="form-group">
 <label for="ciudad">Ciudad*</label>
 <input type="text" id="ciudad" th:field="*{domicilioFamiliar.ciudad}" placeholder="Madrid"
@@ -667,7 +745,7 @@ Declaro bajo mi responsabilidad que los datos consignados en esta solicitud son 
 
 <div th:if="${#fields.hasErrors('declaracionVeracidad')}"
 th:errors="*{declaracionVeracidad}"
-style="color:red; font-size:12px; margin-top:4px;">
+class="field-error">
 </div>
 
 <div class="checkbox-group">
@@ -681,7 +759,7 @@ Autorizo el tratamiento de los datos personales facilitados en este formulario d
 
 <div th:if="${#fields.hasErrors('autorizacionProteccionDatos')}"
 th:errors="*{autorizacionProteccionDatos}"
-style="color:red; font-size:12px; margin-top:4px;">
+class="field-error">
 </div>
 
 <button type="submit" name="accion" value="completar" class="submit-btn">

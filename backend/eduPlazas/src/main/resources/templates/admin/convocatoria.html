@@ -6,32 +6,95 @@
 
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <style>
-        .topbar-right {
-            gap: 10px;
+        :root {
+            --admin-blue: #064a8f;
+            --admin-blue-dark: #03386e;
+            --admin-blue-soft: #e8f2fb;
+            --admin-orange: #f06f00;
+            --admin-orange-dark: #c85c00;
+            --admin-orange-soft: #fff2e6;
+            --admin-bg: #f6f8fb;
+            --admin-card: #ffffff;
+            --admin-border: #e2e8f0;
+            --admin-text: #172033;
+            --admin-muted: #64748b;
+            --admin-green: #16834a;
+            --admin-red: #b42318;
+            --admin-shadow: 0 14px 34px rgba(15, 35, 60, 0.10);
         }
 
         .page-wrapper {
             padding: 34px 0 60px 0;
+            min-height: calc(100vh - 72px);
+            background:
+                radial-gradient(circle at 8% 8%, rgba(240, 111, 0, 0.08) 0, rgba(240, 111, 0, 0.08) 190px, transparent 191px),
+                radial-gradient(circle at 92% 18%, rgba(6, 74, 143, 0.07) 0, rgba(6, 74, 143, 0.07) 230px, transparent 231px),
+                var(--admin-bg);
         }
 
-        .back-link {
-            display: inline-block;
-            color: #e58d00;
-            font-size: 16px;
-            font-weight: 700;
-            text-decoration: none;
-            margin-bottom: 24px;
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+
+        .header-text {
+            max-width: 820px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--admin-blue-soft);
+            color: var(--admin-blue);
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 900;
+            margin-bottom: 14px;
         }
 
         .page-title {
             font-size: 42px;
-            margin: 0 0 14px 0;
+            margin: 0 0 10px 0;
+            color: var(--admin-text);
+            font-weight: 900;
+            letter-spacing: -0.5px;
         }
 
         .page-subtitle {
-            font-size: 18px;
-            color: #666;
-            margin: 0 0 34px 0;
+            font-size: 17px;
+            color: var(--admin-muted);
+            margin: 0;
+            font-weight: 600;
+            line-height: 1.45;
+        }
+
+        .back-link {
+            min-height: 44px;
+            padding: 0 20px;
+            border-radius: 999px;
+            background-color: #ffffff;
+            color: var(--admin-blue);
+            border: 1px solid var(--admin-border);
+            font-size: 14px;
+            font-weight: 900;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 18px rgba(15, 35, 60, 0.08);
+            transition: all 0.18s ease;
+            white-space: nowrap;
+        }
+
+        .back-link:hover {
+            background-color: var(--admin-blue-soft);
+            color: var(--admin-blue-dark);
+            transform: translateY(-1px);
         }
 
         .stepper {
@@ -39,58 +102,63 @@
             justify-content: center;
             align-items: center;
             gap: 12px;
-            margin-bottom: 34px;
+            margin-bottom: 28px;
         }
 
         .step {
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            color: #b3b3b3;
+            font-size: 16px;
+            font-weight: 900;
+            color: #94a3b8;
         }
 
         .step.active {
-            color: #e58d00;
+            color: var(--admin-blue);
         }
 
         .step-circle {
             width: 44px;
             height: 44px;
-            border-radius: 50%;
+            border-radius: 999px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
-            font-weight: 800;
-            background-color: #d9d9d9;
-            color: white;
+            font-size: 18px;
+            font-weight: 900;
+            background-color: #e2e8f0;
+            color: #64748b;
             flex-shrink: 0;
         }
 
         .step.active .step-circle {
-            background-color: #e58d00;
+            background-color: var(--admin-orange);
+            color: #ffffff;
+            box-shadow: 0 8px 18px rgba(240, 111, 0, 0.22);
         }
 
         .step-line {
-            width: 82px;
+            width: 90px;
             height: 2px;
-            background-color: #d6d6d6;
+            background-color: #cbd5e1;
+            border-radius: 999px;
         }
 
         .form-card {
-            background-color: #f7f7f7;
-            border-radius: 34px;
-            padding: 40px 46px 42px 46px;
-            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+            background-color: var(--admin-card);
+            border-radius: 30px;
+            padding: 34px 38px 38px 38px;
+            box-shadow: var(--admin-shadow);
+            border: 1px solid var(--admin-border);
         }
 
         .form-title {
             font-size: 28px;
-            font-weight: 800;
-            color: #111;
-            margin: 0 0 28px 0;
+            font-weight: 900;
+            color: var(--admin-text);
+            margin: 0 0 26px 0;
+            letter-spacing: -0.2px;
         }
 
         .form-group {
@@ -100,34 +168,38 @@
         .form-group label {
             display: block;
             font-size: 14px;
-            font-weight: 800;
-            color: #111;
-            margin-bottom: 10px;
+            font-weight: 900;
+            color: var(--admin-text);
+            margin-bottom: 9px;
         }
 
         .form-group input,
         .form-group textarea,
-        .form-group select {
+        .form-group select,
+        .center-column select,
+        .places-column input {
             width: 100%;
-            border: 2px solid #e58d00;
-            border-radius: 14px;
-            background-color: #f7f7f7;
-            padding: 0 16px;
-            font-size: 14px;
-            color: #111;
+            border: 1.5px solid #d6dde7;
+            border-radius: 13px;
+            background-color: #ffffff;
+            padding: 0 15px;
+            font-size: 15px;
+            color: var(--admin-text);
             outline: none;
             box-sizing: border-box;
+            transition: all 0.18s ease;
         }
 
         .form-group input,
         .form-group select {
-            height: 52px;
+            height: 50px;
         }
 
         .form-group textarea {
-            min-height: 160px;
+            min-height: 140px;
             resize: vertical;
-            padding: 14px 16px;
+            padding: 14px 15px;
+            line-height: 1.45;
         }
 
         .form-group input:focus,
@@ -135,9 +207,9 @@
         .form-group select:focus,
         .center-column select:focus,
         .places-column input:focus {
-            border-color: #d88a00;
-            background-color: #fff;
-            box-shadow: 0 0 0 3px rgba(216, 138, 0, 0.14);
+            border-color: var(--admin-blue);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(6, 74, 143, 0.12);
         }
 
         .form-group input:invalid:not(:placeholder-shown),
@@ -145,8 +217,8 @@
         .form-group select:invalid,
         .center-column select:invalid,
         .places-column input:invalid:not(:placeholder-shown) {
-            border-color: #b90707;
-            background-color: #fff7f7;
+            border-color: var(--admin-red);
+            background-color: #fffafa;
         }
 
         .form-group input:valid:not(:placeholder-shown),
@@ -154,24 +226,29 @@
         .form-group select:valid,
         .center-column select:valid,
         .places-column input:valid:not(:placeholder-shown) {
-            border-color: #3f8f5f;
-            background-color: #f8fff9;
+            border-color: #d6dde7;
+            background-color: #ffffff;
         }
 
         .form-help {
             display: block;
             margin-top: 6px;
             font-size: 12px;
-            color: #666;
-            line-height: 1.3;
+            color: var(--admin-muted);
+            line-height: 1.35;
+            font-weight: 600;
         }
 
         .form-error {
             display: none;
-            margin-top: 8px;
+            margin: 0 0 16px 0;
             font-size: 13px;
-            color: #b90707;
-            font-weight: 700;
+            color: var(--admin-red);
+            font-weight: 800;
+            background-color: #fdecec;
+            border: 1px solid #f7caca;
+            border-radius: 12px;
+            padding: 12px 14px;
         }
 
         .form-error.visible {
@@ -185,88 +262,85 @@
         }
 
         .config-box {
-            background-color: #efefef;
-            border-radius: 22px;
+            background-color: #f8fafc;
+            border: 1px solid var(--admin-border);
+            border-radius: 24px;
             padding: 26px 26px 6px 26px;
             margin-top: 10px;
         }
 
         .config-title {
             font-size: 18px;
-            font-weight: 800;
-            color: #111;
+            font-weight: 900;
+            color: var(--admin-blue);
             margin: 0 0 24px 0;
         }
 
         .step-description {
-            font-size: 22px;
-            line-height: 1.45;
-            color: #111;
-            margin: 26px 0 34px 0;
+            font-size: 18px;
+            line-height: 1.5;
+            color: var(--admin-muted);
+            margin: 0 0 28px 0;
             max-width: 1040px;
+            font-weight: 600;
         }
 
         .center-card {
-            background-color: #f3eee3;
-            border-radius: 22px;
-            padding: 28px 30px;
-            margin-bottom: 24px;
+            background-color: #f8fafc;
+            border: 1px solid var(--admin-border);
+            border-radius: 24px;
+            padding: 26px 28px;
+            margin-bottom: 18px;
         }
 
         .center-grid {
             display: grid;
-            grid-template-columns: 1fr 260px 64px;
-            gap: 20px;
-            align-items: end;
+            grid-template-columns: 1fr 240px 58px;
+            gap: 18px;
+            align-items: start;
         }
 
         .center-label {
             display: block;
-            font-size: 18px;
-            font-weight: 800;
-            color: #e58d00;
-            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 900;
+            color: var(--admin-text);
+            margin-bottom: 9px;
         }
 
-        .center-column input,
         .center-column select,
         .places-column input {
-            width: 100%;
-            height: 64px;
-            border: 2px solid #e58d00;
-            border-radius: 14px;
-            background-color: #f7f7f7;
-            padding: 0 18px;
-            font-size: 18px;
-            color: #111;
-            outline: none;
-            box-sizing: border-box;
+            height: 50px;
+            font-size: 15px;
         }
 
         .places-column input {
             text-align: center;
-            font-weight: 800;
+            font-weight: 900;
         }
 
         .remove-center-btn {
-            width: 64px;
-            height: 64px;
-            border: 2px solid #ff4d4d;
+            width: 50px;
+            height: 50px;
+            margin-top: 27px;
+            border: 1.5px solid #f1b7b7;
             border-radius: 14px;
-            background-color: white;
-            color: #ff4d4d;
-            font-size: 26px;
+            background-color: #ffffff;
+            color: var(--admin-red);
+            font-size: 22px;
             font-weight: 900;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
+            transition: all 0.18s ease;
         }
 
         .remove-center-btn:hover {
-            background-color: #ff4d4d;
-            color: white;
+            background-color: var(--admin-red);
+            color: #ffffff;
+            border-color: var(--admin-red);
+            transform: translateY(-1px);
         }
 
         .fila-centro:first-child .remove-column {
@@ -274,52 +348,63 @@
         }
 
         .fila-centro:first-child .center-grid {
-            grid-template-columns: 1fr 260px;
+            grid-template-columns: 1fr 240px;
         }
 
         .add-center-btn {
             width: 100%;
-            height: 76px;
+            min-height: 56px;
             border: none;
-            border-radius: 20px;
-            background-color: #ddb36a;
-            color: white;
-            font-size: 22px;
-            font-weight: 800;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
-            margin-bottom: 34px;
+            border-radius: 16px;
+            background-color: var(--admin-blue);
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 900;
+            box-shadow: 0 8px 18px rgba(6, 74, 143, 0.18);
+            margin: 8px 0 26px 0;
             cursor: pointer;
+            transition: all 0.18s ease;
+        }
+
+        .add-center-btn:hover {
+            background-color: var(--admin-blue-dark);
+            transform: translateY(-1px);
         }
 
         .divider {
-            margin: 26px 0 42px 0;
+            margin: 24px 0 28px 0;
+            border: none;
+            border-top: 1px solid var(--admin-border);
         }
 
         .info-box {
-            border-radius: 24px;
-            padding: 28px 34px;
-            margin-bottom: 42px;
+            border-radius: 22px;
+            padding: 22px 24px;
+            margin-bottom: 30px;
+            background-color: var(--admin-blue-soft);
+            border: 1px solid #d4e7ff;
         }
 
         .info-box-title {
-            font-size: 20px;
-            font-weight: 800;
-            color: #67a8cf;
-            margin-bottom: 16px;
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--admin-blue);
+            margin-bottom: 12px;
         }
 
         .info-list {
             margin: 0;
             padding-left: 22px;
-            font-size: 16px;
+            font-size: 14px;
             line-height: 1.7;
-            color: #111;
+            color: var(--admin-blue-dark);
+            font-weight: 600;
         }
 
         .form-actions {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 22px;
+            gap: 18px;
             margin-top: 10px;
         }
 
@@ -328,32 +413,38 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 74px;
+            min-height: 54px;
             border: none;
-            border-radius: 20px;
-            font-size: 22px;
-            font-weight: 800;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 900;
             text-decoration: none;
-            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.10);
+            box-shadow: 0 8px 18px rgba(15, 35, 60, 0.12);
             cursor: pointer;
+            transition: all 0.18s ease;
+            font-family: inherit;
         }
 
         .primary-btn {
-            background-color: #e58d00;
-            color: white;
+            background-color: var(--admin-orange);
+            color: #ffffff;
         }
 
         .primary-btn:hover {
-            background-color: #c77400;
+            background-color: var(--admin-orange-dark);
+            transform: translateY(-1px);
         }
 
         .secondary-btn {
-            background-color: #bdbdbd;
-            color: white;
+            background-color: #ffffff;
+            color: var(--admin-blue);
+            border: 1px solid var(--admin-border);
         }
 
         .secondary-btn:hover {
-            background-color: #a8a8a8;
+            background-color: var(--admin-blue-soft);
+            color: var(--admin-blue-dark);
+            transform: translateY(-1px);
         }
 
         .step-1-actions {
@@ -363,17 +454,20 @@
         }
 
         .step-1-actions .primary-btn {
-            width: 430px;
-            height: 64px;
-            font-size: 18px;
-            border-radius: 18px;
+            width: 330px;
         }
 
         @media (max-width: 1000px) {
             .form-grid,
             .center-grid,
+            .fila-centro:first-child .center-grid,
             .form-actions {
                 grid-template-columns: 1fr;
+            }
+
+            .remove-center-btn {
+                margin-top: 0;
+                width: 100%;
             }
 
             .step-1-actions .primary-btn {
@@ -382,12 +476,25 @@
         }
 
         @media (max-width: 800px) {
+            .page-wrapper {
+                padding: 24px 0 42px 0;
+            }
+
+            .admin-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .back-link {
+                width: 100%;
+            }
+
             .page-title {
-                font-size: 30px;
+                font-size: 32px;
             }
 
             .page-subtitle {
-                font-size: 16px;
+                font-size: 15px;
             }
 
             .stepper {
@@ -395,12 +502,16 @@
                 flex-wrap: wrap;
             }
 
+            .step {
+                font-size: 14px;
+            }
+
             .step-line {
-                width: 40px;
+                width: 44px;
             }
 
             .form-card {
-                padding: 26px 18px 28px 18px;
+                padding: 24px 20px 28px 20px;
                 border-radius: 24px;
             }
 
@@ -409,13 +520,17 @@
             }
 
             .step-description {
-                font-size: 18px;
+                font-size: 15px;
             }
 
-            .add-center-btn,
+            .center-card {
+                padding: 22px 18px;
+            }
+
             .primary-btn,
-            .secondary-btn {
-                font-size: 18px;
+            .secondary-btn,
+            .add-center-btn {
+                font-size: 15px;
             }
         }
     </style>
@@ -424,7 +539,10 @@
 <body>
 
 <header class="topbar">
-    <div class="logo">EduPlazas</div>
+    <div class="logo">
+        <span class="logo-edu">Edu</span><span class="logo-plazas">Plazas</span>
+    </div>
+
     <div class="topbar-right">
         <div class="user-name">Panel de Administración</div>
     </div>
@@ -433,28 +551,41 @@
 <main class="page-wrapper">
     <div class="page-content">
 
-        <a th:href="@{/admin/home}" class="back-link">← Volver a Convocatorias</a>
+        <div class="admin-header">
+            <div class="header-text">
+                <div class="eyebrow">Panel de administración</div>
+                <h1 class="page-title">Nueva Convocatoria</h1>
+                <p class="page-subtitle">
+                    Complete la información básica, seleccione los centros participantes y configure las plazas disponibles.
+                </p>
+            </div>
 
-        <h1 class="page-title">Nueva Convocatoria</h1>
-        <p class="page-subtitle">Complete todos los datos para crear una nueva convocatoria</p>
+            <a th:href="@{/admin/home}" class="back-link">← Volver a Convocatorias</a>
+        </div>
 
-        <form id="form-convocatoria" th:action="@{/admin/convocatoria/guardar}" th:object="${nuevaConvocatoria}" method="post" onsubmit="return prepararEnvio()">
+        <form id="form-convocatoria"
+              th:action="@{/admin/convocatoria/guardar}"
+              th:object="${nuevaConvocatoria}"
+              method="post"
+              onsubmit="return prepararEnvio()">
 
             <section id="step-1">
                 <div class="stepper">
                     <div class="step active">
                         <div class="step-circle">1</div>
-                        <span>Información Básica</span>
+                        <span>Información básica</span>
                     </div>
+
                     <div class="step-line"></div>
+
                     <div class="step">
                         <div class="step-circle">2</div>
-                        <span>Centros y Plazas</span>
+                        <span>Centros y plazas</span>
                     </div>
                 </div>
 
                 <section class="form-card">
-                    <h2 class="form-title">Información Básica de la Convocatoria</h2>
+                    <h2 class="form-title">Información básica de la convocatoria</h2>
 
                     <div class="form-group">
                         <label for="nombreConvocatoria">Nombre de la convocatoria *</label>
@@ -507,7 +638,7 @@
                     </div>
 
                     <div class="config-box">
-                        <h3 class="config-title">Configuración General</h3>
+                        <h3 class="config-title">Configuración general</h3>
 
                         <div class="form-grid">
                             <div class="form-group">
@@ -524,7 +655,7 @@
                                 <label for="estadoInicial">Estado inicial *</label>
                                 <select id="estadoInicial" th:field="*{estado}" required title="Selecciona el estado inicial.">
                                     <option value="BORRADOR">Borrador</option>
-                                    <option value="ACTIVA">Publicar como Activa</option>
+                                    <option value="ACTIVA">Publicar como activa</option>
                                     <option value="CERRADA">Cerrada</option>
                                 </select>
                                 <small class="form-help">Campo obligatorio.</small>
@@ -557,24 +688,28 @@
                     </div>
 
                     <div class="step-1-actions">
-                        <button type="button" class="primary-btn" onclick="showStep2()">Siguiente Paso →</button>
+                        <button type="button" class="primary-btn" onclick="showStep2()">Siguiente paso →</button>
                     </div>
                 </section>
             </section>
 
             <section id="step-2" style="display: none;">
-                <section class="form-card">
-                    <div class="stepper">
-                        <div class="step">
-                            <div class="step-circle">1</div>
-                            <span>Información Básica</span>
-                        </div>
-                        <div class="step-line"></div>
-                        <div class="step active">
-                            <div class="step-circle">2</div>
-                            <span>Centros y Plazas</span>
-                        </div>
+                <div class="stepper">
+                    <div class="step">
+                        <div class="step-circle">1</div>
+                        <span>Información básica</span>
                     </div>
+
+                    <div class="step-line"></div>
+
+                    <div class="step active">
+                        <div class="step-circle">2</div>
+                        <span>Centros y plazas</span>
+                    </div>
+                </div>
+
+                <section class="form-card">
+                    <h2 class="form-title">Centros educativos y plazas</h2>
 
                     <p class="step-description">
                         Seleccione los centros educativos participantes y asigne el número de plazas disponibles para cada uno.
@@ -592,7 +727,7 @@
                         <div class="center-card fila-centro">
                             <div class="center-grid">
                                 <div class="center-column">
-                                    <label class="center-label">Centro Educativo *</label>
+                                    <label class="center-label">Centro educativo *</label>
                                     <select class="centro-select" required onchange="actualizarDesplegables()" title="Selecciona un centro educativo.">
                                         <option value="" selected disabled>Seleccione un centro...</option>
                                         <option th:each="centro : ${centros}" th:value="${centro.nombre}" th:text="${centro.nombre}"></option>
@@ -601,7 +736,7 @@
                                 </div>
 
                                 <div class="places-column">
-                                    <label class="center-label">Plazas Disponibles *</label>
+                                    <label class="center-label">Plazas disponibles *</label>
                                     <input
                                         type="number"
                                         class="plazas-input"
@@ -621,12 +756,12 @@
                         </div>
                     </div>
 
-                    <button type="button" class="add-center-btn" onclick="agregarCentro()">＋ Añadir Centro Educativo</button>
+                    <button type="button" class="add-center-btn" onclick="agregarCentro()">＋ Añadir centro educativo</button>
 
                     <hr class="divider">
 
                     <div class="info-box">
-                        <div class="info-box-title">Información Importante</div>
+                        <div class="info-box-title">Información importante</div>
                         <ul class="info-list">
                             <li>El número total de plazas se calculará sumando todas las casillas automáticamente.</li>
                             <li>No puede seleccionar el mismo centro dos veces.</li>
@@ -636,7 +771,7 @@
 
                     <div class="form-actions">
                         <button type="button" class="secondary-btn" onclick="showStep1()">Anterior</button>
-                        <button type="submit" class="primary-btn">Crear Convocatoria →</button>
+                        <button type="submit" class="primary-btn">Crear convocatoria →</button>
                     </div>
                 </section>
             </section>
