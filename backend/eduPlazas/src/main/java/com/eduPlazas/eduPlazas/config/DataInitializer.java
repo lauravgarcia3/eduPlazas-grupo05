@@ -41,21 +41,21 @@ public class DataInitializer {
 
             Usuario admin = new Usuario();
             admin.setEmail("admin@eduplazas.com");
-            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setPassword(passwordEncoder.encode("admin123*"));
             admin.setNombreCompleto("Administrador Principal");
             admin.setRol("ROLE_ADMIN");
             usuarios.add(admin);
 
             Usuario solicitante = new Usuario();
             solicitante.setEmail("solicitante@eduplazas.com");
-            solicitante.setPassword(passwordEncoder.encode("solicitante123"));
+            solicitante.setPassword(passwordEncoder.encode("solicitante123*"));
             solicitante.setNombreCompleto("Familia Ejemplo");
             solicitante.setRol("ROLE_SOLICITANTE");
             usuarios.add(solicitante);
 
             Usuario centroUser = new Usuario();
             centroUser.setEmail("info@ceipsanfrancisco.edu.es");
-            centroUser.setPassword(passwordEncoder.encode("centro123"));
+            centroUser.setPassword(passwordEncoder.encode("centro123*"));
             centroUser.setNombreCompleto("CEIP San Francisco de Asís");
             centroUser.setRol("ROLE_CENTRO");
             usuarios.add(centroUser);
@@ -64,7 +64,7 @@ public class DataInitializer {
             for (int i = 2; i <= 100; i++) {
                 Usuario dummy = new Usuario();
                 dummy.setEmail("familia" + i + "@eduplazas.com");
-                dummy.setPassword(passwordEncoder.encode("123456"));
+                dummy.setPassword(passwordEncoder.encode("123456*"));
                 dummy.setNombreCompleto("Familia Fantasma " + i);
                 dummy.setRol("ROLE_SOLICITANTE");
                 usuarios.add(dummy);
