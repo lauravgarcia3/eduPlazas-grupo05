@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Estado de Solicitud - EduPlazas</title>
@@ -344,104 +345,112 @@
         }
     </style>
 </head>
+
 <body>
 
-<header class="topbar">
-    <div class="logo"><span>Edu</span><strong>Plazas</strong></div>
+    <header class="topbar">
+        <div class="logo"><span>Edu</span><strong>Plazas</strong></div>
 
-    <div class="topbar-right">
-        <a th:href="@{/solicitante/home}" class="back-btn">Volver a mis solicitudes</a>
-    </div>
-</header>
-
-<main class="page-wrapper">
-
-    <div class="status-container">
-        <div class="status-panel">
-            <section>
-                <div class="status-banner banner-aceptada">
-                    <h2>¡Solicitud aceptada!</h2>
-                    <p>El alumno/alumna ha sido admitido en el centro educativo.</p>
-                </div>
-
-                <div class="accepted-card">
-                    <div class="accepted-image-box">
-                        <img th:src="${centro != null ? centro.imagen : 'https://via.placeholder.com/900x250'}" alt="Centro educativo" class="accepted-image">
-                        <div class="confirmed-badge">Plaza confirmada</div>
-                    </div>
-
-                    <h2 class="center-name" th:text="${solicitud.centroPreferencia}">CEIP San Francisco de Asís</h2>
-
-                    <div class="info-grid">
-                        <div class="info-box orange">
-                            <h4>Dirección</h4>
-                            <p th:text="${centro != null ? centro.direccion : 'Dirección no disponible'}">Calle de la Educación, 123</p>
-                            <p th:text="${centro != null ? centro.ciudad + ', España' : ''}">28001 Madrid, España</p>
-                        </div>
-
-                        <div class="info-box blue">
-                            <h4>Correo electrónico</h4>
-                            <p th:text="${centro != null ? centro.email : 'Email no disponible'}">info@ceipsanfrancisco.edu.es</p>
-                        </div>
-
-                        <div class="info-box orange">
-                            <h4>Teléfono</h4>
-                            <p th:text="${centro != null ? centro.telefono : 'Teléfono no disponible'}">+34 91 234 5678</p>
-                        </div>
-
-                        <div class="info-box blue">
-                            <h4>Web</h4>
-                            <p th:text="${centro != null ? centro.web : 'Web no disponible'}">www.ceipsanfrancisco.edu.es</p>
-                        </div>
-                    </div>
-
-                    <hr class="divider">
-
-                    <h3 class="schedule-title">Horarios del centro</h3>
-
-                    <div class="schedule-card">
-                        <h4>Horario lectivo</h4>
-                        <div class="schedule-row">
-                            <span>Lunes a viernes</span>
-                            <span>9:00 - 14:00</span>
-                        </div>
-                        <div class="schedule-row">
-                            <span>Tarde opcional</span>
-                            <span>15:00 - 17:00</span>
-                        </div>
-                        <div class="schedule-note">
-                            Recreo<br>
-                            11:00 - 11:30
-                        </div>
-                    </div>
-
-                    <hr class="divider">
-
-                    <h3 class="schedule-title">Ubicación</h3>
-
-                    <div class="map-box">
-                        <img src="https://via.placeholder.com/900x320" alt="Mapa del centro" class="map-image">
-
-                        <div class="map-info-grid">
-                            <div class="map-info-item">
-                                <h5>Transporte público</h5>
-                                <p>Metro: Línea 3 (Estación Educación)</p>
-                                <p>Autobús: Líneas 12, 45, 87</p>
-                            </div>
-
-                            <div class="map-info-item">
-                                <h5>Aparcamiento</h5>
-                                <p>Parking gratuito disponible</p>
-                                <p>Zona de carga y descarga</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
+        <div class="topbar-right">
+            <a th:href="@{/solicitante/home}" class="back-btn">Volver a mis solicitudes</a>
         </div>
-    </div>
-</main>
+    </header>
+
+    <main class="page-wrapper">
+
+        <div class="status-container">
+            <div class="status-panel">
+                <section>
+                    <div class="status-banner banner-aceptada">
+                        <h2>¡Solicitud aceptada!</h2>
+                        <p>El alumno/alumna ha sido admitido en el centro educativo.</p>
+                    </div>
+
+                    <div class="accepted-card">
+                        <div class="accepted-image-box">
+                            <img th:src="${centro != null ? centro.imagen : 'https://via.placeholder.com/900x250'}"
+                                alt="Centro educativo" class="accepted-image">
+                            <div class="confirmed-badge">Plaza confirmada</div>
+                        </div>
+
+                        <h2 class="center-name" th:text="${solicitud.centroPreferencia}">CEIP San Francisco de Asís</h2>
+
+                        <div class="info-grid">
+                            <div class="info-box orange">
+                                <h4>Dirección</h4>
+                                <p th:text="${centro != null ? centro.direccion : 'Dirección no disponible'}">Calle de
+                                    la Educación, 123</p>
+                                <p th:text="${centro != null ? centro.ciudad + ', España' : ''}">28001 Madrid, España
+                                </p>
+                            </div>
+
+                            <div class="info-box blue">
+                                <h4>Correo electrónico</h4>
+                                <p th:text="${centro != null ? centro.email : 'Email no disponible'}">
+                                    info@ceipsanfrancisco.edu.es</p>
+                            </div>
+
+                            <div class="info-box orange">
+                                <h4>Teléfono</h4>
+                                <p th:text="${centro != null ? centro.telefono : 'Teléfono no disponible'}">+34 91 234
+                                    5678</p>
+                            </div>
+
+                            <div class="info-box blue">
+                                <h4>Web</h4>
+                                <p th:text="${centro != null ? centro.web : 'Web no disponible'}">
+                                    www.ceipsanfrancisco.edu.es</p>
+                            </div>
+                        </div>
+
+                        <hr class="divider">
+
+                        <h3 class="schedule-title">Horarios del centro</h3>
+
+                        <div class="schedule-card">
+                            <h4>Horario lectivo</h4>
+                            <div class="schedule-row">
+                                <span>Lunes a viernes</span>
+                                <span>9:00 - 14:00</span>
+                            </div>
+                            <div class="schedule-row">
+                                <span>Tarde opcional</span>
+                                <span>15:00 - 17:00</span>
+                            </div>
+                            <div class="schedule-note">
+                                Recreo<br>
+                                11:00 - 11:30
+                            </div>
+                        </div>
+
+                        <hr class="divider">
+
+                        <h3 class="schedule-title">Ubicación</h3>
+
+                        <div class="map-box">
+                            <img src="https://via.placeholder.com/900x320" alt="Mapa del centro" class="map-image">
+
+                            <div class="map-info-grid">
+                                <div class="map-info-item">
+                                    <h5>Transporte público</h5>
+                                    <p>Metro: Línea 3 (Estación Educación)</p>
+                                    <p>Autobús: Líneas 12, 45, 87</p>
+                                </div>
+
+                                <div class="map-info-item">
+                                    <h5>Aparcamiento</h5>
+                                    <p>Parking gratuito disponible</p>
+                                    <p>Zona de carga y descarga</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+        </div>
+    </main>
 
 </body>
+
 </html>

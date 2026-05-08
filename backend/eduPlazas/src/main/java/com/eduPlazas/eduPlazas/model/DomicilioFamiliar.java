@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 
 @Entity
@@ -21,6 +22,7 @@ private String direccionCompleta;
 private String ciudad;
 
 @NotBlank(message = "Debe cumplimentar el campo «Código postal».")
+@Pattern(regexp = "^[0-9]{5}$", message = "El código postal debe tener 5 dígitos")
 private String codigoPostal;
 
 @NotBlank(message = "Debe cumplimentar el campo «Provincia».")

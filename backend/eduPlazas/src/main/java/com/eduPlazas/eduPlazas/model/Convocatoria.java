@@ -1,7 +1,10 @@
 package com.eduPlazas.eduPlazas.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "convocatorias")
@@ -11,21 +14,31 @@ public class Convocatoria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El nombre de la convocatoria es obligatorio")
     @Column(nullable = false)
     private String nombre;
 
+    @NotNull(message = "La fecha de inicio es obligatoria")
     @Column(nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaInicio;
 
+    @NotNull(message = "La fecha de fin es obligatoria")
     @Column(nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaFin;
 
     @Column(length = 1000)
     private String descripcion;
 
     private String tipo;          // Ej: Educación Infantil
+    
+    @NotBlank(message = "El estado de la convocatoria es obligatorio")
     private String estado;        // Ej: ACTIVA, CERRADA, BORRADOR
+    
+    @NotBlank(message = "El año académico es obligatorio")
     private String anioAcademico; // Ej: 2026-2027
+    
     private String modalidad;     // Ej: Presencial
 
     // --- CONSTRUCTORES ---
@@ -65,6 +78,12 @@ public class Convocatoria {
     // Añadimos los campos simples para el centro, esto luego lo meteremos en una tabla aparte que haga referencia a esta convocatoria, pero por ahora lo dejamos así hasta que tire todo
     private String nombreCentro;
     private Integer numeroPlazas;
+    
+    @Column(length = 2000)
+    private String nombresCentrosArray;
+    
+    @Column(length = 2000)
+    private String plazasCentrosArray;
 
     // --- GETTERS Y SETTERS NUEVOS ---
     public String getNombreCentro() { return nombreCentro; }
@@ -72,4 +91,10 @@ public class Convocatoria {
 
     public Integer getNumeroPlazas() { return numeroPlazas; }
     public void setNumeroPlazas(Integer numeroPlazas) { this.numeroPlazas = numeroPlazas; }
+
+    public String getNombresCentrosArray() { return nombresCentrosArray; }
+    public void setNombresCentrosArray(String nombresCentrosArray) { this.nombresCentrosArray = nombresCentrosArray; }
+
+    public String getPlazasCentrosArray() { return plazasCentrosArray; }
+    public void setPlazasCentrosArray(String plazasCentrosArray) { this.plazasCentrosArray = plazasCentrosArray; }
 }
