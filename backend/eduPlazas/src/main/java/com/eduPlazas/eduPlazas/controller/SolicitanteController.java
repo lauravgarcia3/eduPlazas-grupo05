@@ -177,21 +177,57 @@ public class SolicitanteController {
             Authentication authentication,
             Model model) {
 
-        if (result.hasErrors()) {
-            Optional<Convocatoria> activa = convocatoriaService.obtenerConvocatoriaActiva();
-            if (activa.isPresent()) {
-                Convocatoria conv = activa.get();
-                model.addAttribute("convocatoriaActiva", conv);
-
-                if (conv.getFechaInicio() != null && conv.getFechaFin() != null) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
-                    model.addAttribute("fechaInicioFormat", conv.getFechaInicio().format(formatter));
-                    model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
-                }
-            }
-            return "solicitante/formulario";
+        // 1. FORZAMOS EL ID PARA QUE HIBERNATE ACTUALICE EN LUGAR DE DUPLICAR
+        if (id != null) {
+            solicitud.setId(id);
         }
 
+        // 2. Si no se han cumplimentado datos de tutor2, lo ignoramos para familias monoparentales.
+        if (solicitud.getTutor2() != null) {
+            Tutor tutor2 = solicitud.getTutor2();
+            boolean tutor2Vacio =
+                    (tutor2.getNombre() == null || tutor2.getNombre().isBlank()) &&
+                    (tutor2.getApellidos() == null || tutor2.getApellidos().isBlank()) &&
+                    (tutor2.getDniNie() == null || tutor2.getDniNie().isBlank()) &&
+                    (tutor2.getRelacionConMenor() == null || tutor2.getRelacionConMenor().isBlank()) &&
+                    (tutor2.getTelefono() == null || tutor2.getTelefono().isBlank()) &&
+                    (tutor2.getEmail() == null || tutor2.getEmail().isBlank()) &&
+                    (tutor2.getSituacionLaboral() == null || tutor2.getSituacionLaboral().isBlank());
+
+            if (tutor2Vacio) {
+                solicitud.setTutor2(null);
+            }
+        }
+
+        // 3. SI ES COMPLETAR Y HAY ERRORES, VOLVEMOS AL FORMULARIO.
+        // SI ES BORRADOR, IGNORAMOS LOS ERRORES 
+        if ("completar".equals(accion) && result.hasErrors()) {
+            boolean soloErroresTutor2 = result.getAllErrors().stream()
+                    .allMatch(error -> error instanceof org.springframework.validation.FieldError fieldError
+                            && fieldError.getField().startsWith("tutor2."));
+
+            if (soloErroresTutor2) {
+                solicitud.setTutor2(null);
+            } else {
+                Optional<Convocatoria> activa = convocatoriaService.obtenerConvocatoriaActiva();
+                if (activa.isPresent()) {
+                    Convocatoria conv = activa.get();
+                    model.addAttribute("convocatoriaActiva", conv);
+                    if (conv.getFechaInicio() != null && conv.getFechaFin() != null) {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
+                        model.addAttribute("fechaInicioFormat", conv.getFechaInicio().format(formatter));
+                        model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
+                    }
+                }
+                List<Centro> centros = centroRepository.findAll();
+                centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
+                model.addAttribute("centros", centros);
+                
+                return "solicitante/formulario";
+            }
+        }
+
+        // 4. ASIGNAMOS USUARIO Y CONVOCATORIA
         String email = authentication.getName();
         var usuarioOpt = usuarioRepository.findByEmail(email);
         usuarioOpt.ifPresent(solicitud::setUsuario);

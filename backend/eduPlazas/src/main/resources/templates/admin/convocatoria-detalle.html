@@ -6,141 +6,236 @@
 
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <style>
+        :root {
+            --admin-blue: #064a8f;
+            --admin-blue-dark: #03386e;
+            --admin-blue-soft: #e8f2fb;
+            --admin-orange: #f06f00;
+            --admin-orange-dark: #c85c00;
+            --admin-orange-soft: #fff2e6;
+            --admin-bg: #f6f8fb;
+            --admin-card: #ffffff;
+            --admin-border: #e2e8f0;
+            --admin-text: #172033;
+            --admin-muted: #64748b;
+            --admin-green: #16834a;
+            --admin-red: #b42318;
+            --admin-shadow: 0 14px 34px rgba(15, 35, 60, 0.10);
+        }
+
         .page-wrapper {
-            padding: 30px 0 50px 0;
+            padding: 34px 0 58px 0;
+            min-height: calc(100vh - 72px);
+            background:
+                radial-gradient(circle at 8% 8%, rgba(240, 111, 0, 0.08) 0, rgba(240, 111, 0, 0.08) 190px, transparent 191px),
+                radial-gradient(circle at 92% 18%, rgba(6, 74, 143, 0.07) 0, rgba(6, 74, 143, 0.07) 230px, transparent 231px),
+                var(--admin-bg);
         }
 
         .page-header {
             display: flex;
             justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .header-text {
+            max-width: 820px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
             align-items: center;
-            margin-bottom: 34px;
+            gap: 8px;
+            background-color: var(--admin-blue-soft);
+            color: var(--admin-blue);
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 900;
+            margin-bottom: 14px;
         }
 
         .page-title {
-            font-size: 34px;
-            margin: 0;
+            font-size: 42px;
+            margin: 0 0 10px 0;
+            color: var(--admin-text);
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            line-height: 1.08;
         }
 
-        .primary-btn {
-            height: 46px;
-            padding: 0 28px;
-            border-radius: 10px;
-            background-color: #e58d00;
-            color: white;
-            font-weight: 800;
+        .page-subtitle {
+            margin: 0;
+            color: var(--admin-muted);
+            font-size: 17px;
+            font-weight: 600;
+            line-height: 1.45;
+        }
+
+        .primary-btn,
+        .secondary-btn {
+            min-height: 46px;
+            padding: 0 24px;
+            border-radius: 14px;
+            font-weight: 900;
             font-size: 15px;
             border: none;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.10);
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            white-space: nowrap;
+            font-family: inherit;
+        }
+
+        .primary-btn {
+            background-color: var(--admin-orange);
+            color: #ffffff;
+            box-shadow: 0 8px 18px rgba(240, 111, 0, 0.22);
         }
 
         .primary-btn:hover {
-            background-color: #c77400;
+            background-color: var(--admin-orange-dark);
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .secondary-btn {
+            background-color: #ffffff;
+            color: var(--admin-blue);
+            border: 1px solid var(--admin-border);
+            box-shadow: 0 8px 18px rgba(15, 35, 60, 0.08);
+        }
+
+        .secondary-btn:hover {
+            background-color: var(--admin-blue-soft);
+            color: var(--admin-blue-dark);
+            transform: translateY(-1px);
+        }
+
+        .disabled-btn {
+            background-color: #cbd5e1;
+            color: #ffffff;
+            opacity: 0.9;
+            cursor: not-allowed;
+            pointer-events: none;
+            box-shadow: none;
         }
 
         .convocatoria-card {
-            display: flex;
-            background-color: #f7f7f7;
+            display: grid;
+            grid-template-columns: 360px 1fr;
+            background-color: var(--admin-card);
             border-radius: 30px;
             overflow: hidden;
-            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.10);
+            box-shadow: var(--admin-shadow);
+            border: 1px solid var(--admin-border);
         }
 
         .convocatoria-left {
-            width: 360px;
-            background-color: #ddb36a;
-            padding: 38px 32px;
-            color: white;
+            background:
+                radial-gradient(circle at 80% 12%, rgba(255, 255, 255, 0.22) 0, rgba(255, 255, 255, 0.22) 80px, transparent 81px),
+                linear-gradient(135deg, #ffb14a 0%, var(--admin-orange) 100%);
+            padding: 32px 30px;
+            color: #ffffff;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            min-height: 360px;
         }
 
         .convocatoria-title {
-            font-size: 26px;
-            font-weight: 800;
-            line-height: 1.35;
+            font-size: 28px;
+            font-weight: 900;
+            line-height: 1.16;
             margin-bottom: 26px;
+            letter-spacing: -0.3px;
         }
 
         .convocatoria-dates {
             font-size: 14px;
-            margin-bottom: 28px;
+            font-weight: 700;
+            line-height: 1.45;
         }
 
         .convocatoria-dates p {
-            margin: 12px 0;
+            margin: 10px 0;
         }
 
         .convocatoria-box {
-            background-color: rgba(255, 255, 255, 0.28);
-            border-radius: 18px;
-            padding: 16px 22px;
+            background-color: rgba(255, 255, 255, 0.20);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            padding: 18px 20px;
+            backdrop-filter: blur(6px);
         }
 
         .convocatoria-box-label {
             font-size: 13px;
-            color: white;
-            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.92);
+            margin-bottom: 8px;
+            font-weight: 800;
         }
 
         .convocatoria-box-value {
-            font-size: 30px;
-            font-weight: 800;
-            color: white;
+            font-size: 36px;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1;
         }
 
         .convocatoria-right {
-            flex: 1;
-            padding: 38px 40px;
+            padding: 34px 36px 36px 36px;
         }
 
-        .section-title {
-            font-size: 18px;
-            font-weight: 800;
-            color: #111;
-            margin-bottom: 18px;
-        }
-
-        .detail-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 18px;
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
             margin-bottom: 26px;
         }
 
-        .detail-box {
-            background-color: #efefef;
-            border-radius: 14px;
-            padding: 18px 20px 20px 20px;
+        .section-title {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--admin-text);
+            margin: 0 0 12px 0;
         }
 
-        .detail-label {
-            font-size: 13px;
-            color: #777;
-            margin-bottom: 8px;
+        .section-description {
+            margin: 0;
+            color: var(--admin-muted);
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.45;
         }
 
-        .detail-value {
-            font-size: 17px;
-            font-weight: 700;
-            color: #111;
+        .status-block {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+            flex-shrink: 0;
         }
 
         .status-pill {
-            background-color: #dfe8ee;
-            padding: 10px 22px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 14px;
-            min-width: 130px;
+            background-color: var(--admin-blue-soft);
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-weight: 900;
+            font-size: 13px;
+            min-width: 120px;
             text-align: center;
-            color: #2d6d95;
-            display: inline-block;
+            color: var(--admin-blue);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .status-indicator {
@@ -148,58 +243,141 @@
             align-items: center;
             gap: 10px;
             font-size: 14px;
-            color: #666;
-            margin-top: 10px;
+            color: var(--admin-muted);
+            font-weight: 800;
+            background-color: #f8fafc;
+            border: 1px solid var(--admin-border);
+            border-radius: 999px;
+            padding: 10px 14px;
         }
 
         .status-dot {
-            width: 12px;
-            height: 12px;
+            width: 11px;
+            height: 11px;
             border-radius: 50%;
             flex-shrink: 0;
         }
 
         .status-dot.green {
-            background-color: #49b35a;
+            background-color: var(--admin-green);
         }
 
         .status-dot.red {
-            background-color: #ef4b43;
+            background-color: var(--admin-red);
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 26px;
+        }
+
+        .detail-box {
+            background-color: #f8fafc;
+            border: 1px solid var(--admin-border);
+            border-radius: 18px;
+            padding: 18px 18px 20px 18px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: var(--admin-muted);
+            margin-bottom: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.35px;
+        }
+
+        .detail-value {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--admin-text);
+            line-height: 1.2;
+        }
+
+        .detail-box.orange {
+            border-left: 5px solid var(--admin-orange);
+        }
+
+        .detail-box.blue {
+            border-left: 5px solid var(--admin-blue);
+        }
+
+        .detail-box.green {
+            border-left: 5px solid var(--admin-green);
+        }
+
+        .detail-box.gray {
+            border-left: 5px solid #94a3b8;
+        }
+
+        .description-card {
+            background-color: var(--admin-blue-soft);
+            border: 1px solid #d4e7ff;
+            color: var(--admin-blue-dark);
+            border-radius: 20px;
+            padding: 20px 22px;
+            margin-bottom: 26px;
+        }
+
+        .description-card h3 {
+            margin: 0 0 8px 0;
+            font-size: 17px;
+            font-weight: 900;
+            color: var(--admin-blue);
+        }
+
+        .description-card p {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.5;
         }
 
         .actions-footer {
-            margin-top: 26px;
             display: flex;
-            gap: 14px;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
-        @media (max-width: 1000px) {
+        .actions-footer .primary-btn,
+        .actions-footer .secondary-btn {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        @media (max-width: 1100px) {
             .convocatoria-card {
-                flex-direction: column;
+                grid-template-columns: 1fr;
             }
 
             .convocatoria-left {
-                width: 100%;
+                min-height: auto;
+                gap: 28px;
             }
 
             .detail-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 800px) {
             .page-wrapper {
-                padding: 24px 0 40px 0;
+                padding: 24px 0 42px 0;
             }
 
             .page-header {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 16px;
+                align-items: stretch;
             }
 
             .page-title {
-                font-size: 28px;
+                font-size: 32px;
+            }
+
+            .page-subtitle {
+                font-size: 15px;
             }
 
             .convocatoria-right {
@@ -210,11 +388,30 @@
                 padding: 24px 20px;
             }
 
+            .section-header {
+                flex-direction: column;
+            }
+
+            .status-block {
+                align-items: flex-start;
+                width: 100%;
+            }
+
+            .status-indicator {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
             .actions-footer {
                 flex-direction: column;
             }
 
-            .primary-btn {
+            .primary-btn,
+            .secondary-btn {
                 width: 100%;
             }
         }
@@ -223,7 +420,9 @@
 <body>
 
 <header class="topbar">
-    <div class="logo">EduPlazas</div>
+    <div class="logo">
+        <span class="logo-edu">Edu</span><span class="logo-plazas">Plazas</span>
+    </div>
 
     <div class="topbar-right">
         <div class="user-name">Panel de Administración</div>
@@ -234,8 +433,15 @@
     <div class="page-content">
 
         <div class="page-header">
-            <h1 class="page-title" th:text="${convocatoria.nombre}">Detalle convocatoria</h1>
-            <a th:href="@{/admin/home}" class="primary-btn">← Volver al listado</a>
+            <div class="header-text">
+                <div class="eyebrow">Detalle de convocatoria</div>
+                <h1 class="page-title" th:text="${convocatoria.nombre}">Detalle convocatoria</h1>
+                <p class="page-subtitle">
+                    Consulta el estado general del proceso, las plazas disponibles y el resumen de solicitudes recibidas.
+                </p>
+            </div>
+
+            <a th:href="@{/admin/home}" class="secondary-btn">← Volver al listado</a>
         </div>
 
         <section class="convocatoria-card">
@@ -258,10 +464,15 @@
             </div>
 
             <div class="convocatoria-right">
-                <div>
-                    <div class="section-title">Estado y resumen</div>
-
+                <div class="section-header">
                     <div>
+                        <h2 class="section-title">Estado y resumen</h2>
+                        <p class="section-description">
+                            Información principal de la convocatoria seleccionada y métricas del proceso.
+                        </p>
+                    </div>
+
+                    <div class="status-block">
                         <span class="status-pill" th:text="${convocatoria.estado}">ACTIVA</span>
 
                         <div class="status-indicator">
@@ -273,18 +484,18 @@
                     </div>
                 </div>
 
-                <div class="detail-grid" style="margin-top: 24px;">
-                    <div class="detail-box">
+                <div class="detail-grid">
+                    <div class="detail-box orange">
                         <div class="detail-label">Plazas totales</div>
                         <div class="detail-value" th:text="${convocatoria.numeroPlazas}">350</div>
                     </div>
 
-                    <div class="detail-box">
+                    <div class="detail-box blue">
                         <div class="detail-label">Solicitudes recibidas</div>
                         <div class="detail-value" th:text="${totalSolicitudes}">0</div>
                     </div>
 
-                    <div class="detail-box">
+                    <div class="detail-box green">
                         <div class="detail-label">Tasa de ocupación</div>
                         <div class="detail-value"
                              th:text="${convocatoria.numeroPlazas > 0} ? ${#numbers.formatDecimal((totalSolicitudes * 100.0) / convocatoria.numeroPlazas, 1, 1)} + '%' : '0%'">
@@ -292,18 +503,32 @@
                         </div>
                     </div>
 
-                    <div class="detail-box">
+                    <div class="detail-box gray">
                         <div class="detail-label">Identificador</div>
                         <div class="detail-value" th:text="${convocatoria.id}">1</div>
                     </div>
                 </div>
 
+                <div class="description-card">
+                    <h3>Descripción</h3>
+                    <p th:text="${convocatoria.descripcion != null and !#strings.isEmpty(convocatoria.descripcion) ? convocatoria.descripcion : 'No hay descripción registrada para esta convocatoria.'}">
+                        No hay descripción registrada para esta convocatoria.
+                    </p>
+                </div>
+
                 <div class="actions-footer">
-                    <a th:href="@{/admin/convocatoria/{id}/solicitudes(id=${convocatoria.id})}" class="primary-btn">Ver solicitudes</a>
-                    <a th:if="${convocatoria.estado == 'ACTIVA'}" th:href="@{/admin/convocatoria}" class="primary-btn" style="background-color:#67a8cf;">
+                    <a th:href="@{/admin/convocatoria/{id}/solicitudes(id=${convocatoria.id})}" class="primary-btn">
+                        Ver solicitudes
+                    </a>
+
+                    <a th:if="${convocatoria.estado == 'ACTIVA' or convocatoria.estado == 'BORRADOR'}"
+                       th:href="@{/admin/convocatoria/editar/{id}(id=${convocatoria.id})}"
+                       class="secondary-btn">
                         Editar convocatoria
                     </a>
-                    <span th:unless="${convocatoria.estado == 'ACTIVA'}" class="primary-btn" style="background-color:#b8b8b8; cursor:not-allowed;">
+
+                    <span th:unless="${convocatoria.estado == 'ACTIVA' or convocatoria.estado == 'BORRADOR'}"
+                          class="secondary-btn disabled-btn">
                         Convocatoria cerrada
                     </span>
                 </div>
@@ -312,5 +537,6 @@
 
     </div>
 </main>
+
 </body>
 </html>

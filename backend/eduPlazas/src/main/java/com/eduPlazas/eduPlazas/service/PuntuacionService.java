@@ -25,7 +25,10 @@ public class PuntuacionService {
                                        double puntosFamiliaNumerosa,
                                        double puntosFamiliaMonoparental,
                                        double puntosDiscapacidad,
-                                       double puntosRenta) {
+                                       double puntosRenta,
+                                       double puntosVictimaViolencia,
+                                       double puntosConciliacion,
+                                       double puntosTraslado) {
 
         Optional<Puntuacion> existenteOpt = puntuacionRepository.findBySolicitud(solicitud);
         Puntuacion p = existenteOpt.orElseGet(Puntuacion::new);
@@ -39,6 +42,9 @@ public class PuntuacionService {
         p.setPuntosFamiliaMonoparental(puntosFamiliaMonoparental);
         p.setPuntosDiscapacidad(puntosDiscapacidad);
         p.setPuntosRenta(puntosRenta);
+        p.setPuntosVictimaViolencia(puntosVictimaViolencia);
+        p.setPuntosConciliacion(puntosConciliacion);
+        p.setPuntosTraslado(puntosTraslado);
 
         double total = puntosHermanos
                 + puntosProximidad
@@ -46,7 +52,10 @@ public class PuntuacionService {
                 + puntosFamiliaNumerosa
                 + puntosFamiliaMonoparental
                 + puntosDiscapacidad
-                + puntosRenta;
+                + puntosRenta
+                + puntosVictimaViolencia
+                + puntosConciliacion
+                + puntosTraslado;
 
         p.setTotalPuntos(total);
         p.setFechaCalculo(LocalDateTime.now());
