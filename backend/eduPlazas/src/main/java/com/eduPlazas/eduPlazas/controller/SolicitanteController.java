@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.eduPlazas.eduPlazas.repository.UsuarioRepository;
 import com.eduPlazas.eduPlazas.repository.CentroRepository;
+import com.eduPlazas.eduPlazas.repository.SolicitudRepository;
 import com.eduPlazas.eduPlazas.service.SolicitudService;
 import com.eduPlazas.eduPlazas.service.ConvocatoriaService;
 import com.eduPlazas.eduPlazas.model.Solicitud;
@@ -52,7 +54,12 @@ public class SolicitanteController {
 
     @Autowired
     private Validator validator;
+
+    @Autowired
     private CentroRepository centroRepository;
+
+    @Autowired
+    private SolicitudRepository solicitudRepository;
 
     @GetMapping("/home")
     public String home(Authentication authentication, Model model) {
@@ -169,7 +176,13 @@ public class SolicitanteController {
     public String estado(@RequestParam(value = "id", required = false) Long id, Model model,
             Authentication authentication) {
 
-        Optional<Solicitud> solicitudOpt = solicitudService.obtenerPorId(id);
+        if (id == null) {
+            return "redirect:/solicitante/home";
+        }
+
+        // Usamos findByIdWithUsuario (JOIN FETCH) para cargar el usuario en la misma query
+        // y evitar LazyInitializationException en el check IDOR
+        Optional<Solicitud> solicitudOpt = solicitudRepository.findByIdWithUsuario(id);
         if (solicitudOpt.isPresent()) {
             Solicitud solicitud = solicitudOpt.get();
             // Verificación de IDOR
@@ -194,6 +207,7 @@ public class SolicitanteController {
 
     @PostMapping("/solicitud/guardar")
     public String guardarSolicitud(
+            @RequestParam(value = "id", required = false) Long id,
             @Valid @ModelAttribute("nuevaSolicitud") Solicitud solicitud,
             BindingResult result,
             @RequestParam(value = "accion", required = false, defaultValue = "completar") String accion,
