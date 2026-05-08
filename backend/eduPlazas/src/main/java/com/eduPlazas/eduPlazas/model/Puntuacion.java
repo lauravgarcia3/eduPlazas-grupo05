@@ -20,6 +20,10 @@ public class Puntuacion {
     private Double puntosDiscapacidad = 0.0;
     private Double puntosRenta = 0.0;
 
+    private Double puntosVictimaViolencia = 0.0;
+    private Double puntosConciliacion = 0.0;
+    private Double puntosTraslado = 0.0;
+
     private LocalDateTime fechaCalculo;
 
     @OneToOne
@@ -96,6 +100,30 @@ public class Puntuacion {
 
     public void setPuntosRenta(Double puntosRenta) {
         this.puntosRenta = puntosRenta;
+    }
+
+    public Double getPuntosVictimaViolencia() {
+        return puntosVictimaViolencia;
+    }
+
+    public void setPuntosVictimaViolencia(Double puntosVictimaViolencia) {
+        this.puntosVictimaViolencia = puntosVictimaViolencia;
+    }
+
+    public Double getPuntosConciliacion() {
+        return puntosConciliacion;
+    }
+
+    public void setPuntosConciliacion(Double puntosConciliacion) {
+        this.puntosConciliacion = puntosConciliacion;
+    }
+
+    public Double getPuntosTraslado() {
+        return puntosTraslado;
+    }
+
+    public void setPuntosTraslado(Double puntosTraslado) {
+        this.puntosTraslado = puntosTraslado;
     }
 
     public LocalDateTime getFechaCalculo() {
