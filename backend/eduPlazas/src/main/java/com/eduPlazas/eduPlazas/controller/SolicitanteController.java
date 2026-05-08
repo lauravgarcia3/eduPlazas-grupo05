@@ -169,6 +169,10 @@ public class SolicitanteController {
             }
         }
 
+        List<Centro> centros = centroRepository.findAll();
+        centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
+        model.addAttribute("centros", centros);
+
         return "solicitante/formulario";
     }
 
@@ -229,6 +233,10 @@ public class SolicitanteController {
                 return "redirect:/solicitante/home";
             }
             solicitud.setId(id);
+            // Recuperamos la solicitud de la DB para no perder los archivos que ya existían
+            solicitudService.obtenerPorId(id).ifPresent(previa -> {
+                solicitud.setDocumentos(previa.getDocumentos());
+            });
         }
 
         // 1.5. REVISIÓN DEL TUTOR 2 (Antes de validar)

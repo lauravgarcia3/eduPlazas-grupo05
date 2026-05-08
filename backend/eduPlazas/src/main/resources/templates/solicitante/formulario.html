@@ -733,7 +733,7 @@ La unidad familiar acredita un traslado por motivos laborales.
 <section class="form-section">
 <h2 class="section-title">7. Documentación a Presentar</h2>
 
-<div class="documents-box">
+<div class="documents-box" style="margin-bottom: 18px;">
 Documentación obligatoria: Deberá presentar los siguientes documentos en formato original o copia compulsada antes de finalizar el plazo de la convocatoria:
 <ul>
 <li>DNI/NIE de los padres/tutores</li>
@@ -743,6 +743,18 @@ Documentación obligatoria: Deberá presentar los siguientes documentos en forma
 </ul>
 </div>
 
+<div th:if="${nuevaSolicitud.documentos != null and not #lists.isEmpty(nuevaSolicitud.documentos)}" style="margin-bottom: 15px; background-color: #f0f7ff; padding: 14px; border-radius: 10px; border: 1px solid #d4e7ff;">
+    <strong style="color: #064a8f; display: block; margin-bottom: 8px; font-size: 14px;">Documentos listos para guardarse:</strong>
+    <ul style="margin: 0 0 0 18px; padding: 0; font-size: 13px; color: #172033; line-height: 1.5;">
+        <li th:each="doc : ${nuevaSolicitud.documentos}">
+            <span th:text="${doc.nombre}" style="font-weight: 700;"></span>
+            <span style="color: #606f80; font-size: 11px; margin-left: 6px;">(Pendiente de envío)</span>
+        </li>
+    </ul>
+</div>
+
+<div id="selected-files" class="selected-files" style="margin-bottom: 15px;"></div>
+
 <input type="file" id="documentos" name="archivos" class="hidden-file-input" multiple
        accept=".pdf,.jpg,.jpeg,.png">
 
@@ -750,8 +762,7 @@ Documentación obligatoria: Deberá presentar los siguientes documentos en forma
 Adjuntar Documentación
 </button>
 
-<div id="selected-files" class="selected-files"></div>
-<div id="file-error" class="file-error" th:if="${fileUploadError}">[[${fileUploadError}]]</div>
+<div id="file-error" class="file-error" th:text="${fileUploadError}"></div>
 <small class="form-help">Formatos permitidos: PDF, JPG, JPEG o PNG. Tamaño máximo recomendado: 5 MB por archivo.</small>
 </section>
 
@@ -802,52 +813,70 @@ const fileErrorDiv = document.getElementById('file-error');
 const fechaNacimientoInput = document.getElementById('fechaNacimiento');
 
 const hoy = new Date().toISOString().split('T')[0];
-fechaNacimientoInput.setAttribute('max', hoy);
-
-inputDocumentos.addEventListener('change', function () {
-selectedFilesDiv.innerHTML = '';
-fileErrorDiv.textContent = '';
-this.setCustomValidity('');
-
-const extensionesPermitidas = ['pdf', 'jpg', 'jpeg', 'png'];
-const maxTamanoBytes = 5 * 1024 * 1024;
-let hayError = false;
-
-if (this.files.length > 0) {
-const titulo = document.createElement('strong');
-titulo.textContent = 'Documentos seleccionados:';
-selectedFilesDiv.appendChild(titulo);
-
-const lista = document.createElement('ul');
-
-for (let i = 0; i < this.files.length; i++) {
-const archivo = this.files[i];
-const extension = archivo.name.split('.').pop().toLowerCase();
-
-const item = document.createElement('li');
-item.textContent = archivo.name;
-lista.appendChild(item);
-
-if (!extensionesPermitidas.includes(extension)) {
-hayError = true;
-fileErrorDiv.textContent = 'Solo se permiten archivos PDF, JPG, JPEG o PNG.';
+if(fechaNacimientoInput) {
+    fechaNacimientoInput.setAttribute('max', hoy);
 }
 
-if (archivo.size > maxTamanoBytes) {
-hayError = true;
-fileErrorDiv.textContent = 'Cada archivo debe tener un tamaño máximo de 5 MB.';
-}
-}
+if(inputDocumentos) {
+    inputDocumentos.addEventListener('change', function () {
+        if(selectedFilesDiv) selectedFilesDiv.innerHTML = '';
+        if(fileErrorDiv) fileErrorDiv.textContent = '';
+        this.setCustomValidity('');
 
-selectedFilesDiv.appendChild(lista);
-}
+        const extensionesPermitidas = ['pdf', 'jpg', 'jpeg', 'png'];
+        const maxTamanoBytes = 5 * 1024 * 1024;
+        let hayError = false;
 
-if (hayError) {
-this.setCustomValidity('Revise los documentos adjuntos.');
-} else {
-this.setCustomValidity('');
+        if (this.files.length > 0) {
+            for (let i = 0; i < this.files.length; i++) {
+                const archivo = this.files[i];
+                const extension = archivo.name.split('.').pop().toLowerCase();
+
+                if (!extensionesPermitidas.includes(extension)) {
+                    hayError = true;
+                    if(fileErrorDiv) fileErrorDiv.textContent = 'Solo se permiten archivos PDF, JPG, JPEG o PNG.';
+                }
+
+                if (archivo.size > maxTamanoBytes) {
+                    hayError = true;
+                    if(fileErrorDiv) fileErrorDiv.textContent = 'Cada archivo debe tener un tamaño máximo de 5 MB.';
+                }
+            }
+        }
+
+        if (hayError) {
+            this.setCustomValidity('Revise los documentos adjuntos.');
+        } else if (this.files.length > 0) {
+            this.setCustomValidity('');
+
+            if(selectedFilesDiv) {
+                const cajaPendientes = document.createElement('div');
+                // ESTILO CALCADO A LA CAJA AZUL
+                cajaPendientes.style.cssText = 'margin-top: 15px; margin-bottom: 15px; background-color: #f0f7ff; padding: 14px; border-radius: 10px; border: 1px solid #d4e7ff;';
+
+                const titulo = document.createElement('strong');
+                // TEXTO EN AZUL OSCURO
+                titulo.style.cssText = 'color: #064a8f; display: block; margin-bottom: 8px; font-size: 14px;';
+                titulo.textContent = 'Documentos listos para guardarse:';
+                cajaPendientes.appendChild(titulo);
+
+                const lista = document.createElement('ul');
+                lista.style.cssText = 'margin: 0 0 0 18px; padding: 0; font-size: 13px; color: #172033; line-height: 1.5;';
+
+                for (let i = 0; i < this.files.length; i++) {
+                    const archivo = this.files[i];
+                    const item = document.createElement('li');
+                    // TEXTO DE LA EXTENSIÓN EN GRIS DISCRETO
+                    item.innerHTML = `<span style="font-weight: 700;">${archivo.name}</span> <span style="color: #606f80; font-size: 11px; margin-left: 6px;">(Pendiente de envío)</span>`;
+                    lista.appendChild(item);
+                }
+
+                cajaPendientes.appendChild(lista);
+                selectedFilesDiv.appendChild(cajaPendientes);
+            }
+        }
+    });
 }
-});
 </script>
 
 </body>
