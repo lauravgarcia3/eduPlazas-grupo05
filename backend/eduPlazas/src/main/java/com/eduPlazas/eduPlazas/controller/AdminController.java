@@ -182,7 +182,7 @@ public class AdminController {
         }
 
         Convocatoria convocatoria = convocatoriaOpt.get();
-        List<Solicitud> solicitudes = solicitudRepository.findByConvocatoria(convocatoria);
+        List<Solicitud> solicitudes = solicitudService.obtenerSolicitudesOrdenadasPorPuntuacion(convocatoria);
 
         // Estadísticas generales
         long totalSolicitudes = solicitudes.size();
@@ -231,5 +231,19 @@ public class AdminController {
     @GetMapping("/publicaciones")
     public String publicaciones() {
         return "admin/publicaciones";
+    }
+
+    @PostMapping("/convocatoria/{id}/adjudicar")
+    public String adjudicarSolicitudesConvocatoria(@PathVariable Long id) {
+        Optional<Convocatoria> convocatoriaOpt = convocatoriaService.obtenerPorId(id);
+
+        if (convocatoriaOpt.isEmpty()) {
+            return "redirect:/admin/home";
+        }
+
+        List<Centro> centros = centroRepository.findAll();
+        solicitudService.adjudicarSolicitudes(convocatoriaOpt.get(), centros);
+
+        return "redirect:/admin/convocatoria/" + id + "/solicitudes";
     }
 }

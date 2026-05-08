@@ -55,6 +55,16 @@ public class Solicitud {
     @Column(nullable = false)
     private Boolean rentaMinimaInsercion = false;
 
+    // ---- CRITERIOS ADICIONALES OFICIALES ----
+    @Column(nullable = false)
+    private Boolean victimaViolenciaGenero = false;
+
+    @Column(nullable = false)
+    private Boolean conciliacionLaboral = false;
+
+    @Column(nullable = false)
+    private Boolean trasladoFamiliar = false;
+
     private String nombreSolicitante;
     private String estado;
 
@@ -237,6 +247,30 @@ public class Solicitud {
 
     public void setRentaMinimaInsercion(Boolean rentaMinimaInsercion) {
         this.rentaMinimaInsercion = rentaMinimaInsercion;
+    }
+
+    public Boolean getVictimaViolenciaGenero() {
+        return victimaViolenciaGenero;
+    }
+
+    public void setVictimaViolenciaGenero(Boolean victimaViolenciaGenero) {
+        this.victimaViolenciaGenero = victimaViolenciaGenero;
+    }
+
+    public Boolean getConciliacionLaboral() {
+        return conciliacionLaboral;
+    }
+
+    public void setConciliacionLaboral(Boolean conciliacionLaboral) {
+        this.conciliacionLaboral = conciliacionLaboral;
+    }
+
+    public Boolean getTrasladoFamiliar() {
+        return trasladoFamiliar;
+    }
+
+    public void setTrasladoFamiliar(Boolean trasladoFamiliar) {
+        this.trasladoFamiliar = trasladoFamiliar;
     }
 
     public Boolean getCompletada() {

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Registro - EduPlazas</title>
@@ -7,15 +8,24 @@
     <link rel="stylesheet" th:href="@{/css/auth.css}">
     <style>
         h1 {
-            font-size: 42px;
-            font-weight: 800;
+            font-size: 40px;
+            font-weight: 900;
             margin: 0;
-            color: #d88a00;
             text-align: left;
+            letter-spacing: 0.2px;
+            line-height: 1.05;
+        }
+
+        .brand-edu {
+            color: #064a8f;
+        }
+
+        .brand-plazas {
+            color: #f06f00;
         }
 
         .register-form {
-            margin-top: 18px;
+            margin-top: 10px;
         }
 
         .form-group {
@@ -24,65 +34,118 @@
 
         .form-group label {
             display: block;
-            font-size: 19px;
-            font-weight: 500;
-            color: #111;
-            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: 800;
+            color: #172033;
+            margin-bottom: 9px;
             line-height: 1.3;
         }
 
         .form-group input {
             width: 100%;
-            height: 46px;
-            padding: 10px 14px;
-            border: 1.5px solid #bdbdbd;
-            border-radius: 12px;
+            height: 48px;
+            padding: 10px 16px;
+            border: 1.5px solid #d6dde7;
+            border-radius: 10px;
             font-size: 15px;
-            background-color: #f9f9f9;
+            background-color: #ffffff;
             box-sizing: border-box;
+            color: #172033;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #064a8f;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(6, 74, 143, 0.12);
+        }
+
+        .form-group input:invalid:not(:placeholder-shown) {
+            border-color: #c93636;
+            background-color: #fffafa;
+        }
+
+        .form-group input:valid:not(:placeholder-shown) {
+            border-color: #d6dde7;
+            background-color: #ffffff;
+        }
+
+        .form-help {
+            display: block;
+            margin-top: 7px;
+            font-size: 12px;
+            color: #606f80;
+            line-height: 1.3;
+            font-weight: 600;
         }
 
         .double-group {
-            display: flex;
-            gap: 20px;
-        }
-
-        .half {
-            width: 50%;
-        }
-
-        .password-label-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .password-label-row label {
-            margin-bottom: 0;
-        }
-
-        .eye-icon {
-            font-size: 20px;
-            color: #999;
-            line-height: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
         }
 
         .btn {
-            display: block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             width: 100%;
-            margin-top: 18px;
-            padding: 13px;
-            background-color: #e58d00;
-            color: white;
+            min-height: 50px;
+            margin-top: 24px;
+            padding: 12px;
+            background-color: #f06f00;
+            color: #ffffff;
             border: none;
             text-decoration: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-size: 17px;
-            font-weight: 600;
+            font-weight: 900;
             text-align: center;
             cursor: pointer;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 18px rgba(240, 111, 0, 0.24);
+            transition: all 0.18s ease;
+        }
+
+        .btn:hover {
+            background-color: #c85c00;
+            transform: translateY(-1px);
+        }
+
+        .alert {
+            padding: 12px 14px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .alert-error {
+            background-color: #fdecec;
+            color: #9e2525;
+            border: 1px solid #f7caca;
+        }
+
+        .alert-success {
+            background-color: #e7f7ec;
+            color: #1f6f38;
+            border: 1px solid #c9ebd2;
+        }
+
+        @media (max-width: 900px) {
+            .double-group {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            .form-group label {
+                font-size: 15px;
+            }
         }
     </style>
 </head>
@@ -94,7 +157,7 @@
             <div class="top-text">
                 <div class="welcome-block">
                     <p class="welcome">Bienvenido a</p>
-                    <h1>EduPlazas</h1>
+                    <h1><span class="brand-edu">Edu</span><span class="brand-plazas">Plazas</span></h1>
                 </div>
 
                 <div class="register-block">
@@ -103,46 +166,65 @@
                 </div>
             </div>
 
-<form th:action="@{/register}" th:object="${usuario}" method="post" class="register-form">
-                <div th:if="${#fields.hasErrors('*')}" style="background-color: #f8d7da; color: #842029; padding: 12px; border-radius: 8px; border: 1px solid #f5c2c7; margin-bottom: 16px;">
+            <form th:action="@{/register}" th:object="${usuario}" method="post" class="register-form">
+                
+                <div th:if="${param.error}" class="alert alert-error">
+                    No se ha podido completar el registro. Revisa los datos introducidos.
+                </div>
+
+                <div th:if="${#fields.hasErrors('*')}"
+                    style="background-color: #f8d7da; color: #842029; padding: 12px; border-radius: 8px; border: 1px solid #f5c2c7; margin-bottom: 16px;">
                     <strong>Se han detectado errores:</strong>
                     <ul style="margin: 6px 0 0 16px; padding: 0;">
                         <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
                     </ul>
                 </div>
-                <div class="form-group">
-                    <label for="email">Introduzca su correo electrónico</label>
-                    <input type="email" id="email" th:field="*{email}" placeholder="Correo electrónico" required>
-                </div>
-
-                <div class="double-group">
-                    <div class="form-group half">
-                        <label for="nombreCompleto">Nombre del usuario</label>
-                        <input type="text" id="nombreCompleto" th:field="*{nombreCompleto}" placeholder="Ej. Familia López" required>
+                    <div class="form-group">
+                        <label for="email">Introduzca su correo electrónico</label>
+                        <input type="email" id="email" th:field="*{email}" placeholder="Correo electrónico"
+                            autocomplete="email" maxlength="100" required
+                            title="Introduce un correo electrónico válido. Ejemplo: usuario@dominio.com">
+                        <small class="form-help">Formato esperado: usuario@dominio.com</small>
                     </div>
 
-                    <div class="form-group half">
-                        <label for="telefono">Número de teléfono</label>
-                        <input type="text" id="telefono" name="telefono" placeholder="Número de teléfono">
-                    </div>
-                </div>
+                    <div class="double-group">
+                        <div class="form-group">
+                            <label for="nombreCompleto">Nombre del usuario</label>
+                            <input type="text" id="nombreCompleto" th:field="*{nombreCompleto}"
+                                placeholder="Ej. Familia López" autocomplete="name" minlength="3" maxlength="80"
+                                pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+" required
+                                title="El nombre solo puede contener letras y espacios, entre 3 y 80 caracteres.">
+                            <small class="form-help">Solo letras y espacios. Entre 3 y 80 caracteres.</small>
+                        </div>
 
-                <div class="form-group">
-                    <div class="password-label-row">
+                        <div class="form-group">
+                            <label for="telefono">Número de teléfono</label>
+                            <input type="tel" id="telefono" name="telefono" placeholder="Ej. 612345678"
+                                autocomplete="tel" pattern="[0-9]{9}" maxlength="9"
+                                title="Introduce un número de teléfono de 9 dígitos.">
+                            <small class="form-help">Debe contener 9 dígitos. Ejemplo: 612345678.</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="password">Introduzca su contraseña</label>
-                        <span class="eye-icon">👁</span>
+                        <input type="password" id="password" th:field="*{password}" placeholder="Contraseña"
+                            autocomplete="new-password" minlength="6" maxlength="50"
+                            pattern="^(?=.*[0-9])(?=.*[^A-Za-z0-9]).{6,50}$" required
+                            title="La contraseña debe tener entre 6 y 50 caracteres, al menos un número y un carácter especial.">
+                        <small class="form-help">Debe tener entre 6 y 50 caracteres, al menos un número y un carácter
+                            especial.</small>
                     </div>
-                    <input type="password" id="password" th:field="*{password}" placeholder="Contraseña" required>
-                </div>
 
-                <button type="submit" class="btn">Registrarme</button>
-            </form>
+                    <button type="submit" class="btn">Registrarme</button>
+                </form>
         </div>
     </div>
 
     <div class="right">
-        <img th:src="@{/images/login.png}" alt="Imagen registro">
+        <img th:src="@{/images/login.png}" alt="Imagen decorativa de registro en EduPlazas">
     </div>
 
 </body>
+
 </html>

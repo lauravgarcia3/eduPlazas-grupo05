@@ -42,9 +42,6 @@ import java.util.Set;
 public class SolicitanteController {
 
     @Autowired
-    private CentroRepository centroRepository;
-
-    @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Autowired
@@ -55,6 +52,7 @@ public class SolicitanteController {
 
     @Autowired
     private Validator validator;
+    private CentroRepository centroRepository;
 
     @GetMapping("/home")
     public String home(Authentication authentication, Model model) {
@@ -65,15 +63,17 @@ public class SolicitanteController {
             var usuario = usuarioOpt.get();
             List<Solicitud> todas = usuario.getSolicitudes();
 
+            // Lógica del compañero: Cálculo de Puntos
             Map<Long, Double> puntosPorSolicitud = new LinkedHashMap<>();
             for (Solicitud solicitud : todas) {
                 puntosPorSolicitud.put(solicitud.getId(), solicitudService.obtenerTotalPuntos(solicitud));
             }
             model.addAttribute("puntosPorSolicitud", puntosPorSolicitud);
 
+            // Separación de listas
             List<Solicitud> incompletas = new ArrayList<>();
             List<Solicitud> completas = new ArrayList<>();
-            
+
             for (Solicitud s : todas) {
                 if (s.getCompletada() != null && s.getCompletada()) {
                     completas.add(s);
@@ -81,10 +81,10 @@ public class SolicitanteController {
                     incompletas.add(s);
                 }
             }
-            
+
             model.addAttribute("solicitudesIncompletas", incompletas);
             model.addAttribute("solicitudesCompletas", completas);
-            
+
         } else {
             model.addAttribute("solicitudes", new ArrayList<>());
             model.addAttribute("solicitudesIncompletas", new ArrayList<>());
@@ -102,7 +102,8 @@ public class SolicitanteController {
                 model.addAttribute("fechaInicioFormat", conv.getFechaInicio().format(formatter));
                 model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
                 model.addAttribute("fechaProvisionales", conv.getFechaFin().plusDays(10).format(formatter));
-                model.addAttribute("fechaReclamaciones", conv.getFechaFin().plusDays(10).format(formatter) + " - " + conv.getFechaFin().plusDays(20).format(formatter));
+                model.addAttribute("fechaReclamaciones", conv.getFechaFin().plusDays(10).format(formatter) + " - "
+                        + conv.getFechaFin().plusDays(20).format(formatter));
                 model.addAttribute("fechaDefinitivos", conv.getFechaFin().plusDays(30).format(formatter));
             }
         }
@@ -111,9 +112,11 @@ public class SolicitanteController {
     }
 
     @GetMapping("/solicitud")
-    public String formulario(@RequestParam(value = "id", required = false) Long id, Model model, Authentication authentication) {
+    public String formulario(@RequestParam(value = "id", required = false) Long id, Model model,
+            Authentication authentication) {
         Solicitud solicitudAMostrar;
 
+        // Recuperación de borradores
         if (id != null) {
             Optional<Solicitud> existente = solicitudService.obtenerPorId(id);
             if (existente.isPresent()) {
@@ -125,10 +128,14 @@ public class SolicitanteController {
                     return "redirect:/solicitante/home";
                 }
 
-                if (solicitudAMostrar.getMenor() == null) solicitudAMostrar.setMenor(new Menor());
-                if (solicitudAMostrar.getTutor1() == null) solicitudAMostrar.setTutor1(new Tutor());
-                if (solicitudAMostrar.getTutor2() == null) solicitudAMostrar.setTutor2(new Tutor());
-                if (solicitudAMostrar.getDomicilioFamiliar() == null) solicitudAMostrar.setDomicilioFamiliar(new DomicilioFamiliar());
+                if (solicitudAMostrar.getMenor() == null)
+                    solicitudAMostrar.setMenor(new Menor());
+                if (solicitudAMostrar.getTutor1() == null)
+                    solicitudAMostrar.setTutor1(new Tutor());
+                if (solicitudAMostrar.getTutor2() == null)
+                    solicitudAMostrar.setTutor2(new Tutor());
+                if (solicitudAMostrar.getDomicilioFamiliar() == null)
+                    solicitudAMostrar.setDomicilioFamiliar(new DomicilioFamiliar());
             } else {
                 return "redirect:/solicitante/home";
             }
@@ -148,29 +155,21 @@ public class SolicitanteController {
             model.addAttribute("convocatoriaActiva", conv);
 
             if (conv.getFechaInicio() != null && conv.getFechaFin() != null) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy",
+                        new Locale("es", "ES"));
                 model.addAttribute("fechaInicioFormat", conv.getFechaInicio().format(formatter));
                 model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
             }
         }
-        // Obtenemos los centros, los ordenamos y los pasamos al modelo
-        List<Centro> centros = centroRepository.findAll();
-        centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
-        model.addAttribute("centros", centros);
 
         return "solicitante/formulario";
     }
 
-   @GetMapping("/estado")
-    public String estado(@RequestParam(value = "id", required = false) Long id, Model model, Authentication authentication) {
-        
-        // 1. Si entran sin pasar un ID (por error o modificando la URL), los mandamos al home
-        if (id == null) {
-            return "redirect:/solicitante/home";
-        }
+    @GetMapping("/estado")
+    public String estado(@RequestParam(value = "id", required = false) Long id, Model model,
+            Authentication authentication) {
 
         Optional<Solicitud> solicitudOpt = solicitudService.obtenerPorId(id);
-        
         if (solicitudOpt.isPresent()) {
             Solicitud solicitud = solicitudOpt.get();
             // Verificación de IDOR
@@ -180,24 +179,21 @@ public class SolicitanteController {
                 return "redirect:/solicitante/home";
             }
             model.addAttribute("solicitud", solicitud);
-            
-            // Buscamos el centro basándonos en el nombre que se eligió en la solicitud
+
             if (solicitud.getCentroPreferencia() != null) {
                 Optional<Centro> centroOpt = centroRepository.findAll().stream()
-                    .filter(c -> c.getNombre().equals(solicitud.getCentroPreferencia()))
-                    .findFirst();
+                        .filter(c -> c.getNombre().equals(solicitud.getCentroPreferencia()))
+                        .findFirst();
                 centroOpt.ifPresent(centro -> model.addAttribute("centro", centro));
             }
         } else {
-            return "redirect:/solicitante/home"; // Si el ID no existe en Base de Datos, al home
+            return "redirect:/solicitante/home";
         }
-        
         return "solicitante/estado";
     }
 
-@PostMapping("/solicitud/guardar")
+    @PostMapping("/solicitud/guardar")
     public String guardarSolicitud(
-            @RequestParam(value = "id", required = false) Long id, // Capturamos el ID explícitamente
             @Valid @ModelAttribute("nuevaSolicitud") Solicitud solicitud,
             BindingResult result,
             @RequestParam(value = "accion", required = false, defaultValue = "completar") String accion,
@@ -221,12 +217,11 @@ public class SolicitanteController {
             solicitud.setId(id);
         }
 
-        // 1.5. REVISIÓN INTELIGENTE DEL TUTOR 2 (Antes de comprobar errores)
+        // 1.5. REVISIÓN DEL TUTOR 2 (Antes de validar)
         if (solicitud.getTutor2() != null) {
             Tutor tutor2 = solicitud.getTutor2();
 
-            boolean tutor2Vacio =
-                    (tutor2.getNombre() == null || tutor2.getNombre().isBlank()) &&
+            boolean tutor2Vacio = (tutor2.getNombre() == null || tutor2.getNombre().isBlank()) &&
                     (tutor2.getApellidos() == null || tutor2.getApellidos().isBlank()) &&
                     (tutor2.getDniNie() == null || tutor2.getDniNie().isBlank()) &&
                     (tutor2.getRelacionConMenor() == null || tutor2.getRelacionConMenor().isBlank()) &&
@@ -241,20 +236,22 @@ public class SolicitanteController {
                 Set<ConstraintViolation<Tutor>> violaciones = validator.validate(tutor2);
                 for (ConstraintViolation<Tutor> violacion : violaciones) {
                     String mensajeCorregido = violacion.getMessage().replace("tutor 1", "tutor 2");
-                    result.rejectValue("tutor2." + violacion.getPropertyPath().toString(), "error.tutor2", mensajeCorregido);
+                    result.rejectValue("tutor2." + violacion.getPropertyPath().toString(), "error.tutor2",
+                            mensajeCorregido);
                 }
             }
         }
 
         // 2. SI ES COMPLETAR Y HAY ERRORES, VOLVEMOS AL FORMULARIO.
-        // SI ES BORRADOR, IGNORAMOS LOS ERRORES 
+        // SI ES BORRADOR, IGNORAMOS LOS ERRORES
         if ("completar".equals(accion) && result.hasErrors()) {
             Optional<Convocatoria> activa = convocatoriaService.obtenerConvocatoriaActiva();
             if (activa.isPresent()) {
                 Convocatoria conv = activa.get();
                 model.addAttribute("convocatoriaActiva", conv);
                 if (conv.getFechaInicio() != null && conv.getFechaFin() != null) {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy",
+                            new Locale("es", "ES"));
                     model.addAttribute("fechaInicioFormat", conv.getFechaInicio().format(formatter));
                     model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
                 }
@@ -262,7 +259,7 @@ public class SolicitanteController {
             List<Centro> centros = centroRepository.findAll();
             centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
             model.addAttribute("centros", centros);
-            
+
             return "solicitante/formulario";
         }
 
@@ -285,8 +282,7 @@ public class SolicitanteController {
 
         // (Revisión de tutor2 movida a paso 1.5)
 
-        // 6. GUARDADO DE DOCUMENTOS
-        if (documentos != null) {
+        if (documentos != null && documentos.length > 0) {
             for (MultipartFile archivo : documentos) {
                 if (archivo != null && !archivo.isEmpty()) {
                     DocumentoAdjunto doc = new DocumentoAdjunto();
