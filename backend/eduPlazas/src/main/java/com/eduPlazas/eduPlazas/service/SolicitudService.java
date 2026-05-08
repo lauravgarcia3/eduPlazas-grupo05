@@ -48,9 +48,9 @@ public class SolicitudService {
         double puntosHermanos = Boolean.TRUE.equals(guardada.getTieneHermanosEnCentro()) ? 15.0 : 0.0;
         double puntosProximidad = Boolean.TRUE.equals(guardada.getDomicilioEnZonaCentro()) ? 12.0 : 0.0;
         double puntosFamiliaNumerosa = Boolean.TRUE.equals(guardada.getFamiliaNumerosa()) ? 10.0 : 0.0;
-        double puntosFamiliaMonoparental = Boolean.TRUE.equals(guardada.getFamiliaMonoparental()) ? 10.0 : 0.0;
-        double puntosDiscapacidad = Boolean.TRUE.equals(guardada.getDiscapacidadAlumnoOTutores()) ? 7.0 : 0.0;
-        double puntosRenta = Boolean.TRUE.equals(guardada.getRentaMinimaInsercion()) ? 12.0 : 0.0;
+        double puntosFamiliaMonoparental = Boolean.TRUE.equals(guardada.getFamiliaMonoparental()) ? 8.0 : 0.0;
+        double puntosDiscapacidad = Boolean.TRUE.equals(guardada.getDiscapacidadAlumnoOTutores()) ? 6.0 : 0.0;
+        double puntosRenta = Boolean.TRUE.equals(guardada.getRentaMinimaInsercion()) ? 4.0 : 0.0;
 
         double puntosTrabajoCentro = 0.0;
         if (guardada.getTutor1() != null &&
@@ -60,6 +60,11 @@ public class SolicitudService {
             puntosTrabajoCentro = 5.0;
         }
 
+        // Nuevos criterios oficiales
+        double puntosVictimaViolencia = Boolean.TRUE.equals(guardada.getVictimaViolenciaGenero()) ? 10.0 : 0.0;
+        double puntosConciliacion = Boolean.TRUE.equals(guardada.getConciliacionLaboral()) ? 3.0 : 0.0;
+        double puntosTraslado = Boolean.TRUE.equals(guardada.getTrasladoFamiliar()) ? 2.0 : 0.0;
+
         puntuacionService.calcularYGuardar(
                 guardada,
                 puntosHermanos,
@@ -68,7 +73,10 @@ public class SolicitudService {
                 puntosFamiliaNumerosa,
                 puntosFamiliaMonoparental,
                 puntosDiscapacidad,
-                puntosRenta
+                puntosRenta,
+                puntosVictimaViolencia,
+                puntosConciliacion,
+                puntosTraslado
         );
 
         return guardada;
