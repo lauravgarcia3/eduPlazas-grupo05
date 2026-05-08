@@ -144,6 +144,10 @@ public class SolicitanteController {
             }
         }
 
+        List<Centro> centros = centroRepository.findAll();
+        centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
+        model.addAttribute("centros", centros);
+
         return "solicitante/formulario";
     }
 
@@ -170,6 +174,7 @@ public class SolicitanteController {
 
     @PostMapping("/solicitud/guardar")
     public String guardarSolicitud(
+            @RequestParam(value = "id", required = false) Long id, // <-- ¡ESTA ES LA LÍNEA QUE FALTABA!
             @Valid @ModelAttribute("nuevaSolicitud") Solicitud solicitud,
             BindingResult result,
             @RequestParam(value = "accion", required = false, defaultValue = "completar") String accion,
@@ -180,6 +185,10 @@ public class SolicitanteController {
         // 1. FORZAMOS EL ID PARA QUE HIBERNATE ACTUALICE EN LUGAR DE DUPLICAR
         if (id != null) {
             solicitud.setId(id);
+            // Recuperamos la solicitud de la DB para no perder los archivos que ya existían
+            solicitudService.obtenerPorId(id).ifPresent(previa -> {
+                solicitud.setDocumentos(previa.getDocumentos());
+            });
         }
 
         // 2. Si no se han cumplimentado datos de tutor2, lo ignoramos para familias monoparentales.
