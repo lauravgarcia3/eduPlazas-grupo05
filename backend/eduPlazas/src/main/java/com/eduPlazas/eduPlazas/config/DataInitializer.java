@@ -33,8 +33,8 @@ public class DataInitializer {
         return args -> {
             System.out.println("--- INICIANDO CARGA DE DATOS DE DEMOSTRACIÓN ---");
             
-            poblarUsuarios(usuarioRepository, passwordEncoder);
             poblarCentros(centroRepository);
+            poblarUsuarios(usuarioRepository, passwordEncoder, centroRepository);
             poblarConvocatorias(convocatoriaRepository);
             poblarSolicitudes(solicitudRepository, usuarioRepository, convocatoriaRepository);
             
@@ -45,7 +45,7 @@ public class DataInitializer {
     // ==========================================
     // 1. POBLAR USUARIOS
     // ==========================================
-    private void poblarUsuarios(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+    private void poblarUsuarios(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder, CentroRepository centroRepository) {
         if (usuarioRepository.count() == 0) {
             List<Usuario> usuarios = new ArrayList<>();
 
@@ -63,12 +63,16 @@ public class DataInitializer {
             solicitante.setRol("ROLE_SOLICITANTE");
             usuarios.add(solicitante);
 
-            Usuario centroUser = new Usuario();
-            centroUser.setEmail("info@ceipsanfrancisco.edu.es");
-            centroUser.setPassword(passwordEncoder.encode("Centro123!"));
-            centroUser.setNombreCompleto("CEIP San Francisco de Asís");
-            centroUser.setRol("ROLE_CENTRO");
-            usuarios.add(centroUser);
+            // Crear un usuario dinámicamente por cada centro registrado
+            List<Centro> centros = centroRepository.findAll();
+            for (Centro centro : centros) {
+                Usuario centroUser = new Usuario();
+                centroUser.setEmail(centro.getEmail());
+                centroUser.setPassword(passwordEncoder.encode("Centro123!"));
+                centroUser.setNombreCompleto(centro.getNombre());
+                centroUser.setRol("ROLE_CENTRO");
+                usuarios.add(centroUser);
+            }
 
             // Generamos 100 familias "fantasma" para repartir el resto de solicitudes
             for (int i = 2; i <= 100; i++) {
@@ -81,7 +85,7 @@ public class DataInitializer {
             }
 
             usuarioRepository.saveAll(usuarios);
-            System.out.println("Usuarios de prueba y 100 familias fantasma creados.");
+            System.out.println("Usuarios de prueba, accesos para todos los centros y 100 familias fantasma creados.");
         }
     }
 
