@@ -4,6 +4,8 @@ import com.eduPlazas.eduPlazas.model.Convocatoria;
 import com.eduPlazas.eduPlazas.model.Solicitud;
 import com.eduPlazas.eduPlazas.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,4 +28,8 @@ public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
     long countByConvocatoriaAndCompletadaTrue(Convocatoria convocatoria);
 
     long countByConvocatoriaAndEstado(Convocatoria convocatoria, String estado);
+
+    // Carga la solicitud junto con su usuario en una sola query (evita LazyInitializationException)
+    @Query("SELECT s FROM Solicitud s JOIN FETCH s.usuario WHERE s.id = :id")
+    Optional<Solicitud> findByIdWithUsuario(@Param("id") Long id);
 }

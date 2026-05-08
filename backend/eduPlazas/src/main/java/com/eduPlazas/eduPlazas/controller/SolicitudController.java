@@ -6,6 +6,8 @@ import com.eduPlazas.eduPlazas.service.SolicitudService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import com.eduPlazas.eduPlazas.repository.UsuarioRepository;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,9 +18,11 @@ import java.util.Optional;
 public class SolicitudController {
 
 private final SolicitudService solicitudService;
+private final UsuarioRepository usuarioRepository;
 
-public SolicitudController(SolicitudService solicitudService) {
+public SolicitudController(SolicitudService solicitudService, UsuarioRepository usuarioRepository) {
 this.solicitudService = solicitudService;
+this.usuarioRepository = usuarioRepository;
 }
 
 // =========================
@@ -61,15 +65,20 @@ return solicitudService.cambiarEstado(id, estado);
 
 @GetMapping("/solicitante/mis-solicitudes")
 @ResponseBody
-public List<Solicitud> misSolicitudes() {
-Usuario usuario = obtenerUsuarioActual();
+public List<Solicitud> misSolicitudes(Authentication authentication) {
+String email = authentication.getName();
+Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
+if (usuario == null) return List.of();
 return solicitudService.obtenerPorUsuario(usuario);
 }
 
 @GetMapping("/solicitante/estado/{id}")
 @ResponseBody
-public Object verEstadoSolicitud(@PathVariable Long id) {
-Usuario usuario = obtenerUsuarioActual();
+public Object verEstadoSolicitud(@PathVariable Long id, Authentication authentication) {
+String email = authentication.getName();
+Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
+if (usuario == null) return "Usuario no encontrado";
+
 Optional<Solicitud> solicitud = solicitudService.buscarPorIdYUsuario(id, usuario);
 
 if (solicitud.isPresent()) {
@@ -95,12 +104,13 @@ return "Solicitud no encontrada o no pertenece a esta familia";
 
 @PostMapping("/solicitante/solicitud")
 @ResponseBody
-public Solicitud crearSolicitudSolicitante(@RequestBody Solicitud solicitud) {
+public Object crearSolicitudSolicitante(@RequestBody Solicitud solicitud, Authentication authentication) {
 
-// TODO LOGIN:
-// Sustituir este valor simulado por el usuario autenticado real
-// cuando sepamos cómo se ha implementado el login.
-solicitud.setUsuario(obtenerUsuarioActual());
+String email = authentication.getName();
+Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
+if (usuario == null) return "Usuario no encontrado";
+
+solicitud.setUsuario(usuario);
 
 // Si no viene estado, por defecto una nueva solicitud queda "Pendiente"
 if (solicitud.getEstado() == null || solicitud.getEstado().isBlank()) {
@@ -110,14 +120,4 @@ solicitud.setEstado("Pendiente");
 return solicitudService.guardar(solicitud);
 }
 
-// =========================
-// MÉTODO TEMPORAL PARA LOGIN
-// =========================
-
-private Usuario obtenerUsuarioActual() {
-        // TODO LOGIN: Reemplazar por la sesión real
-        Usuario usuarioTemp = new Usuario(); // <-- SIN NADA ENTRE LOS PARÉNTESIS
-        usuarioTemp.setEmail("solicitante@eduplazas.com");
-        return usuarioTemp;
-    }
 }

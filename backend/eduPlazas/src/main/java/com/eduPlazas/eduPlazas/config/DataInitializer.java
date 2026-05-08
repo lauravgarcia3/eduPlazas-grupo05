@@ -118,6 +118,10 @@ public class DataInitializer {
     // ==========================================
     private void poblarConvocatorias(ConvocatoriaRepository convocatoriaRepository) {
         if (convocatoriaRepository.count() == 0) {
+            // Arrays de los 10 centros con 40 plazas cada uno (igual que poblarCentros, ordenados alfabéticamente)
+            String todosLosCentros = "CEIP El Olivo,CEIP El Parque,CEIP El Prado,CEIP La Colina,CEIP La Fuente,CEIP Las Estrellas,CEIP Las Rosas,CEIP Los Almendros,CEIP Los Pinos,CEIP San Francisco de Asís";
+            String todasLasPlazas  = "40,40,40,40,40,40,40,40,40,40";
+
             Convocatoria conv2024 = new Convocatoria();
             conv2024.setNombre("Educación Infantil 2024-2025");
             conv2024.setFechaInicio(LocalDate.of(2024, 4, 1));
@@ -128,18 +132,21 @@ public class DataInitializer {
             conv2024.setAnioAcademico("2024-2025");
             conv2024.setModalidad("Presencial");
             conv2024.setNombreCentro("Múltiples Centros");
+            // La convocatoria cerrada no es editable, los arrays no son necesarios
 
             Convocatoria conv2026 = new Convocatoria();
             conv2026.setNombre("Educación Infantil 2026-2027");
             conv2026.setFechaInicio(LocalDate.of(2026, 3, 1));
             conv2026.setFechaFin(LocalDate.of(2026, 5, 31));
             conv2026.setEstado("ACTIVA");
-            conv2026.setNumeroPlazas(400); 
+            conv2026.setNumeroPlazas(400);
             conv2026.setTipo("Educación Infantil");
             conv2026.setAnioAcademico("2026-2027");
             conv2026.setModalidad("Presencial");
             conv2026.setNombreCentro("Múltiples Centros");
             conv2026.setDescripcion("Convocatoria abierta para el curso escolar 2026-2027.");
+            conv2026.setNombresCentrosArray(todosLosCentros);
+            conv2026.setPlazasCentrosArray(todasLasPlazas);
 
             convocatoriaRepository.saveAll(List.of(conv2024, conv2026));
             System.out.println("Convocatorias (Histórica y Activa) creadas.");
