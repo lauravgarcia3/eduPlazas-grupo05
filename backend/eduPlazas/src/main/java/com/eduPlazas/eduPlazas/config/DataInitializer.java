@@ -41,14 +41,14 @@ public class DataInitializer {
 
             Usuario admin = new Usuario();
             admin.setEmail("admin@eduplazas.com");
-            admin.setPassword(passwordEncoder.encode("admin123*"));
+            admin.setPassword(passwordEncoder.encode("admin123!"));
             admin.setNombreCompleto("Administrador Principal");
             admin.setRol("ROLE_ADMIN");
             usuarios.add(admin);
 
             Usuario solicitante = new Usuario();
             solicitante.setEmail("solicitante@eduplazas.com");
-            solicitante.setPassword(passwordEncoder.encode("solicitante123*"));
+            solicitante.setPassword(passwordEncoder.encode("solicitante123!"));
             solicitante.setNombreCompleto("Familia Ejemplo");
             solicitante.setRol("ROLE_SOLICITANTE");
             usuarios.add(solicitante);
@@ -58,7 +58,7 @@ public class DataInitializer {
             for (Centro centro : centros) {
                 Usuario centroUser = new Usuario();
                 centroUser.setEmail(centro.getEmail());
-                centroUser.setPassword(passwordEncoder.encode("centro123*"));
+                centroUser.setPassword(passwordEncoder.encode("centro123!"));
                 centroUser.setNombreCompleto(centro.getNombre());
                 centroUser.setRol("ROLE_CENTRO");
                 usuarios.add(centroUser);
