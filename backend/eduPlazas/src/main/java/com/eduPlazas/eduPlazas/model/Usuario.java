@@ -2,6 +2,11 @@ package com.eduPlazas.eduPlazas.model;
 
 import jakarta.persistence.*;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -13,12 +18,18 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El email no puede estar vacío")
+    @Email(message = "Debe tener un formato de email válido")
     @Column(nullable = false, unique = true)
     private String email;
 
+    @NotBlank(message = "La contraseña es obligatoria")
+    @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
+    @Pattern(regexp = "^[^\\s@,]+$", message = "La contraseña no puede contener espacios, arrobas (@) ni comas")
     @Column(nullable = false)
     private String password;
 
+    @NotBlank(message = "El nombre no puede estar vacío")
     @Column(nullable = false)
     private String nombreCompleto;
 
@@ -27,7 +38,6 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Solicitud> solicitudes = new ArrayList<>();
-
     // constructor vacío
     public Usuario() {
     }

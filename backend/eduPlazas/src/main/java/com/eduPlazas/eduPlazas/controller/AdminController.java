@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
 
 import java.util.*;
 
@@ -42,8 +44,8 @@ public class AdminController {
 
         for (Convocatoria conv : todasLasConvocatorias) {
             long count = todasLasSolicitudes.stream()
-                .filter(s -> s.getConvocatoria() != null && s.getConvocatoria().getId().equals(conv.getId()))
-                .count();
+                    .filter(s -> s.getConvocatoria() != null && s.getConvocatoria().getId().equals(conv.getId()))
+                    .count();
             solicitudesPorConvocatoria.put(conv.getId(), count);
         }
 
@@ -55,11 +57,11 @@ public class AdminController {
     @GetMapping("/convocatoria")
     public String nuevaConvocatoria(Model model) {
         model.addAttribute("nuevaConvocatoria", new Convocatoria());
-        
+
         List<Centro> centros = centroRepository.findAll();
         centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
         model.addAttribute("centros", centros);
-        
+
         return "admin/convocatoria";
     }
 
@@ -67,17 +69,17 @@ public class AdminController {
     @GetMapping("/convocatoria/editar/{id}")
     public String editarConvocatoria(@PathVariable Long id, Model model) {
         Optional<Convocatoria> convocatoriaOpt = convocatoriaService.obtenerPorId(id);
-        
+
         if (convocatoriaOpt.isPresent()) {
             Convocatoria conv = convocatoriaOpt.get();
             // Solo permitimos editar si es Borrador o Activa
             if ("BORRADOR".equals(conv.getEstado()) || "ACTIVA".equals(conv.getEstado())) {
                 model.addAttribute("nuevaConvocatoria", conv);
-                
+
                 List<Centro> centros = centroRepository.findAll();
                 centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
                 model.addAttribute("centros", centros);
-                
+
                 return "admin/convocatoria";
             }
         }
@@ -87,10 +89,28 @@ public class AdminController {
     // 4. Recibir datos del formulario (Crear o Actualizar)
     @PostMapping("/convocatoria/guardar")
     public String guardarConvocatoria(
-            @ModelAttribute("nuevaConvocatoria") Convocatoria convocatoria,
+            @Valid @ModelAttribute("nuevaConvocatoria") Convocatoria convocatoria,
+            BindingResult result,
             @RequestParam(value = "nombresCentrosArray", required = false) String nombresCentros,
-            @RequestParam(value = "plazasCentrosArray", required = false) String plazasCentros) {
-        
+            @RequestParam(value = "plazasCentrosArray", required = false) String plazasCentros,
+            Model model) {
+
+        // 1. Verificación de seguridad de estado (IDOR de estado)
+        if (convocatoria.getId() != null) {
+            Optional<Convocatoria> existenteOpt = convocatoriaService.obtenerPorId(convocatoria.getId());
+            if (existenteOpt.isPresent() && "CERRADA".equals(existenteOpt.get().getEstado())) {
+                return "redirect:/admin/home"; // No se puede editar una convocatoria cerrada
+            }
+        }
+
+        // 2. Validación de backend
+        if (result.hasErrors()) {
+            List<Centro> centros = centroRepository.findAll();
+            centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
+            model.addAttribute("centros", centros);
+            return "admin/convocatoria";
+        }
+
         // Primero guardamos la convocatoria
         convocatoriaService.guardarConvocatoria(convocatoria);
 
@@ -103,14 +123,22 @@ public class AdminController {
             }
         }
 
-        // Procesamos los arrays de centros y plazas enviados desde el formulario dinámico
+        // Procesamos los arrays de centros y plazas enviados desde el formulario
+        // dinámico
         if (nombresCentros != null && !nombresCentros.isEmpty() && plazasCentros != null) {
             String[] nombres = nombresCentros.split(",");
             String[] plazas = plazasCentros.split(",");
 
             for (int i = 0; i < nombres.length; i++) {
                 String nombreCentro = nombres[i].trim();
-                int plazasDelCentro = Integer.parseInt(plazas[i].trim());
+
+                int plazasDelCentro = 0;
+                try {
+                    plazasDelCentro = Integer.parseInt(plazas[i].trim());
+                } catch (NumberFormatException e) {
+                    // Ignoramos el error y dejamos 0 plazas, o manejamos el error de coherencia
+                    plazasDelCentro = 0;
+                }
 
                 Optional<Centro> centroOpt = centroRepository.findAll().stream()
                         .filter(c -> c.getNombre().equals(nombreCentro))
@@ -124,7 +152,7 @@ public class AdminController {
             }
         }
 
-        return "redirect:/admin/home"; 
+        return "redirect:/admin/home";
     }
 
     // 5. Ver detalle básico de una convocatoria
@@ -173,10 +201,11 @@ public class AdminController {
             Map<String, Object> centroData = new HashMap<>();
             centroData.put("centro", centro);
 
-            // Contamos solicitudes asignadas a este centro (Admitidas o Enviadas/Pendientes)
+            // Contamos solicitudes asignadas a este centro (Admitidas o
+            // Enviadas/Pendientes)
             long asignadas = solicitudes.stream()
-                    .filter(s -> ("ADMITIDA".equals(s.getEstado()) || "Enviada".equals(s.getEstado())) 
-                              && centro.getNombre().equals(s.getCentroPreferencia()))
+                    .filter(s -> ("ADMITIDA".equals(s.getEstado()) || "Enviada".equals(s.getEstado()))
+                            && centro.getNombre().equals(s.getCentroPreferencia()))
                     .count();
 
             int plazasTotales = centro.getNumPlazas() != null ? centro.getNumPlazas() : 0;

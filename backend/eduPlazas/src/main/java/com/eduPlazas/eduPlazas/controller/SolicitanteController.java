@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.eduPlazas.eduPlazas.repository.UsuarioRepository;
 import com.eduPlazas.eduPlazas.repository.CentroRepository;
+import com.eduPlazas.eduPlazas.repository.SolicitudRepository;
 import com.eduPlazas.eduPlazas.service.SolicitudService;
 import com.eduPlazas.eduPlazas.service.ConvocatoriaService;
 import com.eduPlazas.eduPlazas.model.Solicitud;
@@ -33,6 +35,9 @@ import java.util.Optional;
 
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
+import jakarta.validation.Validator;
+import jakarta.validation.ConstraintViolation;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/solicitante")
@@ -48,7 +53,13 @@ public class SolicitanteController {
     private ConvocatoriaService convocatoriaService;
 
     @Autowired
+    private Validator validator;
+
+    @Autowired
     private CentroRepository centroRepository;
+
+    @Autowired
+    private SolicitudRepository solicitudRepository;
 
     @GetMapping("/home")
     public String home(Authentication authentication, Model model) {
@@ -98,7 +109,8 @@ public class SolicitanteController {
                 model.addAttribute("fechaInicioFormat", conv.getFechaInicio().format(formatter));
                 model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
                 model.addAttribute("fechaProvisionales", conv.getFechaFin().plusDays(10).format(formatter));
-                model.addAttribute("fechaReclamaciones", conv.getFechaFin().plusDays(10).format(formatter) + " - " + conv.getFechaFin().plusDays(20).format(formatter));
+                model.addAttribute("fechaReclamaciones", conv.getFechaFin().plusDays(10).format(formatter) + " - "
+                        + conv.getFechaFin().plusDays(20).format(formatter));
                 model.addAttribute("fechaDefinitivos", conv.getFechaFin().plusDays(30).format(formatter));
             }
         }
@@ -107,7 +119,8 @@ public class SolicitanteController {
     }
 
     @GetMapping("/solicitud")
-    public String formulario(@RequestParam(value = "id", required = false) Long id, Model model) {
+    public String formulario(@RequestParam(value = "id", required = false) Long id, Model model,
+            Authentication authentication) {
         Solicitud solicitudAMostrar;
 
         // Recuperación de borradores
@@ -115,10 +128,21 @@ public class SolicitanteController {
             Optional<Solicitud> existente = solicitudService.obtenerPorId(id);
             if (existente.isPresent()) {
                 solicitudAMostrar = existente.get();
-                if (solicitudAMostrar.getMenor() == null) solicitudAMostrar.setMenor(new Menor());
-                if (solicitudAMostrar.getTutor1() == null) solicitudAMostrar.setTutor1(new Tutor());
-                if (solicitudAMostrar.getTutor2() == null) solicitudAMostrar.setTutor2(new Tutor());
-                if (solicitudAMostrar.getDomicilioFamiliar() == null) solicitudAMostrar.setDomicilioFamiliar(new DomicilioFamiliar());
+                // Verificación de IDOR
+                String email = authentication.getName();
+                var usuarioOpt = usuarioRepository.findByEmail(email);
+                if (usuarioOpt.isEmpty() || !solicitudAMostrar.getUsuario().getId().equals(usuarioOpt.get().getId())) {
+                    return "redirect:/solicitante/home";
+                }
+
+                if (solicitudAMostrar.getMenor() == null)
+                    solicitudAMostrar.setMenor(new Menor());
+                if (solicitudAMostrar.getTutor1() == null)
+                    solicitudAMostrar.setTutor1(new Tutor());
+                if (solicitudAMostrar.getTutor2() == null)
+                    solicitudAMostrar.setTutor2(new Tutor());
+                if (solicitudAMostrar.getDomicilioFamiliar() == null)
+                    solicitudAMostrar.setDomicilioFamiliar(new DomicilioFamiliar());
             } else {
                 return "redirect:/solicitante/home";
             }
@@ -138,7 +162,8 @@ public class SolicitanteController {
             model.addAttribute("convocatoriaActiva", conv);
 
             if (conv.getFechaInicio() != null && conv.getFechaFin() != null) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy",
+                        new Locale("es", "ES"));
                 model.addAttribute("fechaInicioFormat", conv.getFechaInicio().format(formatter));
                 model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
             }
@@ -152,18 +177,30 @@ public class SolicitanteController {
     }
 
     @GetMapping("/estado")
-    public String estado(@RequestParam(value = "id", required = false) Long id, Model model) {
-        if (id == null) return "solicitante/estado";
-        
-        Optional<Solicitud> solicitudOpt = solicitudService.obtenerPorId(id);
+    public String estado(@RequestParam(value = "id", required = false) Long id, Model model,
+            Authentication authentication) {
+
+        if (id == null) {
+            return "redirect:/solicitante/home";
+        }
+
+        // Usamos findByIdWithUsuario (JOIN FETCH) para cargar el usuario en la misma query
+        // y evitar LazyInitializationException en el check IDOR
+        Optional<Solicitud> solicitudOpt = solicitudRepository.findByIdWithUsuario(id);
         if (solicitudOpt.isPresent()) {
             Solicitud solicitud = solicitudOpt.get();
+            // Verificación de IDOR
+            String email = authentication.getName();
+            var usuarioOpt = usuarioRepository.findByEmail(email);
+            if (usuarioOpt.isEmpty() || !solicitud.getUsuario().getId().equals(usuarioOpt.get().getId())) {
+                return "redirect:/solicitante/home";
+            }
             model.addAttribute("solicitud", solicitud);
-            
+
             if (solicitud.getCentroPreferencia() != null) {
                 Optional<Centro> centroOpt = centroRepository.findAll().stream()
-                    .filter(c -> c.getNombre().equals(solicitud.getCentroPreferencia()))
-                    .findFirst();
+                        .filter(c -> c.getNombre().equals(solicitud.getCentroPreferencia()))
+                        .findFirst();
                 centroOpt.ifPresent(centro -> model.addAttribute("centro", centro));
             }
         } else {
@@ -184,17 +221,28 @@ public class SolicitanteController {
 
         // 1. FORZAMOS EL ID PARA QUE HIBERNATE ACTUALICE EN LUGAR DE DUPLICAR
         if (id != null) {
+            Optional<Solicitud> existenteOpt = solicitudService.obtenerPorId(id);
+            if (existenteOpt.isPresent()) {
+                Solicitud existente = existenteOpt.get();
+                String email = authentication.getName();
+                var usuarioOpt = usuarioRepository.findByEmail(email);
+                if (usuarioOpt.isEmpty() || !existente.getUsuario().getId().equals(usuarioOpt.get().getId())) {
+                    return "redirect:/solicitante/home"; // IDOR attempt
+                }
+            } else {
+                return "redirect:/solicitante/home";
+            }
             solicitud.setId(id);
             solicitudService.obtenerPorId(id).ifPresent(previa -> {
                 solicitud.setDocumentos(previa.getDocumentos());
             });
         }
 
-        // 2. Si no se han cumplimentado datos de tutor2, lo ignoramos para familias monoparentales.
+        // 1.5. REVISIÓN DEL TUTOR 2 (Antes de validar)
         if (solicitud.getTutor2() != null) {
             Tutor tutor2 = solicitud.getTutor2();
-            boolean tutor2Vacio =
-                    (tutor2.getNombre() == null || tutor2.getNombre().isBlank()) &&
+
+            boolean tutor2Vacio = (tutor2.getNombre() == null || tutor2.getNombre().isBlank()) &&
                     (tutor2.getApellidos() == null || tutor2.getApellidos().isBlank()) &&
                     (tutor2.getDniNie() == null || tutor2.getDniNie().isBlank()) &&
                     (tutor2.getRelacionConMenor() == null || tutor2.getRelacionConMenor().isBlank()) &&
@@ -204,38 +252,39 @@ public class SolicitanteController {
 
             if (tutor2Vacio) {
                 solicitud.setTutor2(null);
-            }
-        }
-
-        // 3. SI ES COMPLETAR Y HAY ERRORES, VOLVEMOS AL FORMULARIO.
-        // SI ES BORRADOR, IGNORAMOS LOS ERRORES 
-        if ("completar".equals(accion) && result.hasErrors()) {
-            boolean soloErroresTutor2 = result.getAllErrors().stream()
-                    .allMatch(error -> error instanceof org.springframework.validation.FieldError fieldError
-                            && fieldError.getField().startsWith("tutor2."));
-
-            if (soloErroresTutor2) {
-                solicitud.setTutor2(null);
-            } else {
-                Optional<Convocatoria> activa = convocatoriaService.obtenerConvocatoriaActiva();
-                if (activa.isPresent()) {
-                    Convocatoria conv = activa.get();
-                    model.addAttribute("convocatoriaActiva", conv);
-                    if (conv.getFechaInicio() != null && conv.getFechaFin() != null) {
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
-                        model.addAttribute("fechaInicioFormat", conv.getFechaInicio().format(formatter));
-                        model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
-                    }
+            } else if ("completar".equals(accion)) {
+                // Si no está vacío, validamos manualmente
+                Set<ConstraintViolation<Tutor>> violaciones = validator.validate(tutor2);
+                for (ConstraintViolation<Tutor> violacion : violaciones) {
+                    String mensajeCorregido = violacion.getMessage().replace("tutor 1", "tutor 2");
+                    result.rejectValue("tutor2." + violacion.getPropertyPath().toString(), "error.tutor2",
+                            mensajeCorregido);
                 }
-                List<Centro> centros = centroRepository.findAll();
-                centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
-                model.addAttribute("centros", centros);
-                
-                return "solicitante/formulario";
             }
         }
 
-        // 4. ASIGNAMOS USUARIO Y CONVOCATORIA
+        // 2. SI ES COMPLETAR Y HAY ERRORES, VOLVEMOS AL FORMULARIO.
+        // SI ES BORRADOR, IGNORAMOS LOS ERRORES
+        if ("completar".equals(accion) && result.hasErrors()) {
+            Optional<Convocatoria> activa = convocatoriaService.obtenerConvocatoriaActiva();
+            if (activa.isPresent()) {
+                Convocatoria conv = activa.get();
+                model.addAttribute("convocatoriaActiva", conv);
+                if (conv.getFechaInicio() != null && conv.getFechaFin() != null) {
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy",
+                            new Locale("es", "ES"));
+                    model.addAttribute("fechaInicioFormat", conv.getFechaInicio().format(formatter));
+                    model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
+                }
+            }
+            List<Centro> centros = centroRepository.findAll();
+            centros.sort((c1, c2) -> c1.getNombre().compareToIgnoreCase(c2.getNombre()));
+            model.addAttribute("centros", centros);
+
+            return "solicitante/formulario";
+        }
+
+        // 3. ASIGNAMOS USUARIO Y CONVOCATORIA
         String email = authentication.getName();
         var usuarioOpt = usuarioRepository.findByEmail(email);
         usuarioOpt.ifPresent(solicitud::setUsuario);
@@ -243,6 +292,7 @@ public class SolicitanteController {
         Optional<Convocatoria> activa = convocatoriaService.obtenerConvocatoriaActiva();
         activa.ifPresent(solicitud::setConvocatoria);
 
+        // 4. ESTABLECEMOS EL ESTADO
         if ("borrador".equals(accion)) {
             solicitud.setCompletada(false);
             solicitud.setEstado("Borrador");
@@ -251,46 +301,7 @@ public class SolicitanteController {
             solicitud.setEstado("Enviada");
         }
 
-        if (solicitud.getTutor2() != null) {
-            Tutor tutor2 = solicitud.getTutor2();
-            boolean tutor2Vacio =
-                (tutor2.getNombre() == null || tutor2.getNombre().isBlank()) &&
-                (tutor2.getApellidos() == null || tutor2.getApellidos().isBlank()) &&
-                (tutor2.getDniNie() == null || tutor2.getDniNie().isBlank()) &&
-                (tutor2.getRelacionConMenor() == null || tutor2.getRelacionConMenor().isBlank()) &&
-                (tutor2.getTelefono() == null || tutor2.getTelefono().isBlank()) &&
-                (tutor2.getEmail() == null || tutor2.getEmail().isBlank()) &&
-                (tutor2.getSituacionLaboral() == null || tutor2.getSituacionLaboral().isBlank());
-
-            if (tutor2Vacio) {
-                solicitud.setTutor2(null);
-            } else {
-                boolean tutor2Incompleto =
-                    tutor2.getNombre() == null || tutor2.getNombre().isBlank() ||
-                    tutor2.getApellidos() == null || tutor2.getApellidos().isBlank() ||
-                    tutor2.getDniNie() == null || tutor2.getDniNie().isBlank() ||
-                    tutor2.getRelacionConMenor() == null || tutor2.getRelacionConMenor().isBlank() ||
-                    tutor2.getTelefono() == null || tutor2.getTelefono().isBlank() ||
-                    tutor2.getEmail() == null || tutor2.getEmail().isBlank() ||
-                    tutor2.getSituacionLaboral() == null || tutor2.getSituacionLaboral().isBlank();
-
-                if (tutor2Incompleto) {
-                    result.rejectValue("tutor2.nombre", "error.tutor2",
-                            "Si cumplimenta los datos del segundo tutor, deberá completar todos sus campos.");
-
-                    if (activa.isPresent()) {
-                        Convocatoria conv = activa.get();
-                        model.addAttribute("convocatoriaActiva", conv);
-                        if (conv.getFechaInicio() != null && conv.getFechaFin() != null) {
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
-                            model.addAttribute("fechaInicioFormat", conv.getFechaInicio().format(formatter));
-                            model.addAttribute("fechaFinFormat", conv.getFechaFin().format(formatter));
-                        }
-                    }
-                    return "solicitante/formulario";
-                }
-            }
-        }
+        // (Revisión de tutor2 movida a paso 1.5)
 
         if (documentos != null && documentos.length > 0) {
             for (MultipartFile archivo : documentos) {

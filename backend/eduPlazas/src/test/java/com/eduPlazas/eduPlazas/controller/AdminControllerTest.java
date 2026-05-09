@@ -29,6 +29,9 @@ import com.eduPlazas.eduPlazas.service.SolicitudService;
 public class AdminControllerTest {
 
     @Mock
+    private org.springframework.validation.BindingResult bindingResult;
+
+    @Mock
     private CentroRepository centroRepository;
     
     @Mock
@@ -90,8 +93,8 @@ public class AdminControllerTest {
         String nombresCentros = "CEIP San Francisco de Asís";
         String plazasCentros = "40";
 
-        String vista = adminController.guardarConvocatoria(conv, nombresCentros, plazasCentros);
-
+        String vista = adminController.guardarConvocatoria(conv, bindingResult, nombresCentros, plazasCentros, model);
+        
         // Verificamos que redirige, guarda la convocatoria y actualiza el centro con las 40 plazas
         assertThat(vista).isEqualTo("redirect:/admin/home");
         verify(convocatoriaService).guardarConvocatoria(conv);

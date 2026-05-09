@@ -133,13 +133,14 @@ public class DataInitializer {
             conv2024.setAnioAcademico("2024-2025");
             conv2024.setModalidad("Presencial");
             conv2024.setNombreCentro("Múltiples Centros");
+            // La convocatoria cerrada no es editable, los arrays no son necesarios
 
             Convocatoria conv2026 = new Convocatoria();
             conv2026.setNombre("Educación Infantil 2026-2027");
             conv2026.setFechaInicio(LocalDate.of(2026, 3, 1));
             conv2026.setFechaFin(LocalDate.of(2026, 5, 31));
             conv2026.setEstado("ACTIVA");
-            conv2026.setNumeroPlazas(400); 
+            conv2026.setNumeroPlazas(400);
             conv2026.setTipo("Educación Infantil");
             conv2026.setAnioAcademico("2026-2027");
             conv2026.setModalidad("Presencial");

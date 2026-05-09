@@ -19,6 +19,9 @@ import com.eduPlazas.eduPlazas.service.UsuarioService;
 public class AuthControllerTest {
 
     @Mock
+    private org.springframework.validation.BindingResult bindingResult;
+
+    @Mock
     private UsuarioService usuarioService;
 
     @Mock
@@ -43,8 +46,7 @@ public class AuthControllerTest {
     @Test
     void testProcessRegistration() {
         Usuario nuevoUsuario = new Usuario();
-        String vista = authController.processRegistration(nuevoUsuario);
-        
+        String vista = authController.processRegistration(nuevoUsuario, bindingResult);         
         verify(usuarioService).registrarUsuario(nuevoUsuario);
         assertThat(vista).isEqualTo("redirect:/login?registrado=true");
     }

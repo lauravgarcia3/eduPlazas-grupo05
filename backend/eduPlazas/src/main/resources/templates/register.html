@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Registro - EduPlazas</title>
@@ -166,75 +167,57 @@
             </div>
 
             <form th:action="@{/register}" th:object="${usuario}" method="post" class="register-form">
-
+                
                 <div th:if="${param.error}" class="alert alert-error">
                     No se ha podido completar el registro. Revisa los datos introducidos.
                 </div>
 
-                <div class="form-group">
-                    <label for="email">Introduzca su correo electrónico</label>
-                    <input
-                        type="email"
-                        id="email"
-                        th:field="*{email}"
-                        placeholder="Correo electrónico"
-                        autocomplete="email"
-                        maxlength="100"
-                        required
-                        title="Introduce un correo electrónico válido. Ejemplo: usuario@dominio.com">
-                    <small class="form-help">Formato esperado: usuario@dominio.com</small>
+                <div th:if="${#fields.hasErrors('*')}"
+                    style="background-color: #f8d7da; color: #842029; padding: 12px; border-radius: 8px; border: 1px solid #f5c2c7; margin-bottom: 16px;">
+                    <strong>Se han detectado errores:</strong>
+                    <ul style="margin: 6px 0 0 16px; padding: 0;">
+                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                    </ul>
                 </div>
-
-                <div class="double-group">
                     <div class="form-group">
-                        <label for="nombreCompleto">Nombre del usuario</label>
-                        <input
-                            type="text"
-                            id="nombreCompleto"
-                            th:field="*{nombreCompleto}"
-                            placeholder="Ej. Familia López"
-                            autocomplete="name"
-                            minlength="3"
-                            maxlength="80"
-                            pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+"
-                            required
-                            title="El nombre solo puede contener letras y espacios, entre 3 y 80 caracteres.">
-                        <small class="form-help">Solo letras y espacios. Entre 3 y 80 caracteres.</small>
+                        <label for="email">Introduzca su correo electrónico</label>
+                        <input type="email" id="email" th:field="*{email}" placeholder="Correo electrónico"
+                            autocomplete="email" maxlength="100" required
+                            title="Introduce un correo electrónico válido. Ejemplo: usuario@dominio.com">
+                        <small class="form-help">Formato esperado: usuario@dominio.com</small>
+                    </div>
+
+                    <div class="double-group">
+                        <div class="form-group">
+                            <label for="nombreCompleto">Nombre del usuario</label>
+                            <input type="text" id="nombreCompleto" th:field="*{nombreCompleto}"
+                                placeholder="Ej. Familia López" autocomplete="name" minlength="3" maxlength="80"
+                                pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]+" required
+                                title="El nombre solo puede contener letras y espacios, entre 3 y 80 caracteres.">
+                            <small class="form-help">Solo letras y espacios. Entre 3 y 80 caracteres.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefono">Número de teléfono</label>
+                            <input type="tel" id="telefono" name="telefono" placeholder="Ej. 612345678"
+                                autocomplete="tel" pattern="[0-9]{9}" maxlength="9"
+                                title="Introduce un número de teléfono de 9 dígitos.">
+                            <small class="form-help">Debe contener 9 dígitos. Ejemplo: 612345678.</small>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="telefono">Número de teléfono</label>
-                        <input
-                            type="tel"
-                            id="telefono"
-                            name="telefono"
-                            placeholder="Ej. 612345678"
-                            autocomplete="tel"
-                            pattern="[0-9]{9}"
-                            maxlength="9"
-                            title="Introduce un número de teléfono de 9 dígitos.">
-                        <small class="form-help">Debe contener 9 dígitos. Ejemplo: 612345678.</small>
+                        <label for="password">Introduzca su contraseña</label>
+                        <input type="password" id="password" th:field="*{password}" placeholder="Contraseña"
+                            autocomplete="new-password" minlength="6" maxlength="50"
+                            pattern="^(?=.*[0-9])(?=.*[^A-Za-z0-9]).{6,50}$" required
+                            title="La contraseña debe tener entre 6 y 50 caracteres, al menos un número y un carácter especial.">
+                        <small class="form-help">Debe tener entre 6 y 50 caracteres, al menos un número y un carácter
+                            especial.</small>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="password">Introduzca su contraseña</label>
-                    <input
-                        type="password"
-                        id="password"
-                        th:field="*{password}"
-                        placeholder="Contraseña"
-                        autocomplete="new-password"
-                        minlength="6"
-                        maxlength="50"
-                        pattern="^(?=.*[0-9])(?=.*[^A-Za-z0-9]).{6,50}$"
-                        required
-                        title="La contraseña debe tener entre 6 y 50 caracteres, al menos un número y un carácter especial.">
-                    <small class="form-help">Debe tener entre 6 y 50 caracteres, al menos un número y un carácter especial.</small>
-                </div>
-
-                <button type="submit" class="btn">Registrarme</button>
-            </form>
+                    <button type="submit" class="btn">Registrarme</button>
+                </form>
         </div>
     </div>
 
@@ -243,4 +226,5 @@
     </div>
 
 </body>
+
 </html>

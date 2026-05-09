@@ -15,11 +15,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 
 import com.eduPlazas.eduPlazas.model.Menor;
 import com.eduPlazas.eduPlazas.model.Solicitud;
 import com.eduPlazas.eduPlazas.model.Usuario;
+import com.eduPlazas.eduPlazas.repository.UsuarioRepository;
 import com.eduPlazas.eduPlazas.service.SolicitudService;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +31,13 @@ public class SolicitudControllerTest {
     private SolicitudService solicitudService;
 
     @Mock
+    private UsuarioRepository usuarioRepository;
+
+    @Mock
     private Model model;
+
+    @Mock
+    private Authentication authentication;
 
     @InjectMocks
     private SolicitudController solicitudController;
@@ -62,14 +70,22 @@ public class SolicitudControllerTest {
 
     @Test
     void testMisSolicitudes() {
-        when(solicitudService.obtenerPorUsuario(any(Usuario.class))).thenReturn(List.of(new Solicitud()));
-        List<Solicitud> resultado = solicitudController.misSolicitudes();
+        Usuario u = new Usuario();
+        when(authentication.getName()).thenReturn("test@test.com");
+        when(usuarioRepository.findByEmail("test@test.com")).thenReturn(Optional.of(u));
+        when(solicitudService.obtenerPorUsuario(u)).thenReturn(List.of(new Solicitud()));
+        
+        List<Solicitud> resultado = solicitudController.misSolicitudes(authentication);
         assertThat(resultado).hasSize(1);
     }
 
     @Test
     @SuppressWarnings("unchecked")
     void testVerEstadoSolicitudConMenor() {
+        Usuario u = new Usuario();
+        when(authentication.getName()).thenReturn("test@test.com");
+        when(usuarioRepository.findByEmail("test@test.com")).thenReturn(Optional.of(u));
+
         Solicitud s = new Solicitud();
         s.setId(10L);
         s.setEstado("Enviada");
@@ -79,11 +95,10 @@ public class SolicitudControllerTest {
         menor.setApellidos("García");
         s.setMenor(menor);
 
-        when(solicitudService.buscarPorIdYUsuario(eq(10L), any(Usuario.class))).thenReturn(Optional.of(s));
+        when(solicitudService.buscarPorIdYUsuario(10L, u)).thenReturn(Optional.of(s));
         
-        Object resultado = solicitudController.verEstadoSolicitud(10L);
+        Object resultado = solicitudController.verEstadoSolicitud(10L, authentication);
         
-        // Comprobamos que el mapa de respuesta se montó correctamente con los datos del menor
         assertThat(resultado).isInstanceOf(Map.class);
         Map<String, Object> map = (Map<String, Object>) resultado;
         assertThat(map.get("estado")).isEqualTo("Enviada");
@@ -92,12 +107,16 @@ public class SolicitudControllerTest {
 
     @Test
     void testCrearSolicitudSolicitante() {
+        Usuario u = new Usuario();
+        u.setEmail("solicitante@eduplazas.com");
+        when(authentication.getName()).thenReturn("test@test.com");
+        when(usuarioRepository.findByEmail("test@test.com")).thenReturn(Optional.of(u));
+
         Solicitud s = new Solicitud();
         when(solicitudService.guardar(any(Solicitud.class))).thenAnswer(i -> i.getArguments()[0]);
         
-        Solicitud resultado = solicitudController.crearSolicitudSolicitante(s);
+        Solicitud resultado = (Solicitud) solicitudController.crearSolicitudSolicitante(s, authentication);
         
-        // Comprobamos que por defecto le puso estado "Pendiente" y asignó el usuario simulado
         assertThat(resultado.getEstado()).isEqualTo("Pendiente");
         assertThat(resultado.getUsuario().getEmail()).isEqualTo("solicitante@eduplazas.com");
     }
