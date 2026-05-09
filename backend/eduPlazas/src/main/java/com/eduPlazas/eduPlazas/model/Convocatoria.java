@@ -41,6 +41,16 @@ public class Convocatoria {
     
     private String modalidad;     // Ej: Presencial
 
+    // Añadimos los campos simples para el centro
+    private String nombreCentro;
+    private Integer numeroPlazas;
+    
+    @Column(length = 2000)
+    private String nombresCentrosArray;
+    
+    @Column(length = 2000)
+    private String plazasCentrosArray;
+
     // --- CONSTRUCTORES ---
     public Convocatoria() {
     }
@@ -73,19 +83,6 @@ public class Convocatoria {
     public String getModalidad() { return modalidad; }
     public void setModalidad(String modalidad) { this.modalidad = modalidad; }
 
-  
-
-    // Añadimos los campos simples para el centro, esto luego lo meteremos en una tabla aparte que haga referencia a esta convocatoria, pero por ahora lo dejamos así hasta que tire todo
-    private String nombreCentro;
-    private Integer numeroPlazas;
-    
-    @Column(length = 2000)
-    private String nombresCentrosArray;
-    
-    @Column(length = 2000)
-    private String plazasCentrosArray;
-
-    // --- GETTERS Y SETTERS NUEVOS ---
     public String getNombreCentro() { return nombreCentro; }
     public void setNombreCentro(String nombreCentro) { this.nombreCentro = nombreCentro; }
 

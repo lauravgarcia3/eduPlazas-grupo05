@@ -22,6 +22,7 @@ import com.eduPlazas.eduPlazas.repository.CentroRepository;
 import com.eduPlazas.eduPlazas.repository.ConvocatoriaRepository;
 import com.eduPlazas.eduPlazas.repository.SolicitudRepository;
 import com.eduPlazas.eduPlazas.repository.UsuarioRepository;
+import com.eduPlazas.eduPlazas.service.PuntuacionService;
 
 @Configuration
 public class DataInitializer {
@@ -29,14 +30,14 @@ public class DataInitializer {
     @Bean
     public CommandLineRunner initData(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
                                       ConvocatoriaRepository convocatoriaRepository, SolicitudRepository solicitudRepository,
-                                      CentroRepository centroRepository) {
+                                      CentroRepository centroRepository, PuntuacionService puntuacionService) {
         return args -> {
             System.out.println("--- INICIANDO CARGA DE DATOS DE DEMOSTRACIÓN ---");
             
             poblarCentros(centroRepository);
             poblarUsuarios(usuarioRepository, passwordEncoder, centroRepository);
             poblarConvocatorias(convocatoriaRepository);
-            poblarSolicitudes(solicitudRepository, usuarioRepository, convocatoriaRepository);
+            poblarSolicitudes(solicitudRepository, usuarioRepository, convocatoriaRepository, puntuacionService);
             
             System.out.println("--- CARGA DE DATOS FINALIZADA CON ÉXITO ---");
         };
@@ -113,12 +114,12 @@ public class DataInitializer {
         }
     }
 
-    // ==========================================
+// ==========================================
     // 3. POBLAR CONVOCATORIAS
     // ==========================================
     private void poblarConvocatorias(ConvocatoriaRepository convocatoriaRepository) {
         if (convocatoriaRepository.count() == 0) {
-            // Arrays de los 10 centros con 40 plazas cada uno (igual que poblarCentros, ordenados alfabéticamente)
+            // Declaramos las variables que VS Code te estaba pidiendo
             String todosLosCentros = "CEIP El Olivo,CEIP El Parque,CEIP El Prado,CEIP La Colina,CEIP La Fuente,CEIP Las Estrellas,CEIP Las Rosas,CEIP Los Almendros,CEIP Los Pinos,CEIP San Francisco de Asís";
             String todasLasPlazas  = "40,40,40,40,40,40,40,40,40,40";
 
@@ -145,6 +146,8 @@ public class DataInitializer {
             conv2026.setModalidad("Presencial");
             conv2026.setNombreCentro("Múltiples Centros");
             conv2026.setDescripcion("Convocatoria abierta para el curso escolar 2026-2027.");
+            
+            // Aquí asignamos las variables a la convocatoria
             conv2026.setNombresCentrosArray(todosLosCentros);
             conv2026.setPlazasCentrosArray(todasLasPlazas);
 
@@ -154,9 +157,9 @@ public class DataInitializer {
     }
 
     // ==========================================
-    // 4. POBLAR SOLICITUDES DISTRIBUIDAS (160 Total)
+    // 4. POBLAR SOLICITUDES DISTRIBUIDAS Y PUNTUARLAS
     // ==========================================
-    private void poblarSolicitudes(SolicitudRepository solicitudRepository, UsuarioRepository usuarioRepository, ConvocatoriaRepository convocatoriaRepository) {
+    private void poblarSolicitudes(SolicitudRepository solicitudRepository, UsuarioRepository usuarioRepository, ConvocatoriaRepository convocatoriaRepository, PuntuacionService puntuacionService) {
         if (solicitudRepository.count() == 0) {
             Usuario usuarioPrincipal = usuarioRepository.findByEmail("solicitante@eduplazas.com").orElse(null);
             Convocatoria convocatoriaActiva = convocatoriaRepository.findByEstado("ACTIVA").orElse(null);
@@ -187,6 +190,11 @@ public class DataInitializer {
             sLucia.setDeclaracionVeracidad(true);
             sLucia.setAutorizacionProteccionDatos(true);
             sLucia.setConvocatoria(convocatoriaActiva);
+            
+            // Le damos algunos criterios a Lucía
+            sLucia.setTieneHermanosEnCentro(true);
+            sLucia.setDomicilioEnZonaCentro(true);
+            sLucia.setConciliacionLaboral(true);
             nuevasSolicitudes.add(sLucia);
 
             Menor menorPablo = new Menor(null, "Pablo", "García", "2022-02-15", "Madrid", "Masculino");
@@ -199,6 +207,7 @@ public class DataInitializer {
             sPablo.setMenor(menorPablo);
             sPablo.setCentroPreferencia("CEIP Los Almendros");
             sPablo.setConvocatoria(convocatoriaActiva);
+            sPablo.setDomicilioEnZonaCentro(true); // Pablo solo tiene proximidad
             nuevasSolicitudes.add(sPablo);
 
             // ---------------------------------------------------------
@@ -218,7 +227,7 @@ public class DataInitializer {
                 .filter(u -> u.getEmail().startsWith("familia") && u.getRol().equals("ROLE_SOLICITANTE"))
                 .toList();
 
-            // 119 Enviadas esparcidas por los coles
+            // 119 Enviadas
             for (int i = 0; i < 119; i++) {
                 Usuario u = otrasFamilias.isEmpty() ? usuarioPrincipal : otrasFamilias.get(random.nextInt(otrasFamilias.size()));
                 String centroDestino = centros[i % centros.length];
@@ -247,10 +256,21 @@ public class DataInitializer {
                 s.setAutorizacionProteccionDatos(true);
                 s.setConvocatoria(convocatoriaActiva);
 
+                // Asignar criterios aleatorios para que tengan puntos variados
+                s.setTieneHermanosEnCentro(random.nextInt(100) < 15); // 15% prob
+                s.setDomicilioEnZonaCentro(random.nextInt(100) < 70); // 70% prob
+                s.setFamiliaNumerosa(random.nextInt(100) < 10);
+                s.setFamiliaMonoparental(random.nextInt(100) < 10);
+                s.setDiscapacidadAlumnoOTutores(random.nextInt(100) < 5);
+                s.setRentaMinimaInsercion(random.nextInt(100) < 5);
+                s.setVictimaViolenciaGenero(random.nextInt(100) < 2);
+                s.setConciliacionLaboral(random.nextInt(100) < 40);
+                s.setTrasladoFamiliar(random.nextInt(100) < 5);
+
                 nuevasSolicitudes.add(s);
             }
 
-            // 39 Borradores esparcidos
+            // 39 Borradores
             for (int i = 0; i < 39; i++) {
                 Usuario u = otrasFamilias.isEmpty() ? usuarioPrincipal : otrasFamilias.get(random.nextInt(otrasFamilias.size()));
                 String centroDestino = centros[(i + 3) % centros.length]; 
@@ -271,11 +291,35 @@ public class DataInitializer {
                 b.setCentroPreferencia(centroDestino);
                 b.setConvocatoria(convocatoriaActiva);
 
+                // Criterios aleatorios también para borradores
+                b.setTieneHermanosEnCentro(random.nextInt(100) < 15);
+                b.setDomicilioEnZonaCentro(random.nextInt(100) < 70);
+                
                 nuevasSolicitudes.add(b);
             }
 
+            // 1. Guardamos primero todas las solicitudes para que se genere su ID en la BD
             solicitudRepository.saveAll(nuevasSolicitudes);
-            System.out.println("160 Solicitudes generadas aleatoriamente: 120 Enviadas (75%) y 40 Borradores (25%).");
+            System.out.println("160 Solicitudes guardadas (120 Enviadas, 40 Borradores). Calculando puntuaciones...");
+
+            // 2. Por cada solicitud guardada, calculamos y persistimos sus puntos reales
+            for (Solicitud sol : nuevasSolicitudes) {
+                // (Si necesitas modificar cuánto vale cada criterio, cámbialo aquí)
+                double pHermanos = (sol.getTieneHermanosEnCentro() != null && sol.getTieneHermanosEnCentro()) ? 15.0 : 0.0;
+                double pProximidad = (sol.getDomicilioEnZonaCentro() != null && sol.getDomicilioEnZonaCentro()) ? 5.5 : 0.0;
+                double pTrabajo = 0.0; 
+                double pNumerosa = (sol.getFamiliaNumerosa() != null && sol.getFamiliaNumerosa()) ? 3.0 : 0.0;
+                double pMono = (sol.getFamiliaMonoparental() != null && sol.getFamiliaMonoparental()) ? 3.0 : 0.0;
+                double pDisc = (sol.getDiscapacidadAlumnoOTutores() != null && sol.getDiscapacidadAlumnoOTutores()) ? 2.0 : 0.0;
+                double pRenta = (sol.getRentaMinimaInsercion() != null && sol.getRentaMinimaInsercion()) ? 2.0 : 0.0;
+                double pViolencia = (sol.getVictimaViolenciaGenero() != null && sol.getVictimaViolenciaGenero()) ? 2.0 : 0.0;
+                double pConciliacion = (sol.getConciliacionLaboral() != null && sol.getConciliacionLaboral()) ? 2.0 : 0.0;
+                double pTraslado = (sol.getTrasladoFamiliar() != null && sol.getTrasladoFamiliar()) ? 2.0 : 0.0;
+
+                puntuacionService.calcularYGuardar(sol, pHermanos, pProximidad, pTrabajo, pNumerosa, pMono, pDisc, pRenta, pViolencia, pConciliacion, pTraslado);
+            }
+
+            System.out.println("Puntuaciones calculadas y asignadas correctamente.");
         }
     }
 }

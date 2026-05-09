@@ -211,7 +211,7 @@ public class SolicitanteController {
 
     @PostMapping("/solicitud/guardar")
     public String guardarSolicitud(
-            @RequestParam(value = "id", required = false) Long id,
+            @RequestParam(value = "id", required = false) Long id, 
             @Valid @ModelAttribute("nuevaSolicitud") Solicitud solicitud,
             BindingResult result,
             @RequestParam(value = "accion", required = false, defaultValue = "completar") String accion,
@@ -233,7 +233,6 @@ public class SolicitanteController {
                 return "redirect:/solicitante/home";
             }
             solicitud.setId(id);
-            // Recuperamos la solicitud de la DB para no perder los archivos que ya existían
             solicitudService.obtenerPorId(id).ifPresent(previa -> {
                 solicitud.setDocumentos(previa.getDocumentos());
             });
