@@ -61,10 +61,17 @@ public class Convocatoria {
     public void setModalidad(String modalidad) { this.modalidad = modalidad; }
 
   
-
-    // Añadimos los campos simples para el centro, esto luego lo meteremos en una tabla aparte que haga referencia a esta convocatoria, pero por ahora lo dejamos así hasta que tire todo
+    // Añadimos los campos simples para el centro
     private String nombreCentro;
     private Integer numeroPlazas;
+
+    // --- ESTO ES LO QUE FALTABA: LAS VARIABLES PARA EL ARRAY DE CENTROS ---
+    @Column(length = 2000)
+    private String nombresCentrosArray;
+    
+    @Column(length = 2000)
+    private String plazasCentrosArray;
+
 
     // --- GETTERS Y SETTERS NUEVOS ---
     public String getNombreCentro() { return nombreCentro; }
@@ -72,4 +79,10 @@ public class Convocatoria {
 
     public Integer getNumeroPlazas() { return numeroPlazas; }
     public void setNumeroPlazas(Integer numeroPlazas) { this.numeroPlazas = numeroPlazas; }
+
+    public String getNombresCentrosArray() { return nombresCentrosArray; }
+    public void setNombresCentrosArray(String nombresCentrosArray) { this.nombresCentrosArray = nombresCentrosArray; }
+
+    public String getPlazasCentrosArray() { return plazasCentrosArray; }
+    public void setPlazasCentrosArray(String plazasCentrosArray) { this.plazasCentrosArray = plazasCentrosArray; }
 }
