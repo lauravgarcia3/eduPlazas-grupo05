@@ -18,7 +18,9 @@ public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
 
     Optional<Solicitud> findByIdAndUsuario(Long id, Usuario usuario);
 
-    List<Solicitud> findByCentroPreferencia(String centroPreferencia);
+    List<Solicitud> findByCentroPreferencia1(String centroPreferencia1);
+
+    List<Solicitud> findByCentroAdjudicado(String centroAdjudicado);
 
     long countByConvocatoria(Convocatoria convocatoria);
 

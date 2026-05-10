@@ -52,11 +52,12 @@ public class CentroControllerTest {
         usuarioMock.setNombreCompleto("CEIP Los Almendros");
 
         Solicitud solMock = new Solicitud();
-        solMock.setCentroPreferencia("CEIP Los Almendros");
+        solMock.setCentroPreferencia1("CEIP Los Almendros");
 
         // Simulamos la base de datos
         when(usuarioRepository.findByEmail("centro@eduplazas.com")).thenReturn(Optional.of(usuarioMock));
-        when(solicitudRepository.findByCentroPreferencia("CEIP Los Almendros")).thenReturn(List.of(solMock));
+        when(solicitudRepository.findByCentroAdjudicado("CEIP Los Almendros")).thenReturn(List.of());
+        when(solicitudRepository.findByCentroPreferencia1("CEIP Los Almendros")).thenReturn(List.of(solMock));
 
         // 2. Ejecutar el método del controlador DIRECTAMENTE
         String vista = centroController.home(model, principal);

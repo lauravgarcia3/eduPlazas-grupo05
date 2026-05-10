@@ -363,19 +363,34 @@
         <div class="status-container">
             <div class="status-panel">
                 <section>
-                    <div class="status-banner banner-aceptada">
+                    <div class="status-banner banner-aceptada" th:if="${solicitud.estado == 'ADMITIDA' || solicitud.estado == 'Aceptada'}">
                         <h2>¡Solicitud aceptada!</h2>
                         <p>El alumno/alumna ha sido admitido en el centro educativo.</p>
+                    </div>
+
+                    <div class="status-banner banner-proceso" th:if="${solicitud.estado != 'ADMITIDA' && solicitud.estado != 'Aceptada' && solicitud.estado != 'LISTA_ESPERA' && solicitud.estado != 'Rechazada'}">
+                        <h2>Solicitud enviada</h2>
+                        <p>La solicitud esta pendiente de adjudicacion.</p>
+                    </div>
+
+                    <div class="status-banner banner-proceso" th:if="${solicitud.estado == 'LISTA_ESPERA'}">
+                        <h2>Solicitud en lista de espera</h2>
+                        <p>No se ha obtenido plaza en los centros solicitados por el momento.</p>
+                    </div>
+
+                    <div class="status-banner banner-rechazada" th:if="${solicitud.estado == 'Rechazada'}">
+                        <h2>Solicitud rechazada</h2>
+                        <p>La solicitud no ha sido aceptada.</p>
                     </div>
 
                     <div class="accepted-card">
                         <div class="accepted-image-box">
                             <img th:src="${centro != null ? centro.imagen : 'https://via.placeholder.com/900x250'}"
                                 alt="Centro educativo" class="accepted-image">
-                            <div class="confirmed-badge">Plaza confirmada</div>
+                            <div class="confirmed-badge" th:if="${solicitud.estado == 'ADMITIDA' || solicitud.estado == 'Aceptada'}">Plaza confirmada</div>
                         </div>
 
-                        <h2 class="center-name" th:text="${solicitud.centroPreferencia}">CEIP San Francisco de Asís</h2>
+                        <h2 class="center-name" th:text="${solicitud.centroAdjudicado != null ? solicitud.centroAdjudicado : solicitud.centroPreferencia1}">CEIP San Francisco de Asís</h2>
 
                         <div class="info-grid">
                             <div class="info-box orange">

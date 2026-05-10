@@ -99,7 +99,7 @@ public class DataInitializer {
 
             List<Centro> centros = Arrays.asList(
                 new Centro("CEIP San Francisco de Asís", "Calle de la Educación, 123", "28001 Madrid", "info@ceipsanfrancisco.edu.es", "+34 91 234 5678", "www.ceipsanfrancisco.edu.es", "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=900&q=80", plazasIniciales),
-                new Centro("CEIP Los Almendros", "Avenida de los Almendros, 45", "28002 Madrid", "contacto@ceipalmendros.edu.es", "+34 91 345 6789", "www.ceipalmendros.edu.es", "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=900&q=80", plazasIniciales),
+                new Centro("CEIP Los Almendros", "Avenida de los Almendros, 45", "28002 Madrid", "contacto@ceipalmendros.edu.es", "+34 91 345 6789", "www.ceipalmendros.edu.es", "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=900&q=80", 0),
                 new Centro("CEIP El Prado", "Calle del Prado, 67", "28003 Madrid", "info@ceipelprado.edu.es", "+34 91 456 7890", "www.ceipelprado.edu.es", "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=900&q=80", plazasIniciales),
                 new Centro("CEIP Las Rosas", "Plaza de las Rosas, 12", "28004 Madrid", "contacto@ceiplasrosas.edu.es", "+34 91 567 8901", "www.ceiplasrosas.edu.es", "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=900&q=80", plazasIniciales),
                 new Centro("CEIP La Colina", "Camino de la Colina, 89", "28005 Madrid", "info@ceiplacolina.edu.es", "+34 91 678 9012", "www.ceiplacolina.edu.es", "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=900&q=80", plazasIniciales),
@@ -185,7 +185,9 @@ public class DataInitializer {
             sLucia.setMenor(menorLucia);
             sLucia.setTutor1(tutorLucia);
             sLucia.setDomicilioFamiliar(domLucia);
-            sLucia.setCentroPreferencia("CEIP San Francisco de Asís");
+            sLucia.setCentroPreferencia1("CEIP San Francisco de Asís");
+            sLucia.setCentroPreferencia2("CEIP Los Almendros");
+            sLucia.setCentroPreferencia3("CEIP El Prado");
             sLucia.setCursoSolicitado("Educación Infantil 3 años");
             sLucia.setDeclaracionVeracidad(true);
             sLucia.setAutorizacionProteccionDatos(true);
@@ -205,7 +207,9 @@ public class DataInitializer {
             sPablo.setCompletada(false);
             sPablo.setUsuario(usuarioPrincipal);
             sPablo.setMenor(menorPablo);
-            sPablo.setCentroPreferencia("CEIP Los Almendros");
+            sPablo.setCentroPreferencia1("CEIP Los Almendros");
+            sPablo.setCentroPreferencia2("CEIP El Prado");
+            sPablo.setCentroPreferencia3("CEIP Las Rosas");
             sPablo.setConvocatoria(convocatoriaActiva);
             sPablo.setDomicilioEnZonaCentro(true); // Pablo solo tiene proximidad
             nuevasSolicitudes.add(sPablo);
@@ -250,7 +254,9 @@ public class DataInitializer {
                 s.setMenor(m);
                 s.setTutor1(t);
                 s.setDomicilioFamiliar(d);
-                s.setCentroPreferencia(centroDestino);
+                s.setCentroPreferencia1(centroDestino);
+                s.setCentroPreferencia2(centros[(i + 1) % centros.length]);
+                s.setCentroPreferencia3(centros[(i + 2) % centros.length]);
                 s.setCursoSolicitado("Educación Infantil 3 años");
                 s.setDeclaracionVeracidad(true);
                 s.setAutorizacionProteccionDatos(true);
@@ -288,7 +294,9 @@ public class DataInitializer {
                 b.setCompletada(false);
                 b.setUsuario(u);
                 b.setMenor(mB);
-                b.setCentroPreferencia(centroDestino);
+                b.setCentroPreferencia1(centroDestino);
+                b.setCentroPreferencia2(centros[(i + 4) % centros.length]);
+                b.setCentroPreferencia3(centros[(i + 5) % centros.length]);
                 b.setConvocatoria(convocatoriaActiva);
 
                 // Criterios aleatorios también para borradores
@@ -322,4 +330,5 @@ public class DataInitializer {
             System.out.println("Puntuaciones calculadas y asignadas correctamente.");
         }
     }
+
 }

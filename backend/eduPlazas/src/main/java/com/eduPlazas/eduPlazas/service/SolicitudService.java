@@ -143,13 +143,23 @@ public class SolicitudService {
         List<Solicitud> solicitudesOrdenadas = obtenerSolicitudesOrdenadasPorPuntuacion(convocatoria);
 
         for (Solicitud solicitud : solicitudesOrdenadas) {
-            String centroPreferencia = normalizarCentro(solicitud.getCentroPreferencia());
-            int plazasDisponibles = plazasDisponiblesPorCentro.getOrDefault(centroPreferencia, 0);
+            solicitud.setCentroAdjudicado(null);
+            boolean adjudicada = false;
 
-            if (plazasDisponibles > 0) {
-                solicitud.setEstado("ADMITIDA");
-                plazasDisponiblesPorCentro.put(centroPreferencia, plazasDisponibles - 1);
-            } else {
+            for (String centroSolicitado : obtenerPreferenciasCentro(solicitud)) {
+                String centroNormalizado = normalizarCentro(centroSolicitado);
+                int plazasDisponibles = plazasDisponiblesPorCentro.getOrDefault(centroNormalizado, 0);
+
+                if (plazasDisponibles > 0) {
+                    solicitud.setEstado("ADMITIDA");
+                    solicitud.setCentroAdjudicado(centroSolicitado);
+                    plazasDisponiblesPorCentro.put(centroNormalizado, plazasDisponibles - 1);
+                    adjudicada = true;
+                    break;
+                }
+            }
+
+            if (!adjudicada) {
                 solicitud.setEstado("LISTA_ESPERA");
             }
 
@@ -191,5 +201,34 @@ public class SolicitudService {
 
     private String normalizarCentro(String centro) {
         return centro == null ? "" : centro.trim().toLowerCase();
+    }
+
+    public List<String> obtenerPreferenciasCentro(Solicitud solicitud) {
+        List<String> preferencias = new ArrayList<>();
+
+        if (solicitud == null) return preferencias;
+
+        agregarPreferencia(preferencias, solicitud.getCentroPreferencia1());
+        agregarPreferencia(preferencias, solicitud.getCentroPreferencia2());
+        agregarPreferencia(preferencias, solicitud.getCentroPreferencia3());
+
+        return preferencias;
+    }
+
+    private void agregarPreferencia(List<String> preferencias, String centro) {
+        if (estaVacio(centro)) return;
+
+        String centroNormalizado = normalizarCentro(centro);
+        boolean yaIncluido = preferencias.stream()
+                .map(this::normalizarCentro)
+                .anyMatch(centroNormalizado::equals);
+
+        if (!yaIncluido) {
+            preferencias.add(centro.trim());
+        }
+    }
+
+    private boolean estaVacio(String texto) {
+        return texto == null || texto.trim().isEmpty();
     }
 }

@@ -137,7 +137,7 @@ public class SolicitanteControllerTest {
 
         Solicitud s = new Solicitud();
         s.setUsuario(u); 
-        s.setCentroPreferencia("Mi Colegio Favorito");
+        s.setCentroPreferencia1("Mi Colegio Favorito");
         
         // Ahora usamos el nuevo repositorio que implementó tu compañero
         when(solicitudRepository.findByIdWithUsuario(1L)).thenReturn(Optional.of(s));
