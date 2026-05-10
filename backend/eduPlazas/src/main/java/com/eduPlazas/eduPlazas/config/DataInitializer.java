@@ -99,7 +99,7 @@ public class DataInitializer {
 
             List<Centro> centros = Arrays.asList(
                 new Centro("CEIP San Francisco de Asís", "Calle de la Educación, 123", "28001 Madrid", "info@ceipsanfrancisco.edu.es", "+34 91 234 5678", "www.ceipsanfrancisco.edu.es", "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=900&q=80", plazasIniciales),
-                new Centro("CEIP Los Almendros", "Avenida de los Almendros, 45", "28002 Madrid", "contacto@ceipalmendros.edu.es", "+34 91 345 6789", "www.ceipalmendros.edu.es", "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=900&q=80", plazasIniciales),
+                new Centro("CEIP Los Almendros", "Avenida de los Almendros, 45", "28002 Madrid", "contacto@ceipalmendros.edu.es", "+34 91 345 6789", "www.ceipalmendros.edu.es", "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=900&q=80", 0),
                 new Centro("CEIP El Prado", "Calle del Prado, 67", "28003 Madrid", "info@ceipelprado.edu.es", "+34 91 456 7890", "www.ceipelprado.edu.es", "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=900&q=80", plazasIniciales),
                 new Centro("CEIP Las Rosas", "Plaza de las Rosas, 12", "28004 Madrid", "contacto@ceiplasrosas.edu.es", "+34 91 567 8901", "www.ceiplasrosas.edu.es", "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=900&q=80", plazasIniciales),
                 new Centro("CEIP La Colina", "Camino de la Colina, 89", "28005 Madrid", "info@ceiplacolina.edu.es", "+34 91 678 9012", "www.ceiplacolina.edu.es", "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=900&q=80", plazasIniciales),
