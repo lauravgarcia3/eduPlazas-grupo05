@@ -201,10 +201,9 @@ public class AdminController {
             Map<String, Object> centroData = new HashMap<>();
             centroData.put("centro", centro);
 
-            // Contamos solicitudes asignadas a este centro (Admitidas o
-            // Enviadas/Pendientes)
+            // Solo las admitidas cuentan como plazas adjudicadas.
             long asignadas = solicitudes.stream()
-                    .filter(s -> ("ADMITIDA".equals(s.getEstado()) || "Enviada".equals(s.getEstado()))
+                    .filter(s -> "ADMITIDA".equals(s.getEstado())
                             && centro.getNombre().equals(obtenerCentroReferencia(s)))
                     .count();
 
@@ -247,25 +246,30 @@ public class AdminController {
         existente.setReclamacionesDefinitivasProcesadas(Boolean.TRUE.equals(convocatoria.getReclamacionesDefinitivasProcesadas()));
 
         convocatoriaService.guardarConvocatoria(existente);
-        return "redirect:/admin/convocatoria/" + id + "/publicaciones";
+        return "redirect:/admin/convocatoria/" + id + "/solicitudes";
     }
 
     @PostMapping("/convocatoria/{id}/publicaciones/publicar-definitivo")
-    public String publicarListadoDefinitivo(@PathVariable Long id) {
+    public String publicarListadoDefinitivo(@PathVariable Long id,
+                                           @ModelAttribute("convocatoria") Convocatoria convocatoria) {
         Optional<Convocatoria> convocatoriaOpt = convocatoriaService.obtenerPorId(id);
         if (convocatoriaOpt.isEmpty()) {
             return "redirect:/admin/home";
         }
 
         Convocatoria existente = convocatoriaOpt.get();
-        if (!Boolean.TRUE.equals(existente.getListadoDefinitivoPublicado())
-                || !Boolean.TRUE.equals(existente.getPeriodoReclamacionesFinalizado())
-                || !Boolean.TRUE.equals(existente.getReclamacionesDefinitivasProcesadas())) {
-            return "redirect:/admin/convocatoria/" + id + "/publicaciones";
+        if (!Boolean.TRUE.equals(convocatoria.getListadoDefinitivoPublicado())
+                || !Boolean.TRUE.equals(convocatoria.getPeriodoReclamacionesFinalizado())
+                || !Boolean.TRUE.equals(convocatoria.getReclamacionesDefinitivasProcesadas())) {
+            return "redirect:/admin/convocatoria/" + id + "/solicitudes";
         }
 
-        // Aquí se podría añadir lógica real de publicación definitiva si se necesita.
-        return "redirect:/admin/convocatoria/" + id + "/publicaciones";
+        existente.setListadoDefinitivoPublicado(true);
+        existente.setPeriodoReclamacionesFinalizado(true);
+        existente.setReclamacionesDefinitivasProcesadas(true);
+        existente.setEstado("CERRADA");
+        convocatoriaService.guardarConvocatoria(existente);
+        return "redirect:/admin/convocatoria/" + id + "/solicitudes";
     }
 
     @PostMapping("/convocatoria/{id}/adjudicar")

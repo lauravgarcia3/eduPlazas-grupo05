@@ -698,16 +698,17 @@
                     </div>
                 </div>
 
-                <div class="publication-card pending">
+                <div th:class="'publication-card ' + (${convocatoria.estado == 'CERRADA'} ? 'ready' : 'pending')">
                     <div class="publication-header">
                         <div class="publication-title">Listado definitivo</div>
-                        <div class="status-pill">Pendiente</div>
+                        <div th:class="'status-pill ' + (${convocatoria.estado == 'CERRADA'} ? 'ready' : '')"
+                             th:text="${convocatoria.estado == 'CERRADA'} ? 'Publicado' : 'Pendiente'">Pendiente</div>
                     </div>
 
                     <div class="publication-label">Estado del proceso</div>
 
                     <form th:object="${convocatoria}"
-                          th:action="@{/admin/convocatoria/{id}/publicaciones/estado(id=${convocatoria.id})}"
+                          th:action="@{/admin/convocatoria/{id}/publicaciones/publicar-definitivo(id=${convocatoria.id})}"
                           method="post">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 
@@ -728,20 +729,15 @@
                             </div>
                         </div>
 
-                    </form>
-
-                    <div class="action-row">
-                        <form th:action="@{/admin/convocatoria/{id}/publicaciones/publicar-definitivo(id=${convocatoria.id})}"
-                              method="post"
-                              style="flex: 1;">
-                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <div class="action-row">
                             <button id="btnPublishDefinitivo" type="submit" class="primary-btn" style="width: 100%;"
-                                    th:disabled="${convocatoria.listadoDefinitivoPublicado != true or convocatoria.periodoReclamacionesFinalizado != true or convocatoria.reclamacionesDefinitivasProcesadas != true}">
+                                    th:data-closed="${convocatoria.estado == 'CERRADA'}"
+                                    th:disabled="${convocatoria.estado == 'CERRADA' or convocatoria.listadoDefinitivoPublicado != true or convocatoria.periodoReclamacionesFinalizado != true or convocatoria.reclamacionesDefinitivasProcesadas != true}"
+                                    th:text="${convocatoria.estado == 'CERRADA'} ? 'Listado publicado' : 'Publicar listado'">
                                 Publicar listado
                             </button>
-                        </form>
-                        
-                    </div>
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -835,6 +831,11 @@
 
         const updateButtonState = (checkboxes, button) => {
             if (!button) return;
+            if (button.dataset.closed === 'true') {
+                button.disabled = true;
+                button.style.cursor = 'not-allowed';
+                return;
+            }
             const allChecked = checkboxes.every(input => input && input.checked);
             button.disabled = !allChecked;
             button.style.cursor = allChecked ? 'pointer' : 'not-allowed';
