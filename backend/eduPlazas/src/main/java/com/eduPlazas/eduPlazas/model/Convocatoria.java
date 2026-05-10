@@ -51,6 +51,13 @@ public class Convocatoria {
     @Column(length = 2000)
     private String plazasCentrosArray;
 
+    private Boolean listadoProvisionalPublicado = false;
+    private Boolean reclamacionesFinalizadas = false;
+    private Boolean reclamacionesProcesadas = false;
+    private Boolean listadoDefinitivoPublicado = false;
+    private Boolean periodoReclamacionesFinalizado = false;
+    private Boolean reclamacionesDefinitivasProcesadas = false;
+
     // --- CONSTRUCTORES ---
     public Convocatoria() {
     }
@@ -94,4 +101,22 @@ public class Convocatoria {
 
     public String getPlazasCentrosArray() { return plazasCentrosArray; }
     public void setPlazasCentrosArray(String plazasCentrosArray) { this.plazasCentrosArray = plazasCentrosArray; }
+
+    public Boolean getListadoProvisionalPublicado() { return listadoProvisionalPublicado; }
+    public void setListadoProvisionalPublicado(Boolean listadoProvisionalPublicado) { this.listadoProvisionalPublicado = listadoProvisionalPublicado; }
+
+    public Boolean getReclamacionesFinalizadas() { return reclamacionesFinalizadas; }
+    public void setReclamacionesFinalizadas(Boolean reclamacionesFinalizadas) { this.reclamacionesFinalizadas = reclamacionesFinalizadas; }
+
+    public Boolean getReclamacionesProcesadas() { return reclamacionesProcesadas; }
+    public void setReclamacionesProcesadas(Boolean reclamacionesProcesadas) { this.reclamacionesProcesadas = reclamacionesProcesadas; }
+
+    public Boolean getListadoDefinitivoPublicado() { return listadoDefinitivoPublicado; }
+    public void setListadoDefinitivoPublicado(Boolean listadoDefinitivoPublicado) { this.listadoDefinitivoPublicado = listadoDefinitivoPublicado; }
+
+    public Boolean getPeriodoReclamacionesFinalizado() { return periodoReclamacionesFinalizado; }
+    public void setPeriodoReclamacionesFinalizado(Boolean periodoReclamacionesFinalizado) { this.periodoReclamacionesFinalizado = periodoReclamacionesFinalizado; }
+
+    public Boolean getReclamacionesDefinitivasProcesadas() { return reclamacionesDefinitivasProcesadas; }
+    public void setReclamacionesDefinitivasProcesadas(Boolean reclamacionesDefinitivasProcesadas) { this.reclamacionesDefinitivasProcesadas = reclamacionesDefinitivasProcesadas; }
 }
