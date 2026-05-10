@@ -205,7 +205,7 @@ public class AdminController {
             // Enviadas/Pendientes)
             long asignadas = solicitudes.stream()
                     .filter(s -> ("ADMITIDA".equals(s.getEstado()) || "Enviada".equals(s.getEstado()))
-                            && centro.getNombre().equals(s.getCentroPreferencia()))
+                            && centro.getNombre().equals(obtenerCentroReferencia(s)))
                     .count();
 
             int plazasTotales = centro.getNumPlazas() != null ? centro.getNumPlazas() : 0;
@@ -247,5 +247,15 @@ public class AdminController {
         solicitudService.adjudicarSolicitudes(convocatoriaOpt.get(), centros);
 
         return "redirect:/admin/convocatoria/" + id + "/solicitudes";
+    }
+
+    private String obtenerCentroReferencia(Solicitud solicitud) {
+        if (solicitud == null) return null;
+
+        if ("ADMITIDA".equals(solicitud.getEstado()) && solicitud.getCentroAdjudicado() != null) {
+            return solicitud.getCentroAdjudicado();
+        }
+
+        return solicitud.getCentroPreferencia1();
     }
 }

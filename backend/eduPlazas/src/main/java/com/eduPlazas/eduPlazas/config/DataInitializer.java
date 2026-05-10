@@ -185,7 +185,9 @@ public class DataInitializer {
             sLucia.setMenor(menorLucia);
             sLucia.setTutor1(tutorLucia);
             sLucia.setDomicilioFamiliar(domLucia);
-            sLucia.setCentroPreferencia("CEIP San Francisco de Asís");
+            sLucia.setCentroPreferencia1("CEIP San Francisco de Asís");
+            sLucia.setCentroPreferencia2("CEIP Los Almendros");
+            sLucia.setCentroPreferencia3("CEIP El Prado");
             sLucia.setCursoSolicitado("Educación Infantil 3 años");
             sLucia.setDeclaracionVeracidad(true);
             sLucia.setAutorizacionProteccionDatos(true);
@@ -205,7 +207,9 @@ public class DataInitializer {
             sPablo.setCompletada(false);
             sPablo.setUsuario(usuarioPrincipal);
             sPablo.setMenor(menorPablo);
-            sPablo.setCentroPreferencia("CEIP Los Almendros");
+            sPablo.setCentroPreferencia1("CEIP Los Almendros");
+            sPablo.setCentroPreferencia2("CEIP El Prado");
+            sPablo.setCentroPreferencia3("CEIP Las Rosas");
             sPablo.setConvocatoria(convocatoriaActiva);
             sPablo.setDomicilioEnZonaCentro(true); // Pablo solo tiene proximidad
             nuevasSolicitudes.add(sPablo);
@@ -250,7 +254,9 @@ public class DataInitializer {
                 s.setMenor(m);
                 s.setTutor1(t);
                 s.setDomicilioFamiliar(d);
-                s.setCentroPreferencia(centroDestino);
+                s.setCentroPreferencia1(centroDestino);
+                s.setCentroPreferencia2(centros[(i + 1) % centros.length]);
+                s.setCentroPreferencia3(centros[(i + 2) % centros.length]);
                 s.setCursoSolicitado("Educación Infantil 3 años");
                 s.setDeclaracionVeracidad(true);
                 s.setAutorizacionProteccionDatos(true);
@@ -288,7 +294,9 @@ public class DataInitializer {
                 b.setCompletada(false);
                 b.setUsuario(u);
                 b.setMenor(mB);
-                b.setCentroPreferencia(centroDestino);
+                b.setCentroPreferencia1(centroDestino);
+                b.setCentroPreferencia2(centros[(i + 4) % centros.length]);
+                b.setCentroPreferencia3(centros[(i + 5) % centros.length]);
                 b.setConvocatoria(convocatoriaActiva);
 
                 // Criterios aleatorios también para borradores
@@ -322,4 +330,5 @@ public class DataInitializer {
             System.out.println("Puntuaciones calculadas y asignadas correctamente.");
         }
     }
+
 }

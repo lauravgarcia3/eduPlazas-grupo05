@@ -373,7 +373,7 @@
                             <div class="confirmed-badge">Plaza confirmada</div>
                         </div>
 
-                        <h2 class="center-name" th:text="${solicitud.centroPreferencia}">CEIP San Francisco de Asís</h2>
+                        <h2 class="center-name" th:text="${solicitud.centroAdjudicado != null ? solicitud.centroAdjudicado : solicitud.centroPreferencia1}">CEIP San Francisco de Asís</h2>
 
                         <div class="info-grid">
                             <div class="info-box orange">

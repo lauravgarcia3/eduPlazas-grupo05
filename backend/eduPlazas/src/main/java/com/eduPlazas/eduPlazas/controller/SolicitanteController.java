@@ -197,9 +197,10 @@ public class SolicitanteController {
             }
             model.addAttribute("solicitud", solicitud);
 
-            if (solicitud.getCentroPreferencia() != null) {
+            String centroReferencia = obtenerCentroReferencia(solicitud);
+            if (centroReferencia != null) {
                 Optional<Centro> centroOpt = centroRepository.findAll().stream()
-                        .filter(c -> c.getNombre().equals(solicitud.getCentroPreferencia()))
+                        .filter(c -> c.getNombre().equals(centroReferencia))
                         .findFirst();
                 centroOpt.ifPresent(centro -> model.addAttribute("centro", centro));
             }
@@ -263,6 +264,8 @@ public class SolicitanteController {
             }
         }
 
+        validarPreferenciasCentro(solicitud, result);
+
         // 2. SI ES COMPLETAR Y HAY ERRORES, VOLVEMOS AL FORMULARIO.
         // SI ES BORRADOR, IGNORAMOS LOS ERRORES
         if ("completar".equals(accion) && result.hasErrors()) {
@@ -322,5 +325,32 @@ public class SolicitanteController {
 
         solicitudService.guardar(solicitud);
         return "redirect:/solicitante/home";
+    }
+
+    private void validarPreferenciasCentro(Solicitud solicitud, BindingResult result) {
+        List<String> preferencias = new ArrayList<>();
+
+        agregarPreferencia(solicitud.getCentroPreferencia1(), "centroPreferencia1", preferencias, result);
+        agregarPreferencia(solicitud.getCentroPreferencia2(), "centroPreferencia2", preferencias, result);
+        agregarPreferencia(solicitud.getCentroPreferencia3(), "centroPreferencia3", preferencias, result);
+    }
+
+    private void agregarPreferencia(String centro, String campo, List<String> preferencias, BindingResult result) {
+        if (centro == null || centro.trim().isEmpty()) return;
+
+        String normalizada = centro.trim().toLowerCase();
+        if (preferencias.contains(normalizada)) {
+            result.rejectValue(campo, "error.preferenciasCentro",
+                    "No se puede seleccionar el mismo centro en varias preferencias.");
+        } else {
+            preferencias.add(normalizada);
+        }
+    }
+
+    private String obtenerCentroReferencia(Solicitud solicitud) {
+        if (solicitud.getCentroAdjudicado() != null && !solicitud.getCentroAdjudicado().isBlank()) {
+            return solicitud.getCentroAdjudicado();
+        }
+        return solicitud.getCentroPreferencia1();
     }
 }

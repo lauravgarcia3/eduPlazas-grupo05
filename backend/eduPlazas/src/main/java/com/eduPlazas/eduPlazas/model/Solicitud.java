@@ -24,8 +24,11 @@ public class Solicitud {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Debe seleccionar el campo «Centro de preferencia», payaso.")
-    private String centroPreferencia;
+    @NotBlank(message = "Debe seleccionar el campo «Centro de preferencia 1».")
+    private String centroPreferencia1;
+    private String centroPreferencia2;
+    private String centroPreferencia3;
+    private String centroAdjudicado;
 
     @NotBlank(message = "Debe seleccionar el campo «Curso solicitado».")
     private String cursoSolicitado;
@@ -121,7 +124,7 @@ public class Solicitud {
     public Solicitud(Long id, String nombreSolicitante, String estado, Usuario usuario,
             Menor menor, Tutor tutor1, Tutor tutor2,
             DomicilioFamiliar domicilioFamiliar,
-            String centroPreferencia, String cursoSolicitado,
+            String centroPreferencia1, String cursoSolicitado,
             Boolean declaracionVeracidad, Boolean autorizacionProteccionDatos) {
         this.id = id;
         this.nombreSolicitante = nombreSolicitante;
@@ -131,7 +134,7 @@ public class Solicitud {
         this.tutor1 = tutor1;
         this.tutor2 = tutor2;
         this.domicilioFamiliar = domicilioFamiliar;
-        this.centroPreferencia = centroPreferencia;
+        setCentroPreferencia1(centroPreferencia1);
         this.cursoSolicitado = cursoSolicitado;
         this.declaracionVeracidad = declaracionVeracidad;
         this.autorizacionProteccionDatos = autorizacionProteccionDatos;
@@ -169,12 +172,36 @@ public class Solicitud {
         this.usuario = usuario;
     }
 
-    public String getCentroPreferencia() {
-        return centroPreferencia;
+    public String getCentroPreferencia1() {
+        return centroPreferencia1;
     }
 
-    public void setCentroPreferencia(String centroPreferencia) {
-        this.centroPreferencia = centroPreferencia;
+    public void setCentroPreferencia1(String centroPreferencia1) {
+        this.centroPreferencia1 = centroPreferencia1;
+    }
+
+    public String getCentroPreferencia2() {
+        return centroPreferencia2;
+    }
+
+    public void setCentroPreferencia2(String centroPreferencia2) {
+        this.centroPreferencia2 = centroPreferencia2;
+    }
+
+    public String getCentroPreferencia3() {
+        return centroPreferencia3;
+    }
+
+    public void setCentroPreferencia3(String centroPreferencia3) {
+        this.centroPreferencia3 = centroPreferencia3;
+    }
+
+    public String getCentroAdjudicado() {
+        return centroAdjudicado;
+    }
+
+    public void setCentroAdjudicado(String centroAdjudicado) {
+        this.centroAdjudicado = centroAdjudicado;
     }
 
     public String getCursoSolicitado() {

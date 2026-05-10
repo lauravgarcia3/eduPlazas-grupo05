@@ -629,12 +629,30 @@ Complete todos los campos obligatorios marcados con (*). La información proporc
 
 <div class="form-grid">
 <div class="form-group">
-    <label for="centroPreferencia">Centro de preferencia*</label>
-    <select id="centroPreferencia" th:field="*{centroPreferencia}" required title="Selecciona un centro de preferencia.">
+    <label for="centroPreferencia1">Centro de preferencia 1*</label>
+    <select id="centroPreferencia1" th:field="*{centroPreferencia1}" required title="Selecciona el primer centro de preferencia.">
         <option value="">Seleccione...</option>
         <option th:each="centro : ${centros}" th:value="${centro.nombre}" th:text="${centro.nombre}"></option>
     </select>
     <small class="form-help">Campo obligatorio.</small>
+</div>
+
+<div class="form-group">
+    <label for="centroPreferencia2">Centro de preferencia 2</label>
+    <select id="centroPreferencia2" th:field="*{centroPreferencia2}" title="Selecciona el segundo centro de preferencia.">
+        <option value="">Seleccione...</option>
+        <option th:each="centro : ${centros}" th:value="${centro.nombre}" th:text="${centro.nombre}"></option>
+    </select>
+    <small class="form-help">Opcional.</small>
+</div>
+
+<div class="form-group">
+    <label for="centroPreferencia3">Centro de preferencia 3</label>
+    <select id="centroPreferencia3" th:field="*{centroPreferencia3}" title="Selecciona el tercer centro de preferencia.">
+        <option value="">Seleccione...</option>
+        <option th:each="centro : ${centros}" th:value="${centro.nombre}" th:text="${centro.nombre}"></option>
+    </select>
+    <small class="form-help">Opcional.</small>
 </div>
 
 <div class="form-group">

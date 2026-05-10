@@ -39,8 +39,11 @@ public class CentroController {
         if(usuario != null) {
             String nombreCentro = usuario.getNombreCompleto();
             
-            // 3. Buscamos SOLO las solicitudes para este centro
-            List<Solicitud> solicitudes = solicitudRepository.findByCentroPreferencia(nombreCentro);
+            // 3. Buscamos las solicitudes asociadas para este centro. Si todavia no hay adjudicacion,
+            List<Solicitud> solicitudes = solicitudRepository.findByCentroAdjudicado(nombreCentro);
+            if (solicitudes.isEmpty()) {
+                solicitudes = solicitudRepository.findByCentroPreferencia1(nombreCentro);
+            }
             
             model.addAttribute("nombreCentro", nombreCentro);
             model.addAttribute("solicitudes", solicitudes);
