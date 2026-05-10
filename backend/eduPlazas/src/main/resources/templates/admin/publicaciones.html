@@ -658,22 +658,29 @@
 
                     <div class="publication-label">Estado del proceso</div>
 
-                    <div class="check-list">
-                        <div class="check-item">
-                            <span class="check-circle green">✓</span>
-                            <span>Cálculo de puntuaciones completado</span>
+                    <form th:object="${convocatoria}"
+                          th:action="@{/admin/convocatoria/{id}/publicaciones/estado(id=${convocatoria.id})}"
+                          method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                        <div class="check-list">
+                            <div class="check-item">
+                                <input type="checkbox" id="listadoProvisionalPublicado" th:field="*{listadoProvisionalPublicado}" />
+                                <label for="listadoProvisionalPublicado">Cálculo de puntuaciones completado</label>
+                            </div>
+
+                            <div class="check-item">
+                                <input type="checkbox" id="reclamacionesFinalizadas" th:field="*{reclamacionesFinalizadas}" />
+                                <label for="reclamacionesFinalizadas">Asignación automática realizada</label>
+                            </div>
+
+                            <div class="check-item">
+                                <input type="checkbox" id="reclamacionesProcesadas" th:field="*{reclamacionesProcesadas}" />
+                                <label for="reclamacionesProcesadas">Listado generado y validado</label>
+                            </div>
                         </div>
 
-                        <div class="check-item">
-                            <span class="check-circle green">✓</span>
-                            <span>Asignación automática realizada</span>
-                        </div>
-
-                        <div class="check-item">
-                            <span class="check-circle green">✓</span>
-                            <span>Listado generado y validado</span>
-                        </div>
-                    </div>
+                    </form>
 
                     <div class="action-row">
                         <form th:action="@{/admin/convocatoria/{id}/adjudicar(id=${convocatoria.id})}"
@@ -682,11 +689,12 @@
                             <input type="hidden"
                                    th:name="${_csrf.parameterName}"
                                    th:value="${_csrf.token}">
-                            <button type="submit" class="primary-btn" style="width: 100%;">
+                            <button id="btnPublishProvisional" type="submit" class="primary-btn" style="width: 100%;"
+                                    th:disabled="${convocatoria.listadoProvisionalPublicado != true or convocatoria.reclamacionesFinalizadas != true or convocatoria.reclamacionesProcesadas != true}">
                                 Publicar listado
                             </button>
                         </form>
-                        <a href="#" class="secondary-btn">Descargar PDF</a>
+                       
                     </div>
                 </div>
 
@@ -698,26 +706,41 @@
 
                     <div class="publication-label">Estado del proceso</div>
 
-                    <div class="check-list">
-                        <div class="check-item">
-                            <span class="check-circle gray"></span>
-                            <span>Listado provisional publicado</span>
+                    <form th:object="${convocatoria}"
+                          th:action="@{/admin/convocatoria/{id}/publicaciones/estado(id=${convocatoria.id})}"
+                          method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                        <div class="check-list">
+                            <div class="check-item">
+                                <input type="checkbox" id="listadoDefinitivoPublicado" th:field="*{listadoDefinitivoPublicado}" />
+                                <label for="listadoDefinitivoPublicado">Listado provisional publicado</label>
+                            </div>
+
+                            <div class="check-item">
+                                <input type="checkbox" id="periodoReclamacionesFinalizado" th:field="*{periodoReclamacionesFinalizado}" />
+                                <label for="periodoReclamacionesFinalizado">Periodo de reclamaciones finalizado</label>
+                            </div>
+
+                            <div class="check-item">
+                                <input type="checkbox" id="reclamacionesDefinitivasProcesadas" th:field="*{reclamacionesDefinitivasProcesadas}" />
+                                <label for="reclamacionesDefinitivasProcesadas">Reclamaciones procesadas</label>
+                            </div>
                         </div>
 
-                        <div class="check-item">
-                            <span class="check-circle gray"></span>
-                            <span>Periodo de reclamaciones finalizado</span>
-                        </div>
-
-                        <div class="check-item">
-                            <span class="check-circle gray"></span>
-                            <span>Reclamaciones procesadas</span>
-                        </div>
-                    </div>
+                    </form>
 
                     <div class="action-row">
-                        <a href="#" class="secondary-btn">Publicar listado</a>
-                        <a href="#" class="secondary-btn">Descargar PDF</a>
+                        <form th:action="@{/admin/convocatoria/{id}/publicaciones/publicar-definitivo(id=${convocatoria.id})}"
+                              method="post"
+                              style="flex: 1;">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                            <button id="btnPublishDefinitivo" type="submit" class="primary-btn" style="width: 100%;"
+                                    th:disabled="${convocatoria.listadoDefinitivoPublicado != true or convocatoria.periodoReclamacionesFinalizado != true or convocatoria.reclamacionesDefinitivasProcesadas != true}">
+                                Publicar listado
+                            </button>
+                        </form>
+                        
                     </div>
                 </div>
             </div>
@@ -794,6 +817,41 @@
         </section>
     </div>
 </main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const provisionalCheckboxes = [
+            document.getElementById('listadoProvisionalPublicado'),
+            document.getElementById('reclamacionesFinalizadas'),
+            document.getElementById('reclamacionesProcesadas')
+        ];
+        const definitiveCheckboxes = [
+            document.getElementById('listadoDefinitivoPublicado'),
+            document.getElementById('periodoReclamacionesFinalizado'),
+            document.getElementById('reclamacionesDefinitivasProcesadas')
+        ];
+        const provisionalButton = document.getElementById('btnPublishProvisional');
+        const definitivoButton = document.getElementById('btnPublishDefinitivo');
+
+        const updateButtonState = (checkboxes, button) => {
+            if (!button) return;
+            const allChecked = checkboxes.every(input => input && input.checked);
+            button.disabled = !allChecked;
+            button.style.cursor = allChecked ? 'pointer' : 'not-allowed';
+        };
+
+        provisionalCheckboxes.forEach(input => {
+            if (input) input.addEventListener('change', () => updateButtonState(provisionalCheckboxes, provisionalButton));
+        });
+
+        definitiveCheckboxes.forEach(input => {
+            if (input) input.addEventListener('change', () => updateButtonState(definitiveCheckboxes, definitivoButton));
+        });
+
+        updateButtonState(provisionalCheckboxes, provisionalButton);
+        updateButtonState(definitiveCheckboxes, definitivoButton);
+    });
+</script>
 
 </body>
 </html>

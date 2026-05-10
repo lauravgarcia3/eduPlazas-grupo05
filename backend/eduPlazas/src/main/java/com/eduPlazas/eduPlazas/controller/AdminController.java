@@ -230,9 +230,42 @@ public class AdminController {
         return "admin/publicaciones";
     }
 
-    @GetMapping("/publicaciones")
-    public String publicaciones() {
-        return "admin/publicaciones";
+    @PostMapping("/convocatoria/{id}/publicaciones/estado")
+    public String actualizarEstadoPublicaciones(@PathVariable Long id,
+                                               @ModelAttribute("convocatoria") Convocatoria convocatoria) {
+        Optional<Convocatoria> convocatoriaOpt = convocatoriaService.obtenerPorId(id);
+        if (convocatoriaOpt.isEmpty()) {
+            return "redirect:/admin/home";
+        }
+
+        Convocatoria existente = convocatoriaOpt.get();
+        existente.setListadoProvisionalPublicado(Boolean.TRUE.equals(convocatoria.getListadoProvisionalPublicado()));
+        existente.setReclamacionesFinalizadas(Boolean.TRUE.equals(convocatoria.getReclamacionesFinalizadas()));
+        existente.setReclamacionesProcesadas(Boolean.TRUE.equals(convocatoria.getReclamacionesProcesadas()));
+        existente.setListadoDefinitivoPublicado(Boolean.TRUE.equals(convocatoria.getListadoDefinitivoPublicado()));
+        existente.setPeriodoReclamacionesFinalizado(Boolean.TRUE.equals(convocatoria.getPeriodoReclamacionesFinalizado()));
+        existente.setReclamacionesDefinitivasProcesadas(Boolean.TRUE.equals(convocatoria.getReclamacionesDefinitivasProcesadas()));
+
+        convocatoriaService.guardarConvocatoria(existente);
+        return "redirect:/admin/convocatoria/" + id + "/publicaciones";
+    }
+
+    @PostMapping("/convocatoria/{id}/publicaciones/publicar-definitivo")
+    public String publicarListadoDefinitivo(@PathVariable Long id) {
+        Optional<Convocatoria> convocatoriaOpt = convocatoriaService.obtenerPorId(id);
+        if (convocatoriaOpt.isEmpty()) {
+            return "redirect:/admin/home";
+        }
+
+        Convocatoria existente = convocatoriaOpt.get();
+        if (!Boolean.TRUE.equals(existente.getListadoDefinitivoPublicado())
+                || !Boolean.TRUE.equals(existente.getPeriodoReclamacionesFinalizado())
+                || !Boolean.TRUE.equals(existente.getReclamacionesDefinitivasProcesadas())) {
+            return "redirect:/admin/convocatoria/" + id + "/publicaciones";
+        }
+
+        // Aquí se podría añadir lógica real de publicación definitiva si se necesita.
+        return "redirect:/admin/convocatoria/" + id + "/publicaciones";
     }
 
     @PostMapping("/convocatoria/{id}/adjudicar")

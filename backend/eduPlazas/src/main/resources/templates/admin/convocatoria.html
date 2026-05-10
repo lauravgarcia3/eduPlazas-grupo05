@@ -571,6 +571,12 @@
             <form id="form-convocatoria" th:action="@{/admin/convocatoria/guardar}" th:object="${nuevaConvocatoria}"
                 method="post" onsubmit="return prepararEnvio()">
                 <input type="hidden" th:field="*{id}">
+                <input type="hidden" th:field="*{listadoProvisionalPublicado}">
+                <input type="hidden" th:field="*{reclamacionesFinalizadas}">
+                <input type="hidden" th:field="*{reclamacionesProcesadas}">
+                <input type="hidden" th:field="*{listadoDefinitivoPublicado}">
+                <input type="hidden" th:field="*{periodoReclamacionesFinalizado}">
+                <input type="hidden" th:field="*{reclamacionesDefinitivasProcesadas}">
 
                 <section id="step-1">
                     <div class="stepper">

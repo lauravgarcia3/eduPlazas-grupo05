@@ -32,6 +32,31 @@ public class ConvocatoriaService {
             }
         }
 
+        if (nuevaConvocatoria.getId() != null) {
+            Optional<Convocatoria> existenteOpt = repository.findById(nuevaConvocatoria.getId());
+            if (existenteOpt.isPresent()) {
+                Convocatoria existente = existenteOpt.get();
+                if (nuevaConvocatoria.getListadoProvisionalPublicado() == null) {
+                    nuevaConvocatoria.setListadoProvisionalPublicado(existente.getListadoProvisionalPublicado());
+                }
+                if (nuevaConvocatoria.getReclamacionesFinalizadas() == null) {
+                    nuevaConvocatoria.setReclamacionesFinalizadas(existente.getReclamacionesFinalizadas());
+                }
+                if (nuevaConvocatoria.getReclamacionesProcesadas() == null) {
+                    nuevaConvocatoria.setReclamacionesProcesadas(existente.getReclamacionesProcesadas());
+                }
+                if (nuevaConvocatoria.getListadoDefinitivoPublicado() == null) {
+                    nuevaConvocatoria.setListadoDefinitivoPublicado(existente.getListadoDefinitivoPublicado());
+                }
+                if (nuevaConvocatoria.getPeriodoReclamacionesFinalizado() == null) {
+                    nuevaConvocatoria.setPeriodoReclamacionesFinalizado(existente.getPeriodoReclamacionesFinalizado());
+                }
+                if (nuevaConvocatoria.getReclamacionesDefinitivasProcesadas() == null) {
+                    nuevaConvocatoria.setReclamacionesDefinitivasProcesadas(existente.getReclamacionesDefinitivasProcesadas());
+                }
+            }
+        }
+
         // Finalmente, guardamos la nueva
         repository.save(nuevaConvocatoria);
     }
