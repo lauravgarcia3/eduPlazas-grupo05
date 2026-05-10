@@ -69,6 +69,16 @@ body {
     text-shadow: none;
 }
 
+.logo-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo-link:hover .logo {
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
 .logo-edu {
     color: #ffffff;
 }
