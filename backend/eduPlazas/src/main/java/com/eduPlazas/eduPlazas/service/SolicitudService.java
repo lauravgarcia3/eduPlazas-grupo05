@@ -49,9 +49,15 @@ public class SolicitudService {
                 documento.setSolicitud(solicitud);
             }
         }
-
         Solicitud guardada = solicitudRepository.save(solicitud);
+        
+        // Usamos el motor centralizado
+        calcularYGuardarBaremacion(guardada);
+        return guardada;
+    }
 
+    // MÉTODO CENTRALIZADO PARA EL PUNTO 9
+    public void calcularYGuardarBaremacion(Solicitud guardada) {
         double puntosHermanos = Boolean.TRUE.equals(guardada.getTieneHermanosEnCentro()) ? 15.0 : 0.0;
         double puntosProximidad = Boolean.TRUE.equals(guardada.getDomicilioEnZonaCentro()) ? 12.0 : 0.0;
         double puntosFamiliaNumerosa = Boolean.TRUE.equals(guardada.getFamiliaNumerosa()) ? 10.0 : 0.0;
@@ -60,32 +66,19 @@ public class SolicitudService {
         double puntosRenta = Boolean.TRUE.equals(guardada.getRentaMinimaInsercion()) ? 4.0 : 0.0;
 
         double puntosTrabajoCentro = 0.0;
-        if (guardada.getTutor1() != null &&
-                guardada.getTutor1().getSituacionLaboral() != null &&
-                (guardada.getTutor1().getSituacionLaboral().equalsIgnoreCase("Trabajando")
-                        || guardada.getTutor1().getSituacionLaboral().equalsIgnoreCase("Autónomo"))) {
+        if (guardada.getTutor1() != null && guardada.getTutor1().getSituacionLaboral() != null &&
+            (guardada.getTutor1().getSituacionLaboral().equalsIgnoreCase("Trabajando") || 
+             guardada.getTutor1().getSituacionLaboral().equalsIgnoreCase("Autónomo"))) {
             puntosTrabajoCentro = 5.0;
         }
 
-        // Nuevos criterios oficiales
         double puntosVictimaViolencia = Boolean.TRUE.equals(guardada.getVictimaViolenciaGenero()) ? 10.0 : 0.0;
         double puntosConciliacion = Boolean.TRUE.equals(guardada.getConciliacionLaboral()) ? 3.0 : 0.0;
         double puntosTraslado = Boolean.TRUE.equals(guardada.getTrasladoFamiliar()) ? 2.0 : 0.0;
 
-        puntuacionService.calcularYGuardar(
-                guardada,
-                puntosHermanos,
-                puntosProximidad,
-                puntosTrabajoCentro,
-                puntosFamiliaNumerosa,
-                puntosFamiliaMonoparental,
-                puntosDiscapacidad,
-                puntosRenta,
-                puntosVictimaViolencia,
-                puntosConciliacion,
-                puntosTraslado);
-
-        return guardada;
+        puntuacionService.calcularYGuardar(guardada, puntosHermanos, puntosProximidad, puntosTrabajoCentro, 
+            puntosFamiliaNumerosa, puntosFamiliaMonoparental, puntosDiscapacidad, puntosRenta, 
+            puntosVictimaViolencia, puntosConciliacion, puntosTraslado);
     }
 
     public Optional<Solicitud> buscarPorId(Long id) {

@@ -23,6 +23,7 @@ import com.eduPlazas.eduPlazas.repository.ConvocatoriaRepository;
 import com.eduPlazas.eduPlazas.repository.SolicitudRepository;
 import com.eduPlazas.eduPlazas.repository.UsuarioRepository;
 import com.eduPlazas.eduPlazas.service.PuntuacionService;
+import com.eduPlazas.eduPlazas.service.SolicitudService;
 
 @Configuration
 public class DataInitializer {
@@ -30,14 +31,14 @@ public class DataInitializer {
     @Bean
     public CommandLineRunner initData(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder,
                                       ConvocatoriaRepository convocatoriaRepository, SolicitudRepository solicitudRepository,
-                                      CentroRepository centroRepository, PuntuacionService puntuacionService) {
+                                      CentroRepository centroRepository, SolicitudService solicitudService) {
         return args -> {
             System.out.println("--- INICIANDO CARGA DE DATOS DE DEMOSTRACIÓN ---");
             
             poblarCentros(centroRepository);
             poblarUsuarios(usuarioRepository, passwordEncoder, centroRepository);
             poblarConvocatorias(convocatoriaRepository);
-            poblarSolicitudes(solicitudRepository, usuarioRepository, convocatoriaRepository, puntuacionService);
+            poblarSolicitudes(solicitudRepository, usuarioRepository, convocatoriaRepository, solicitudService);
             
             System.out.println("--- CARGA DE DATOS FINALIZADA CON ÉXITO ---");
         };
@@ -159,8 +160,8 @@ public class DataInitializer {
     // ==========================================
     // 4. POBLAR SOLICITUDES DISTRIBUIDAS Y PUNTUARLAS
     // ==========================================
-    private void poblarSolicitudes(SolicitudRepository solicitudRepository, UsuarioRepository usuarioRepository, ConvocatoriaRepository convocatoriaRepository, PuntuacionService puntuacionService) {
-        if (solicitudRepository.count() == 0) {
+        private void poblarSolicitudes(SolicitudRepository solicitudRepository, UsuarioRepository usuarioRepository, ConvocatoriaRepository convocatoriaRepository, SolicitudService solicitudService) {        
+            if (solicitudRepository.count() == 0) {
             Usuario usuarioPrincipal = usuarioRepository.findByEmail("solicitante@eduplazas.com").orElse(null);
             Convocatoria convocatoriaActiva = convocatoriaRepository.findByEstado("ACTIVA").orElse(null);
 
@@ -310,21 +311,9 @@ public class DataInitializer {
             solicitudRepository.saveAll(nuevasSolicitudes);
             System.out.println("160 Solicitudes guardadas (120 Enviadas, 40 Borradores). Calculando puntuaciones...");
 
-            // 2. Por cada solicitud guardada, calculamos y persistimos sus puntos reales
+            // 2. Sincronizamos los puntos de la demo con el baremo oficial (Punto 9)
             for (Solicitud sol : nuevasSolicitudes) {
-                // (Si necesitas modificar cuánto vale cada criterio, cámbialo aquí)
-                double pHermanos = (sol.getTieneHermanosEnCentro() != null && sol.getTieneHermanosEnCentro()) ? 15.0 : 0.0;
-                double pProximidad = (sol.getDomicilioEnZonaCentro() != null && sol.getDomicilioEnZonaCentro()) ? 5.5 : 0.0;
-                double pTrabajo = 0.0; 
-                double pNumerosa = (sol.getFamiliaNumerosa() != null && sol.getFamiliaNumerosa()) ? 3.0 : 0.0;
-                double pMono = (sol.getFamiliaMonoparental() != null && sol.getFamiliaMonoparental()) ? 3.0 : 0.0;
-                double pDisc = (sol.getDiscapacidadAlumnoOTutores() != null && sol.getDiscapacidadAlumnoOTutores()) ? 2.0 : 0.0;
-                double pRenta = (sol.getRentaMinimaInsercion() != null && sol.getRentaMinimaInsercion()) ? 2.0 : 0.0;
-                double pViolencia = (sol.getVictimaViolenciaGenero() != null && sol.getVictimaViolenciaGenero()) ? 2.0 : 0.0;
-                double pConciliacion = (sol.getConciliacionLaboral() != null && sol.getConciliacionLaboral()) ? 2.0 : 0.0;
-                double pTraslado = (sol.getTrasladoFamiliar() != null && sol.getTrasladoFamiliar()) ? 2.0 : 0.0;
-
-                puntuacionService.calcularYGuardar(sol, pHermanos, pProximidad, pTrabajo, pNumerosa, pMono, pDisc, pRenta, pViolencia, pConciliacion, pTraslado);
+                solicitudService.calcularYGuardarBaremacion(sol);
             }
 
             System.out.println("Puntuaciones calculadas y asignadas correctamente.");
