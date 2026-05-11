@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+
 @Service
 public class SolicitudService {
 
@@ -23,7 +24,7 @@ public class SolicitudService {
     private final PuntuacionService puntuacionService;
 
     public SolicitudService(SolicitudRepository solicitudRepository,
-                            PuntuacionService puntuacionService) {
+            PuntuacionService puntuacionService) {
         this.solicitudRepository = solicitudRepository;
         this.puntuacionService = puntuacionService;
     }
@@ -82,8 +83,7 @@ public class SolicitudService {
                 puntosRenta,
                 puntosVictimaViolencia,
                 puntosConciliacion,
-                puntosTraslado
-        );
+                puntosTraslado);
 
         return guardada;
     }
@@ -104,11 +104,15 @@ public class SolicitudService {
         Solicitud solicitud = solicitudRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Solicitud no encontrada"));
 
-        if (!estado.equals("Pendiente") && !estado.equals("Aceptada") && !estado.equals("Rechazada")) {
-            throw new RuntimeException("Estado inválido");
+        List<String> estadosOficiales = List.of("BORRADOR", "ENVIADA", "ADMITIDA", "LISTA_ESPERA", "NO_ADMITIDA");
+
+        String estadoUpper = estado.toUpperCase();
+
+        if (!estadosOficiales.contains(estadoUpper)) {
+            throw new RuntimeException("Estado inválido. Use uno de los estados del SDD: " + estadosOficiales);
         }
 
-        solicitud.setEstado(estado);
+        solicitud.setEstado(estadoUpper);
         return solicitudRepository.save(solicitud);
     }
 
@@ -168,7 +172,8 @@ public class SolicitudService {
     }
 
     private boolean esSolicitudAdjudicable(Solicitud solicitud) {
-        if (solicitud == null) return false;
+        if (solicitud == null)
+            return false;
 
         String estado = solicitud.getEstado();
 
@@ -188,7 +193,8 @@ public class SolicitudService {
     private Map<String, Integer> construirMapaPlazas(List<Centro> centros) {
         Map<String, Integer> plazas = new HashMap<>();
 
-        if (centros == null) return plazas;
+        if (centros == null)
+            return plazas;
 
         for (Centro centro : centros) {
             String nombreCentro = normalizarCentro(centro.getNombre());
@@ -206,7 +212,8 @@ public class SolicitudService {
     public List<String> obtenerPreferenciasCentro(Solicitud solicitud) {
         List<String> preferencias = new ArrayList<>();
 
-        if (solicitud == null) return preferencias;
+        if (solicitud == null)
+            return preferencias;
 
         agregarPreferencia(preferencias, solicitud.getCentroPreferencia1());
         agregarPreferencia(preferencias, solicitud.getCentroPreferencia2());
@@ -216,7 +223,8 @@ public class SolicitudService {
     }
 
     private void agregarPreferencia(List<String> preferencias, String centro) {
-        if (estaVacio(centro)) return;
+        if (estaVacio(centro))
+            return;
 
         String centroNormalizado = normalizarCentro(centro);
         boolean yaIncluido = preferencias.stream()

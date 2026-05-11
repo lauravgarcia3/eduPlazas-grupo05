@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Nueva convocatoria - EduPlazas</title>
@@ -229,100 +230,79 @@
 
 <body>
 
-<header class="topbar">
-    <a th:href="@{/admin/home}" class="logo-link">
-        <div class="logo">
-            <span class="logo-edu">Edu</span><span class="logo-plazas">Plazas</span>
+    <header class="topbar">
+        <a th:href="@{/admin/home}" class="logo-link">
+            <div class="logo">
+                <span class="logo-edu">Edu</span><span class="logo-plazas">Plazas</span>
+            </div>
+        </a>
+
+        <div class="topbar-right">
+            <div class="user-name">Panel de Administración</div>
         </div>
-    </a>
+    </header>
 
-    <div class="topbar-right">
-        <div class="user-name">Panel de Administración</div>
-    </div>
-</header>
+    <main class="page-wrapper">
+        <div class="page-content">
 
-<main class="page-wrapper">
-    <div class="page-content">
+            <div class="page-header">
+                <div class="header-text">
+                    <div class="eyebrow">Panel de administración</div>
+                    <h1 class="page-title">Nueva convocatoria</h1>
+                    <p class="page-subtitle">
+                        Registra los datos principales de una convocatoria de forma rápida.
+                    </p>
+                </div>
 
-        <div class="page-header">
-            <div class="header-text">
-                <div class="eyebrow">Panel de administración</div>
-                <h1 class="page-title">Nueva convocatoria</h1>
-                <p class="page-subtitle">
-                    Registra los datos principales de una convocatoria de forma rápida.
-                </p>
+                <a th:href="@{/admin/convocatoria}" class="secondary-btn">← Volver al listado</a>
             </div>
 
-            <a th:href="@{/admin/convocatoria}" class="secondary-btn">← Volver al listado</a>
+            <section class="form-card">
+                <h2 class="form-title">Datos principales</h2>
+                <p class="form-description">
+                    Complete los campos obligatorios para guardar la convocatoria.
+                </p>
+
+                <form th:action="@{/admin/convocatoria}" th:object="${convocatoria}" method="post">
+                    <div class="form-group">
+                        <label for="nombre">Nombre de la convocatoria</label>
+                        <input type="text" id="nombre" th:field="*{nombre}"
+                            placeholder="Ej. Convocatoria curso 2026/2027" minlength="5" maxlength="100" required
+                            title="El nombre de la convocatoria debe tener entre 5 y 100 caracteres.">
+                        <small class="form-help">Introduce un nombre claro. Entre 5 y 100 caracteres.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fechaInicio">Fecha de inicio</label>
+                        <input type="date" id="fechaInicio" th:field="*{fechaInicio}" required
+                            title="Selecciona la fecha de inicio de la convocatoria.">
+                        <small class="form-help">Fecha en la que comienza el periodo de solicitud.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fechaFin">Fecha de fin</label>
+                        <input type="date" id="fechaFin" th:field="*{fechaFin}" required
+                            title="Selecciona la fecha de fin de la convocatoria.">
+                        <small class="form-help">Fecha límite para presentar solicitudes.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="numeroPlazas">Número de plazas</label>
+                        <input type="number" id="numeroPlazas" th:field="*{numeroPlazas}" placeholder="Ej. 100" min="1"
+                            max="10000" step="1" required title="Introduce un número entero de plazas mayor que 0.">
+                        <small class="form-help">Debe ser un número entero positivo.</small>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit" class="primary-btn">Guardar convocatoria</button>
+                        <a th:href="@{/admin/convocatoria}" class="secondary-btn">Cancelar</a>
+                    </div>
+                </form>
+            </section>
+
         </div>
-
-        <section class="form-card">
-            <h2 class="form-title">Datos principales</h2>
-            <p class="form-description">
-                Complete los campos obligatorios para guardar la convocatoria.
-            </p>
-
-            <form th:action="@{/admin/convocatoria}" th:object="${convocatoria}" method="post">
-                <div class="form-group">
-                    <label for="nombre">Nombre de la convocatoria</label>
-                    <input
-                        type="text"
-                        id="nombre"
-                        th:field="*{nombre}"
-                        placeholder="Ej. Convocatoria curso 2026/2027"
-                        minlength="5"
-                        maxlength="100"
-                        required
-                        title="El nombre de la convocatoria debe tener entre 5 y 100 caracteres.">
-                    <small class="form-help">Introduce un nombre claro. Entre 5 y 100 caracteres.</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="fechaInicio">Fecha de inicio</label>
-                    <input
-                        type="date"
-                        id="fechaInicio"
-                        th:field="*{fechaInicio}"
-                        required
-                        title="Selecciona la fecha de inicio de la convocatoria.">
-                    <small class="form-help">Fecha en la que comienza el periodo de solicitud.</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="fechaFin">Fecha de fin</label>
-                    <input
-                        type="date"
-                        id="fechaFin"
-                        th:field="*{fechaFin}"
-                        required
-                        title="Selecciona la fecha de fin de la convocatoria.">
-                    <small class="form-help">Fecha límite para presentar solicitudes.</small>
-                </div>
-
-                <div class="form-group">
-                    <label for="plazasTotales">Plazas totales</label>
-                    <input
-                        type="number"
-                        id="plazasTotales"
-                        th:field="*{plazasTotales}"
-                        placeholder="Ej. 100"
-                        min="1"
-                        max="10000"
-                        step="1"
-                        required
-                        title="Introduce un número entero de plazas mayor que 0.">
-                    <small class="form-help">Debe ser un número entero positivo.</small>
-                </div>
-
-                <div class="actions">
-                    <button type="submit" class="primary-btn">Guardar convocatoria</button>
-                    <a th:href="@{/admin/convocatoria}" class="secondary-btn">Cancelar</a>
-                </div>
-            </form>
-        </section>
-
-    </div>
-</main>
+    </main>
 
 </body>
+
 </html>
