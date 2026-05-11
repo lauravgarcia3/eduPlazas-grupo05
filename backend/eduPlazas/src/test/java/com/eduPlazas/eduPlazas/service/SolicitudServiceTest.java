@@ -79,13 +79,14 @@ public class SolicitudServiceTest {
     void testCambiarEstadoExito() {
         Solicitud sol = new Solicitud();
         sol.setId(1L);
-        sol.setEstado("Pendiente");
+        sol.setEstado("ENVIADA"); // Usamos un estado oficial inicial
 
         when(solicitudRepository.findById(1L)).thenReturn(Optional.of(sol));
         when(solicitudRepository.save(any(Solicitud.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        Solicitud actualizada = solicitudService.cambiarEstado(1L, "Aceptada");
+        // Cambiamos "Aceptada" por el término oficial del SDD: "ADMITIDA"
+        Solicitud actualizada = solicitudService.cambiarEstado(1L, "ADMITIDA");
 
-        assertThat(actualizada.getEstado()).isEqualTo("Aceptada");
+        assertThat(actualizada.getEstado()).isEqualTo("ADMITIDA");
     }
 }
